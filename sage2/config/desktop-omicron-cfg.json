@@ -1,0 +1,61 @@
+/*
+	default configuration of the server
+*/
+{
+		// hostname of the web server
+	host: "localhost",
+		// port of the HTTPS server: 443 for default
+	port: 9090,
+		// port of the HTTP public page
+	index_port: 9292,
+	background: {
+		color: "#333333"
+	},
+	ui: {
+		// clock setting: 12-hour or 24-hour
+		clock: 12,
+		show_version: true,
+		show_url:     true,
+	},
+	resolution: {
+		width: 700,
+		height: 700
+	},
+	// for experimental features: true/false
+	experimental: {
+		omicron: { // enable omicron input module
+			enable: true,
+			dataPort: 30005,
+			
+			// Touch gestures
+			zoomGestureScale = 520;
+			acceleratedDragScale = 0;
+			
+			// Note if the following is enabled the server will attempt
+			// to connect to the specified Omicron oinputserver
+			// (By default the server listens for an Omicron sageinputserver to connect to it)
+			useOinputserver: false,
+			inputServerIP: "cave2tracker.evl.uic.edu",
+			msgPort: 28000
+		}
+	},
+	layout: {
+		rows: 1,
+		columns: 2
+	},
+	displays: [
+		{
+			row: 0,
+			column: 0
+		},
+		{
+			row: 0,
+			column: 1
+		},
+	],
+	alternate_hosts: [
+		"127.0.0.1"
+	],
+	remote_sites: [
+	]
+}

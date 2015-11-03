@@ -1,0 +1,223 @@
+/*
+	Configuration for CAVE2
+*/
+{
+	"host": "lyra.evl.uic.edu",
+	"port": 443,
+	"index_port": 80,
+	"background": {
+		"color": "#333333",
+		"image": {
+			"url": "images/background/chicago-pano-october-2011-bw.jpg",
+			"style": "stretch"
+		},
+		"clip": true
+	},
+	"ui": {
+		"clock": 12,
+		"show_url": true,
+		"show_version": true,
+	},
+	"resolution": {
+		"width": 1366,
+		"height":  1536
+	},
+	// for experimental features: true/false
+	"experimental": {
+		"omicron": // enable omicron input module
+		{
+			// Standard 'SAGE' connection
+			// SAGE listens for a sageinputserver to stream events
+			"enable": true,
+			"dataPort": 20015,
+			
+			// Additional 'CAVE2' type connection
+			// SAGE connects to an oinputserver to get events
+			"useOinputserver": true,
+			"inputServerIP": "cave2tracker.evl.uic.edu",
+			"msgPort": 28000
+		}
+	},
+	"layout": {
+		"rows": 2,
+		"columns": 18
+	},
+	"displays": [
+		{
+			"row": 0,
+			"column": 0
+		},
+		{
+			"row": 1,
+			"column": 0
+		},
+		{
+			"row": 0,
+			"column": 1
+		},
+		{
+			"row": 1,
+			"column": 1
+		},
+		{
+			"row": 0,
+			"column": 2
+		},
+		{
+			"row": 1,
+			"column": 2
+		},
+		{
+			"row": 0,
+			"column": 3
+		},
+		{
+			"row": 1,
+			"column": 3
+		},
+		{
+			"row": 0,
+			"column": 4
+		},
+		{
+			"row": 1,
+			"column": 4
+		},
+		{
+			"row": 0,
+			"column": 5
+		},
+		{
+			"row": 1,
+			"column": 5
+		},
+		{
+			"row": 0,
+			"column": 6
+		},
+		{
+			"row": 1,
+			"column": 6
+		},
+		{
+			"row": 0,
+			"column": 7
+		},
+		{
+			"row": 1,
+			"column": 7
+		},
+		{
+			"row": 0,
+			"column": 8
+		},
+		{
+			"row": 1,
+			"column": 8
+		},
+		{
+			"row": 0,
+			"column": 9
+		},
+		{
+			"row": 1,
+			"column": 9
+		},
+		{
+			"row": 0,
+			"column": 10
+		},
+		{
+			"row": 1,
+			"column": 10
+		},
+		{
+			"row": 0,
+			"column": 11
+		},
+		{
+			"row": 1,
+			"column": 11
+		},
+		{
+			"row": 0,
+			"column": 12
+		},
+		{
+			"row": 1,
+			"column": 12
+		},
+		{
+			"row": 0,
+			"column": 13
+		},
+		{
+			"row": 1,
+			"column": 13
+		},
+		{
+			"row": 0,
+			"column": 14
+		},
+		{
+			"row": 1,
+			"column": 14
+		},
+		{
+			"row": 0,
+			"column": 15
+		},
+		{
+			"row": 1,
+			"column": 15
+		},
+		{
+			"row": 0,
+			"column": 16
+		},
+		{
+			"row": 1,
+			"column": 16
+		},
+		{
+			"row": 0,
+			"column": 17
+		},
+		{
+			"row": 1,
+			"column": 17
+		}
+	],
+	"alternate_hosts": [
+		"localhost",
+		"127.0.0.1",
+		"lyra.evl.optiputer.net"
+	],
+	"remote_sites": [
+		{
+			"name": "Cyber-Commons",
+			"host": "iridium.evl.uic.edu",
+			"port": 443
+		},
+		{
+			"name": "CAVE2 Column",
+			"host": "preeka.evl.uic.edu",
+			"port": 443
+		},
+		{
+			"name": "IceWall",
+			"host": "thor.evl.uic.edu",
+			"port": 443
+		},
+		{
+			"name": "PhD Room",
+			"host": "dante.evl.uic.edu",
+			"port": 443
+		},
+		{
+			"name": "Green Room",
+			"host": "mesaverde.evl.uic.edu",
+			"port": 443
+		}
+	]
+}

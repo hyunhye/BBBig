@@ -1,0 +1,1250 @@
+{
+    "root": "public_HTTPS\\uploads",
+    "rel": "uploads",
+    "list": {
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\images\\QR.png": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\images\\QR.png",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\images\\QR.png",
+            "exif": {
+                "SourceFile": "C:/sage2/sage2/sage2/public_HTTPS/uploads/images/QR.png",
+                "ExifToolVersion": 10,
+                "FileName": "QR.png",
+                "Directory": "C:/sage2/sage2/sage2/public_HTTPS/uploads/images",
+                "FileSize": "1229 bytes",
+                "FileModifyDate": "2015:09:04 09:19:32+09:00",
+                "FileAccessDate": "2015:09:04 09:18:54+09:00",
+                "FileCreateDate": "2015:09:04 09:18:54+09:00",
+                "FilePermissions": "rw-rw-rw-",
+                "FileType": "PNG",
+                "FileTypeExtension": "png",
+                "MIMEType": "image/png",
+                "ImageWidth": 465,
+                "ImageHeight": 465,
+                "BitDepth": 8,
+                "ColorType": "Grayscale",
+                "Compression": "Deflate/Inflate",
+                "Filter": "Adaptive",
+                "Interlace": "Noninterlaced",
+                "ImageSize": "465x465",
+                "Megapixels": 0.216,
+                "SAGE2thumbnail": "uploads\\assets\\QR.png"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\images\\sage.jpg": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\images\\sage.jpg",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\images\\sage.jpg",
+            "exif": {
+                "SourceFile": "C:/sage2/sage2/sage2/public_HTTPS/uploads/images/sage.jpg",
+                "ExifToolVersion": 10,
+                "FileName": "sage.jpg",
+                "Directory": "C:/sage2/sage2/sage2/public_HTTPS/uploads/images",
+                "FileSize": "46 kB",
+                "FileModifyDate": "2014:11:25 04:43:53+09:00",
+                "FileAccessDate": "2015:09:03 17:20:10+09:00",
+                "FileCreateDate": "2015:09:03 17:20:10+09:00",
+                "FilePermissions": "rw-rw-rw-",
+                "FileType": "JPEG",
+                "FileTypeExtension": "jpg",
+                "MIMEType": "image/jpeg",
+                "JFIFVersion": 1.01,
+                "ResolutionUnit": "None",
+                "XResolution": 1,
+                "YResolution": 1,
+                "ProfileCMMType": "appl",
+                "ProfileVersion": "2.2.0",
+                "ProfileClass": "Display Device Profile",
+                "ColorSpaceData": "RGB ",
+                "ProfileConnectionSpace": "XYZ ",
+                "ProfileDateTime": "2009:02:25 11:26:11",
+                "ProfileFileSignature": "acsp",
+                "PrimaryPlatform": "Apple Computer Inc.",
+                "CMMFlags": "Not Embedded, Independent",
+                "DeviceManufacturer": "appl",
+                "DeviceModel": "",
+                "DeviceAttributes": "Reflective, Glossy, Positive, Color",
+                "RenderingIntent": "Perceptual",
+                "ConnectionSpaceIlluminant": "0.9642 1 0.82491",
+                "ProfileCreator": "appl",
+                "ProfileID": 0,
+                "ProfileDescriptionML": "Generic RGB Profile",
+                "ProfileDescriptionML-es-ES": "Perfil RGB Genérico",
+                "ProfileDescriptionML-da-DK": "Generel RGB-beskrivelse",
+                "ProfileDescriptionML-de-DE": "Allgemeines RGB-Profil",
+                "ProfileDescriptionML-fi-FI": "Yleinen RGB-profiili",
+                "ProfileDescriptionML-fr-FU": "Profil Générique RVB",
+                "ProfileDescriptionML-it-IT": "Profilo RGB Generico",
+                "ProfileDescriptionML-nl-NL": "Algemeen RGB-profiel",
+                "ProfileDescriptionML-nb-NO": "Generisk RGB-profil",
+                "ProfileDescriptionML-pt-BR": "Perfil RGB Genérico",
+                "ProfileDescriptionML-sv-SE": "Generisk RGB-profil",
+                "ProfileDescriptionML-ja-JP": "一般 RGB プロファイル",
+                "ProfileDescriptionML-ko-KR": "일반 RGB 프로파일",
+                "ProfileDescriptionML-zh-TW": "通用 RGB 色彩描述",
+                "ProfileDescriptionML-zh-CN": "普通 RGB 描述文件",
+                "ProfileDescriptionML-ru-RU": "Общий профиль RGB",
+                "ProfileDescriptionML-pl-PL": "Uniwersalny profil RGB",
+                "ProfileDescription": "Generic RGB Profile",
+                "GreenMatrixColumn": "0.35335 0.67363 0.09064",
+                "MediaWhitePoint": "0.95047 1 1.0891",
+                "RedMatrixColumn": "0.4543 0.24191 0.01489",
+                "BlueMatrixColumn": "0.15665 0.08446 0.71957",
+                "RedTRC": "(Binary data 14 bytes, use -b option to extract)",
+                "ProfileCopyright": "Copyright 2007 Apple Inc., all rights reserved.",
+                "ChromaticAdaptation": "1.04788 0.02292 -0.0502 0.02957 0.99049 -0.01706 -0.00923 0.01508 0.75165",
+                "GreenTRC": "(Binary data 14 bytes, use -b option to extract)",
+                "BlueTRC": "(Binary data 14 bytes, use -b option to extract)",
+                "ExifByteOrder": "Big-endian (Motorola, MM)",
+                "ExifImageWidth": 822,
+                "ExifImageHeight": 493,
+                "ImageWidth": 822,
+                "ImageHeight": 493,
+                "EncodingProcess": "Baseline DCT, Huffman coding",
+                "BitsPerSample": 8,
+                "ColorComponents": 3,
+                "YCbCrSubSampling": "YCbCr4:2:0 (2 2)",
+                "ImageSize": "822x493",
+                "Megapixels": 0.405,
+                "SAGE2thumbnail": "uploads\\assets\\sage.jpg"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\images\\sage2-1400-green_tm.png": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\images\\sage2-1400-green_tm.png",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\images\\sage2-1400-green_tm.png",
+            "exif": {
+                "SourceFile": "C:/sage2/sage2/sage2/public_HTTPS/uploads/images/sage2-1400-green_tm.png",
+                "ExifToolVersion": 10,
+                "FileName": "sage2-1400-green_tm.png",
+                "Directory": "C:/sage2/sage2/sage2/public_HTTPS/uploads/images",
+                "FileSize": "96 kB",
+                "FileModifyDate": "2014:11:25 04:43:53+09:00",
+                "FileAccessDate": "2015:09:03 17:20:10+09:00",
+                "FileCreateDate": "2015:09:03 17:20:10+09:00",
+                "FilePermissions": "rw-rw-rw-",
+                "FileType": "PNG",
+                "FileTypeExtension": "png",
+                "MIMEType": "image/png",
+                "ImageWidth": 1400,
+                "ImageHeight": 400,
+                "BitDepth": 8,
+                "ColorType": "RGB",
+                "Compression": "Deflate/Inflate",
+                "Filter": "Adaptive",
+                "Interlace": "Noninterlaced",
+                "Software": "Adobe ImageReady",
+                "XMPToolkit": "Adobe XMP Core 5.5-c021 79.154911, 2013/10/29-11:47:16        ",
+                "OriginalDocumentID": "xmp.did:8F7A677AEEB211E399A19D8544E241D1",
+                "DocumentID": "xmp.did:7F29C152EF7211E39C96D332B84A85D3",
+                "InstanceID": "xmp.iid:7F29C151EF7211E39C96D332B84A85D3",
+                "CreatorTool": "Adobe Photoshop CC (Macintosh)",
+                "DerivedFromInstanceID": "xmp.iid:5674db6f-2dac-4ba8-a603-f77dcf81e864",
+                "DerivedFromDocumentID": "xmp.did:66EF7D66EF4511E3BBD3BE7C6DEF11BA",
+                "ImageSize": "1400x400",
+                "Megapixels": 0.56,
+                "SAGE2thumbnail": "uploads\\assets\\sage2-1400-green_tm.png"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\images\\sage2-displays-cave2-4.jpg": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\images\\sage2-displays-cave2-4.jpg",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\images\\sage2-displays-cave2-4.jpg",
+            "exif": {
+                "SourceFile": "C:/sage2/sage2/sage2/public_HTTPS/uploads/images/sage2-displays-cave2-4.jpg",
+                "ExifToolVersion": 10,
+                "FileName": "sage2-displays-cave2-4.jpg",
+                "Directory": "C:/sage2/sage2/sage2/public_HTTPS/uploads/images",
+                "FileSize": "278 kB",
+                "FileModifyDate": "2014:11:25 04:43:53+09:00",
+                "FileAccessDate": "2015:09:03 17:20:10+09:00",
+                "FileCreateDate": "2015:09:03 17:20:10+09:00",
+                "FilePermissions": "rw-rw-rw-",
+                "FileType": "JPEG",
+                "FileTypeExtension": "jpg",
+                "MIMEType": "image/jpeg",
+                "ExifByteOrder": "Little-endian (Intel, II)",
+                "Copyright": "Luc Renambot (c)",
+                "Quality": "30%",
+                "XMPToolkit": "Adobe XMP Core 5.5-c021 79.154911, 2013/10/29-11:47:16        ",
+                "Marked": true,
+                "OriginalDocumentID": "87FC274D54A6E86B0659B32E68EDEA65",
+                "DocumentID": "xmp.did:36D5DEA1625811E48508E82309125BBE",
+                "InstanceID": "xmp.iid:36D5DEA0625811E48508E82309125BBE",
+                "CreatorTool": "Adobe Photoshop Lightroom 5.4 (Macintosh)",
+                "DerivedFromInstanceID": "xmp.iid:2e73e28b-c819-4598-bcd9-ff9a8ba13cd3",
+                "DerivedFromDocumentID": "xmp.did:2e73e28b-c819-4598-bcd9-ff9a8ba13cd3",
+                "Rights": "Luc Renambot (c)",
+                "Creator": "Luc Renambot",
+                "Title": "cave2-4",
+                "CurrentIPTCDigest": "5d07db6e9e98b7e46b87905eb8b1e62d",
+                "CodedCharacterSet": "UTF8",
+                "ApplicationRecordVersion": 2,
+                "CopyrightNotice": "Luc Renambot (c)",
+                "IPTCDigest": "5d07db6e9e98b7e46b87905eb8b1e62d",
+                "DCTEncodeVersion": 100,
+                "APP14Flags0": "[14], Encoded with Blend=1 downsampling",
+                "APP14Flags1": "(none)",
+                "ColorTransform": "YCbCr",
+                "ImageWidth": 1920,
+                "ImageHeight": 1184,
+                "EncodingProcess": "Baseline DCT, Huffman coding",
+                "BitsPerSample": 8,
+                "ColorComponents": 3,
+                "YCbCrSubSampling": "YCbCr4:2:0 (2 2)",
+                "ImageSize": "1920x1184",
+                "Megapixels": 2.3,
+                "SAGE2thumbnail": "uploads\\assets\\sage2-displays-cave2-4.jpg"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\images\\sage2-displays-cybercommons-people.jpg": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\images\\sage2-displays-cybercommons-people.jpg",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\images\\sage2-displays-cybercommons-people.jpg",
+            "exif": {
+                "SourceFile": "C:/sage2/sage2/sage2/public_HTTPS/uploads/images/sage2-displays-cybercommons-people.jpg",
+                "ExifToolVersion": 10,
+                "FileName": "sage2-displays-cybercommons-people.jpg",
+                "Directory": "C:/sage2/sage2/sage2/public_HTTPS/uploads/images",
+                "FileSize": "179 kB",
+                "FileModifyDate": "2014:11:25 04:43:53+09:00",
+                "FileAccessDate": "2015:09:03 17:20:10+09:00",
+                "FileCreateDate": "2015:09:03 17:20:10+09:00",
+                "FilePermissions": "rw-rw-rw-",
+                "FileType": "JPEG",
+                "FileTypeExtension": "jpg",
+                "MIMEType": "image/jpeg",
+                "ExifByteOrder": "Little-endian (Intel, II)",
+                "Copyright": "Luc Renambot (c)",
+                "Quality": "30%",
+                "XMPToolkit": "Adobe XMP Core 5.5-c021 79.154911, 2013/10/29-11:47:16        ",
+                "Marked": true,
+                "OriginalDocumentID": "C34EF051BAD1F1B983AEB42E1F57C7A7",
+                "DocumentID": "xmp.did:36D5DE9D625811E48508E82309125BBE",
+                "InstanceID": "xmp.iid:36D5DE9C625811E48508E82309125BBE",
+                "CreatorTool": "Adobe Photoshop Lightroom 5.4 (Macintosh)",
+                "DerivedFromInstanceID": "xmp.iid:eca2cd0d-3235-48b7-ab61-ec19dea9754b",
+                "DerivedFromDocumentID": "xmp.did:eca2cd0d-3235-48b7-ab61-ec19dea9754b",
+                "Rights": "Luc Renambot (c)",
+                "Creator": "Luc Renambot",
+                "Title": "cybercommons-people",
+                "CurrentIPTCDigest": "5d07db6e9e98b7e46b87905eb8b1e62d",
+                "CodedCharacterSet": "UTF8",
+                "ApplicationRecordVersion": 2,
+                "CopyrightNotice": "Luc Renambot (c)",
+                "IPTCDigest": "5d07db6e9e98b7e46b87905eb8b1e62d",
+                "DCTEncodeVersion": 100,
+                "APP14Flags0": "[14], Encoded with Blend=1 downsampling",
+                "APP14Flags1": "(none)",
+                "ColorTransform": "YCbCr",
+                "ImageWidth": 1920,
+                "ImageHeight": 1169,
+                "EncodingProcess": "Baseline DCT, Huffman coding",
+                "BitsPerSample": 8,
+                "ColorComponents": 3,
+                "YCbCrSubSampling": "YCbCr4:2:0 (2 2)",
+                "ImageSize": "1920x1169",
+                "Megapixels": 2.2,
+                "SAGE2thumbnail": "uploads\\assets\\sage2-displays-cybercommons-people.jpg"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\images\\sage2-displays-green-table-people-1.jpg": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\images\\sage2-displays-green-table-people-1.jpg",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\images\\sage2-displays-green-table-people-1.jpg",
+            "exif": {
+                "SourceFile": "C:/sage2/sage2/sage2/public_HTTPS/uploads/images/sage2-displays-green-table-people-1.jpg",
+                "ExifToolVersion": 10,
+                "FileName": "sage2-displays-green-table-people-1.jpg",
+                "Directory": "C:/sage2/sage2/sage2/public_HTTPS/uploads/images",
+                "FileSize": "185 kB",
+                "FileModifyDate": "2014:11:25 04:43:53+09:00",
+                "FileAccessDate": "2015:09:03 17:20:10+09:00",
+                "FileCreateDate": "2015:09:03 17:20:10+09:00",
+                "FilePermissions": "rw-rw-rw-",
+                "FileType": "JPEG",
+                "FileTypeExtension": "jpg",
+                "MIMEType": "image/jpeg",
+                "ExifByteOrder": "Little-endian (Intel, II)",
+                "Copyright": "Luc Renambot (c)",
+                "Quality": "30%",
+                "XMPToolkit": "Adobe XMP Core 5.5-c021 79.154911, 2013/10/29-11:47:16        ",
+                "Marked": true,
+                "OriginalDocumentID": "3509E46B375A1A5A130311E5EDBD3609",
+                "DocumentID": "xmp.did:2A0B8674625811E48508E82309125BBE",
+                "InstanceID": "xmp.iid:2A0B8673625811E48508E82309125BBE",
+                "CreatorTool": "Adobe Photoshop CS6 (Macintosh)",
+                "DerivedFromInstanceID": "xmp.iid:F87F1174072068118083C9E8F78A09B1",
+                "DerivedFromDocumentID": "xmp.did:7b2f0745-4adb-422b-9146-9a2233a55f83",
+                "Rights": "Luc Renambot (c)",
+                "Creator": "Luc Renambot",
+                "Title": "green-table-people-1",
+                "CurrentIPTCDigest": "5d07db6e9e98b7e46b87905eb8b1e62d",
+                "CodedCharacterSet": "UTF8",
+                "ApplicationRecordVersion": 2,
+                "CopyrightNotice": "Luc Renambot (c)",
+                "IPTCDigest": "5d07db6e9e98b7e46b87905eb8b1e62d",
+                "DCTEncodeVersion": 100,
+                "APP14Flags0": "[14], Encoded with Blend=1 downsampling",
+                "APP14Flags1": "(none)",
+                "ColorTransform": "YCbCr",
+                "ImageWidth": 1920,
+                "ImageHeight": 1080,
+                "EncodingProcess": "Baseline DCT, Huffman coding",
+                "BitsPerSample": 8,
+                "ColorComponents": 3,
+                "YCbCrSubSampling": "YCbCr4:2:0 (2 2)",
+                "ImageSize": "1920x1080",
+                "Megapixels": 2.1,
+                "SAGE2thumbnail": "uploads\\assets\\sage2-displays-green-table-people-1.jpg"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\images\\sage2-displays-icelab-people.jpg": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\images\\sage2-displays-icelab-people.jpg",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\images\\sage2-displays-icelab-people.jpg",
+            "exif": {
+                "SourceFile": "C:/sage2/sage2/sage2/public_HTTPS/uploads/images/sage2-displays-icelab-people.jpg",
+                "ExifToolVersion": 10,
+                "FileName": "sage2-displays-icelab-people.jpg",
+                "Directory": "C:/sage2/sage2/sage2/public_HTTPS/uploads/images",
+                "FileSize": "192 kB",
+                "FileModifyDate": "2014:11:25 04:43:53+09:00",
+                "FileAccessDate": "2015:09:03 17:20:10+09:00",
+                "FileCreateDate": "2015:09:03 17:20:10+09:00",
+                "FilePermissions": "rw-rw-rw-",
+                "FileType": "JPEG",
+                "FileTypeExtension": "jpg",
+                "MIMEType": "image/jpeg",
+                "ExifByteOrder": "Little-endian (Intel, II)",
+                "Copyright": "Luc Renambot (c)",
+                "Quality": "30%",
+                "XMPToolkit": "Adobe XMP Core 5.5-c021 79.154911, 2013/10/29-11:47:16        ",
+                "Marked": true,
+                "OriginalDocumentID": "0A550C1A9EF24F95C399419F77F98F1A",
+                "DocumentID": "xmp.did:43CA0A62625811E48508E82309125BBE",
+                "InstanceID": "xmp.iid:43CA0A61625811E48508E82309125BBE",
+                "CreatorTool": "Adobe Photoshop CS6 (Macintosh)",
+                "DerivedFromInstanceID": "xmp.iid:F97F1174072068118083C9E8F78A09B1",
+                "DerivedFromDocumentID": "xmp.did:f860ba6c-bbb7-4f6c-9d7f-0e8e8a22541b",
+                "Rights": "Luc Renambot (c)",
+                "Creator": "Luc Renambot",
+                "Title": "icelab-people",
+                "CurrentIPTCDigest": "5d07db6e9e98b7e46b87905eb8b1e62d",
+                "CodedCharacterSet": "UTF8",
+                "ApplicationRecordVersion": 2,
+                "CopyrightNotice": "Luc Renambot (c)",
+                "IPTCDigest": "5d07db6e9e98b7e46b87905eb8b1e62d",
+                "DCTEncodeVersion": 100,
+                "APP14Flags0": "[14], Encoded with Blend=1 downsampling",
+                "APP14Flags1": "(none)",
+                "ColorTransform": "YCbCr",
+                "ImageWidth": 1920,
+                "ImageHeight": 1015,
+                "EncodingProcess": "Baseline DCT, Huffman coding",
+                "BitsPerSample": 8,
+                "ColorComponents": 3,
+                "YCbCrSubSampling": "YCbCr4:2:0 (2 2)",
+                "ImageSize": "1920x1015",
+                "Megapixels": 1.9,
+                "SAGE2thumbnail": "uploads\\assets\\sage2-displays-icelab-people.jpg"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\images\\sage2-displays-phd-room.jpg": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\images\\sage2-displays-phd-room.jpg",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\images\\sage2-displays-phd-room.jpg",
+            "exif": {
+                "SourceFile": "C:/sage2/sage2/sage2/public_HTTPS/uploads/images/sage2-displays-phd-room.jpg",
+                "ExifToolVersion": 10,
+                "FileName": "sage2-displays-phd-room.jpg",
+                "Directory": "C:/sage2/sage2/sage2/public_HTTPS/uploads/images",
+                "FileSize": "229 kB",
+                "FileModifyDate": "2014:11:25 04:43:53+09:00",
+                "FileAccessDate": "2015:09:03 17:20:10+09:00",
+                "FileCreateDate": "2015:09:03 17:20:10+09:00",
+                "FilePermissions": "rw-rw-rw-",
+                "FileType": "JPEG",
+                "FileTypeExtension": "jpg",
+                "MIMEType": "image/jpeg",
+                "ExifByteOrder": "Little-endian (Intel, II)",
+                "Copyright": "Luc Renambot (c)",
+                "Quality": "30%",
+                "XMPToolkit": "Adobe XMP Core 5.5-c021 79.154911, 2013/10/29-11:47:16        ",
+                "Marked": true,
+                "OriginalDocumentID": "769CE2F9DCA867042EA70F8043413356",
+                "DocumentID": "xmp.did:2A0B8670625811E48508E82309125BBE",
+                "InstanceID": "xmp.iid:2A0B866F625811E48508E82309125BBE",
+                "CreatorTool": "Adobe Photoshop Lightroom 5.4 (Macintosh)",
+                "DerivedFromInstanceID": "xmp.iid:9a494703-14e3-490f-bae0-622c9d3862be",
+                "DerivedFromDocumentID": "xmp.did:9a494703-14e3-490f-bae0-622c9d3862be",
+                "Rights": "Luc Renambot (c)",
+                "Creator": "Luc Renambot",
+                "Title": "phd-room",
+                "CurrentIPTCDigest": "5d07db6e9e98b7e46b87905eb8b1e62d",
+                "CodedCharacterSet": "UTF8",
+                "ApplicationRecordVersion": 2,
+                "CopyrightNotice": "Luc Renambot (c)",
+                "IPTCDigest": "5d07db6e9e98b7e46b87905eb8b1e62d",
+                "DCTEncodeVersion": 100,
+                "APP14Flags0": "[14], Encoded with Blend=1 downsampling",
+                "APP14Flags1": "(none)",
+                "ColorTransform": "YCbCr",
+                "ImageWidth": 1920,
+                "ImageHeight": 1440,
+                "EncodingProcess": "Baseline DCT, Huffman coding",
+                "BitsPerSample": 8,
+                "ColorComponents": 3,
+                "YCbCrSubSampling": "YCbCr4:2:0 (2 2)",
+                "ImageSize": "1920x1440",
+                "Megapixels": 2.8,
+                "SAGE2thumbnail": "uploads\\assets\\sage2-displays-phd-room.jpg"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\videos\\SAGE2_Trailer.mp4": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\videos\\SAGE2_Trailer.mp4",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\videos\\SAGE2_Trailer.mp4",
+            "exif": {
+                "SourceFile": "C:/sage2/sage2/sage2/public_HTTPS/uploads/videos/SAGE2_Trailer.mp4",
+                "ExifToolVersion": 10,
+                "FileName": "SAGE2_Trailer.mp4",
+                "Directory": "C:/sage2/sage2/sage2/public_HTTPS/uploads/videos",
+                "FileSize": "9.5 MB",
+                "FileModifyDate": "2014:11:25 04:43:53+09:00",
+                "FileAccessDate": "2015:09:03 17:20:10+09:00",
+                "FileCreateDate": "2015:09:03 17:20:10+09:00",
+                "FilePermissions": "rw-rw-rw-",
+                "FileType": "MP4",
+                "FileTypeExtension": "mp4",
+                "MIMEType": "video/mp4",
+                "MajorBrand": "MP4 v2 [ISO 14496-14]",
+                "MinorVersion": "0.0.0",
+                "CompatibleBrands": [
+                    "mp42",
+                    "isom",
+                    "avc1"
+                ],
+                "MovieHeaderVersion": 0,
+                "CreateDate": "2014:11:12 06:06:28",
+                "ModifyDate": "2014:11:12 06:06:39",
+                "TimeScale": 90000,
+                "Duration": "0:00:35",
+                "PreferredRate": 1,
+                "PreferredVolume": "100.00%",
+                "PreviewTime": "0 s",
+                "PreviewDuration": "0 s",
+                "PosterTime": "0 s",
+                "SelectionTime": "0 s",
+                "SelectionDuration": "0 s",
+                "CurrentTime": "0 s",
+                "NextTrackID": 3,
+                "TrackHeaderVersion": 0,
+                "TrackCreateDate": "2014:11:12 06:06:28",
+                "TrackModifyDate": "2014:11:12 06:06:39",
+                "TrackID": 1,
+                "TrackDuration": "0:00:35",
+                "TrackLayer": 0,
+                "TrackVolume": "0.00%",
+                "ImageWidth": 1280,
+                "ImageHeight": 720,
+                "GraphicsMode": "srcCopy",
+                "OpColor": "0 0 0",
+                "CompressorID": "avc1",
+                "SourceImageWidth": 1280,
+                "SourceImageHeight": 720,
+                "XResolution": 72,
+                "YResolution": 72,
+                "CompressorName": "JVT/AVC Coding",
+                "BitDepth": 24,
+                "ColorRepresentation": "nclc 1 1 1",
+                "PixelAspectRatio": "1:1",
+                "VideoFrameRate": 29.97,
+                "MatrixStructure": "1 0 0 0 1 0 0 0 1",
+                "MediaHeaderVersion": 0,
+                "MediaCreateDate": "2014:11:12 06:06:28",
+                "MediaModifyDate": "2014:11:12 06:06:39",
+                "MediaTimeScale": 48000,
+                "MediaDuration": "0:00:35",
+                "MediaLanguageCode": "und",
+                "Balance": 0,
+                "AudioFormat": "mp4a",
+                "AudioChannels": 2,
+                "AudioBitsPerSample": 16,
+                "AudioSampleRate": 48000,
+                "Track2Name": "Stereo",
+                "HandlerType": "Metadata",
+                "Encoder": "HandBrake 0.9.9 2013051800",
+                "MovieDataSize": 9944376,
+                "MovieDataOffset": 22841,
+                "AvgBitrate": "2.27 Mbps",
+                "ImageSize": "1280x720",
+                "Megapixels": 0.922,
+                "Rotation": 0,
+                "SAGE2thumbnail": "uploads\\assets\\SAGE2_Trailer.mp4"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\pdfs\\SAGE2_collaborate_com2014.pdf": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\pdfs\\SAGE2_collaborate_com2014.pdf",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\pdfs\\SAGE2_collaborate_com2014.pdf",
+            "exif": {
+                "SourceFile": "C:/sage2/sage2/sage2/public_HTTPS/uploads/pdfs/SAGE2_collaborate_com2014.pdf",
+                "ExifToolVersion": 10,
+                "FileName": "SAGE2_collaborate_com2014.pdf",
+                "Directory": "C:/sage2/sage2/sage2/public_HTTPS/uploads/pdfs",
+                "FileSize": "2.3 MB",
+                "FileModifyDate": "2014:11:25 04:43:53+09:00",
+                "FileAccessDate": "2015:09:03 17:20:10+09:00",
+                "FileCreateDate": "2015:09:03 17:20:10+09:00",
+                "FilePermissions": "rw-rw-rw-",
+                "FileType": "PDF",
+                "FileTypeExtension": "pdf",
+                "MIMEType": "application/pdf",
+                "PDFVersion": 1.4,
+                "Linearized": "Yes",
+                "AppleKeywords": "",
+                "Author": "Thomas Marrinan",
+                "CreateDate": "2014:09:19 01:07:35Z",
+                "ModifyDate": "2014:10:23 17:18:33-05:00",
+                "Subject": "",
+                "XMPToolkit": "Adobe XMP Core 5.4-c005 78.147326, 2012/08/23-13:03:03        ",
+                "Format": "application/pdf",
+                "Creator": "Thomas Marrinan",
+                "Description": "",
+                "Title": "CollaborateCom2014-CameraReady",
+                "CreatorTool": "Word",
+                "MetadataDate": "2014:10:23 17:18:33-05:00",
+                "Keywords": "",
+                "Producer": "Mac OS X 10.9.4 Quartz PDFContext",
+                "DocumentID": "uuid:9fc53c44-597f-3946-aaa7-9462e781d846",
+                "InstanceID": "uuid:aa7fd0dd-54b0-e54f-bbca-f3384400de1f",
+                "PageCount": 10,
+                "SAGE2thumbnail": "uploads\\assets\\SAGE2_collaborate_com2014.pdf"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\bounce": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\bounce",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\bounce",
+            "exif": {
+                "FileName": "bounce",
+                "icon": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\bounce\\test_icon.png",
+                "MIMEType": "application/custom",
+                "metadata": {
+                    "title": "Bounce",
+                    "version": "1.0.0",
+                    "description": "Canvas 2D with animation example",
+                    "author": "Thomas Marrinan <thomas.j.marrinan@gmail.com>",
+                    "license": "SAGE2-Software-License",
+                    "keywords": [
+                        "canvas",
+                        "2d"
+                    ]
+                },
+                "SAGE2thumbnail": "uploads\\assets\\apps\\bounce"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\cave2_monitor": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\cave2_monitor",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\cave2_monitor",
+            "exif": {
+                "FileName": "cave2_monitor",
+                "icon": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\cave2_monitor\\cave2b.webp",
+                "MIMEType": "application/custom",
+                "metadata": {
+                    "title": "CAVE2 Monitor",
+                    "version": "1.0.0",
+                    "description": "System activity monitor for CAVE2",
+                    "author": "Andrew Johnson <lenzman@me.com>",
+                    "license": "SAGE2-Software-License",
+                    "keywords": [
+                        "d3",
+                        "cave2",
+                        "performance",
+                        "monitoring"
+                    ]
+                },
+                "SAGE2thumbnail": "uploads\\assets\\apps\\cave2_monitor"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\chronicles_of_spaceman_spiff": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\chronicles_of_spaceman_spiff",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\chronicles_of_spaceman_spiff",
+            "exif": {
+                "FileName": "chronicles_of_spaceman_spiff",
+                "icon": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\chronicles_of_spaceman_spiff\\calvin.png",
+                "MIMEType": "application/custom",
+                "metadata": {
+                    "title": "Chronicles of Spaceman Spiff",
+                    "version": "1.0.0",
+                    "description": "Daily Calvin and Hobbes comic",
+                    "author": "Andrew Johnson <lenzman@me.com>",
+                    "license": "SAGE2-Software-License",
+                    "keywords": [
+                        "d3",
+                        "comic"
+                    ]
+                },
+                "SAGE2thumbnail": "uploads\\assets\\apps\\chronicles_of_spaceman_spiff"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\chronograph": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\chronograph",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\chronograph",
+            "exif": {
+                "FileName": "chronograph",
+                "icon": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\chronograph\\chronograph.webp",
+                "MIMEType": "application/custom",
+                "metadata": {
+                    "title": "Chronograph",
+                    "version": "1.0.0",
+                    "description": "A chronograph written in Canvas 2D",
+                    "author": "Luc Renambot <renambot@uic.edu>",
+                    "license": "SAGE2-Software-License",
+                    "keywords": [
+                        "clock",
+                        "2d",
+                        "svg"
+                    ]
+                },
+                "SAGE2thumbnail": "uploads\\assets\\apps\\chronograph"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\clock": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\clock",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\clock",
+            "exif": {
+                "FileName": "clock",
+                "icon": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\clock\\clock.png",
+                "MIMEType": "application/custom",
+                "metadata": {
+                    "title": "Clock",
+                    "version": "1.0.0",
+                    "description": "A 2D clock written in Canvas 2D",
+                    "author": "Thomas Marrinan <thomas.j.marrinan@gmail.com>",
+                    "license": "SAGE2-Software-License",
+                    "keywords": [
+                        "clock",
+                        "2d",
+                        "canvas"
+                    ]
+                },
+                "SAGE2thumbnail": "uploads\\assets\\apps\\clock"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\d3_sample": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\d3_sample",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\d3_sample",
+            "exif": {
+                "FileName": "d3_sample",
+                "icon": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\d3_sample\\d3.webp",
+                "MIMEType": "application/custom",
+                "metadata": {
+                    "title": "D3 example: Voronoi Geometry",
+                    "version": "1.0.0",
+                    "description": "A D3 sample portedto SAGE2",
+                    "author": "Luc Renambot <renambot@gmail.com>",
+                    "license": "SAGE2-Software-License",
+                    "keywords": [
+                        "d3",
+                        "example",
+                        "voronoi"
+                    ]
+                },
+                "SAGE2thumbnail": "uploads\\assets\\apps\\d3_sample"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\evl_photos": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\evl_photos",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\evl_photos",
+            "exif": {
+                "FileName": "evl_photos",
+                "icon": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\evl_photos\\photos.webp",
+                "MIMEType": "application/custom",
+                "metadata": {
+                    "title": "EVL Photo Slideshow",
+                    "version": "1.1.0",
+                    "description": "A slideshow of EVL history",
+                    "author": "Andrew Johnson <lenzman@me.com>",
+                    "license": "SAGE2-Software-License",
+                    "keywords": [
+                        "d3",
+                        "picture",
+                        "history",
+                        "slideshow"
+                    ]
+                },
+                "SAGE2thumbnail": "uploads\\assets\\apps\\evl_photos"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\evl_weather": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\evl_weather",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\evl_weather",
+            "exif": {
+                "FileName": "evl_weather",
+                "icon": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\evl_weather\\evl.png",
+                "MIMEType": "application/custom",
+                "metadata": {
+                    "title": "EVL Weather Map",
+                    "version": "1.0.1",
+                    "description": "EVL weather monitoring",
+                    "author": "Andrew Johnson <lenzman@me.com>",
+                    "license": "SAGE2-Software-License",
+                    "keywords": [
+                        "d3",
+                        "2d",
+                        "temperature",
+                        "weather"
+                    ]
+                },
+                "SAGE2thumbnail": "uploads\\assets\\apps\\evl_weather"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\googlemaps": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\googlemaps",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\googlemaps",
+            "exif": {
+                "FileName": "googlemaps",
+                "icon": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\googlemaps\\googlemaps.webp",
+                "MIMEType": "application/custom",
+                "metadata": {
+                    "title": "Google Maps",
+                    "version": "1.0.0",
+                    "description": "Map visualization using Google Maps Javascript API V3",
+                    "author": "Luc Renambot <renambot@gmail.com>",
+                    "license": "SAGE2-Software-License",
+                    "keywords": [
+                        "maps",
+                        "google",
+                        "geo"
+                    ]
+                },
+                "SAGE2thumbnail": "uploads\\assets\\apps\\googlemaps"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\histologyViewer": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\histologyViewer",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\histologyViewer",
+            "exif": {
+                "FileName": "histologyViewer",
+                "icon": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\histologyViewer\\histology.webp",
+                "MIMEType": "application/custom",
+                "metadata": {
+                    "title": "Histology Viewer",
+                    "version": "1.0.0",
+                    "description": "Histology Viewer for Pathology",
+                    "author": "Victor Mateevitsi <mvictoras@gmail.com>",
+                    "license": "SAGE2-Software-License",
+                    "keywords": [
+                        "openseadragon",
+                        "image",
+                        "viewer",
+                        "histology"
+                    ]
+                },
+                "SAGE2thumbnail": "uploads\\assets\\apps\\histologyViewer"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\kinetic_animation": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\kinetic_animation",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\kinetic_animation",
+            "exif": {
+                "FileName": "kinetic_animation",
+                "icon": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\kinetic_animation\\kinetic_animation.webp",
+                "MIMEType": "application/custom",
+                "metadata": {
+                    "title": "Kinetic Animation",
+                    "version": "1.0.0",
+                    "description": "Kinetic.js demo #1",
+                    "author": "Luc Renambot <renambot@gmail.com>",
+                    "license": "SAGE2-Software-License",
+                    "keywords": [
+                        "kinetic",
+                        "demo",
+                        "animation"
+                    ]
+                },
+                "SAGE2thumbnail": "uploads\\assets\\apps\\kinetic_animation"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\kinetic_oscillating": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\kinetic_oscillating",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\kinetic_oscillating",
+            "exif": {
+                "FileName": "kinetic_oscillating",
+                "icon": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\kinetic_oscillating\\kinetic_oscillating.webp",
+                "MIMEType": "application/custom",
+                "metadata": {
+                    "title": "Kinetic Oscillating",
+                    "version": "1.0.0",
+                    "description": "Kinetic.js demo #2",
+                    "author": "Luc Renambot <renambot@gmail.com>",
+                    "license": "SAGE2-Software-License",
+                    "keywords": [
+                        "kinetic",
+                        "demo",
+                        "animation"
+                    ]
+                },
+                "SAGE2thumbnail": "uploads\\assets\\apps\\kinetic_oscillating"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\modest": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\modest",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\modest",
+            "exif": {
+                "FileName": "modest",
+                "icon": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\modest\\modestmaps.webp",
+                "MIMEType": "application/custom",
+                "metadata": {
+                    "title": "Modest Maps",
+                    "version": "1.0.0",
+                    "description": "Demo using the Modest Maps API",
+                    "author": "Luc Renambot <renambot@gmail.com>",
+                    "license": "SAGE2-Software-License",
+                    "keywords": [
+                        "maps",
+                        "modest",
+                        "geo"
+                    ]
+                },
+                "SAGE2thumbnail": "uploads\\assets\\apps\\modest"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\notepad": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\notepad",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\notepad",
+            "exif": {
+                "FileName": "notepad",
+                "icon": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\notepad\\notepad.webp",
+                "MIMEType": "application/custom",
+                "metadata": {
+                    "title": "Notepad",
+                    "version": "1.0.0",
+                    "description": "A multi-user notepad application",
+                    "author": "Krishna Bharadwaj <krishnaknbharadwaj@gmail.com>",
+                    "license": "SAGE2-Software-License",
+                    "keywords": [
+                        "notepad",
+                        "collaborative",
+                        "text"
+                    ]
+                },
+                "SAGE2thumbnail": "uploads\\assets\\apps\\notepad"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\playcanvas": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\playcanvas",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\playcanvas",
+            "exif": {
+                "FileName": "playcanvas",
+                "icon": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\playcanvas\\playcanvas.webp",
+                "MIMEType": "application/custom",
+                "metadata": {
+                    "title": "Play Canvas Demo",
+                    "version": "1.0.0",
+                    "description": "Demo using the Playcanvas game engine",
+                    "author": "Luc Renambot <renambot@gmail.com>",
+                    "license": "SAGE2-Software-License",
+                    "keywords": [
+                        "game",
+                        "engine",
+                        "webgl",
+                        "3d"
+                    ]
+                },
+                "SAGE2thumbnail": "uploads\\assets\\apps\\playcanvas"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\presentation": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\presentation",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\presentation",
+            "exif": {
+                "FileName": "presentation",
+                "icon": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\presentation\\presentation.webp",
+                "MIMEType": "application/custom",
+                "metadata": {
+                    "title": "Presentation",
+                    "version": "1.0.0",
+                    "description": "Experiments showing online presentation",
+                    "author": "Luc Renambot <renambot@gmail.com>",
+                    "license": "SAGE2-Software-License",
+                    "keywords": [
+                        "online",
+                        "presentation",
+                        "microsoft",
+                        "google"
+                    ]
+                },
+                "SAGE2thumbnail": "uploads\\assets\\apps\\presentation"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\prime": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\prime",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\prime",
+            "exif": {
+                "FileName": "prime",
+                "icon": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\prime\\prime.webp",
+                "MIMEType": "application/custom",
+                "metadata": {
+                    "title": "Prime numbers",
+                    "version": "1.0.0",
+                    "description": "Demo showing the use of WebWorkers to calculate prime numbers",
+                    "author": "Luc Renambot <renambot@gmail.com>",
+                    "license": "SAGE2-Software-License",
+                    "keywords": [
+                        "webworker",
+                        "thread",
+                        "prime",
+                        "computation"
+                    ]
+                },
+                "SAGE2thumbnail": "uploads\\assets\\apps\\prime"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\radar": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\radar",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\radar",
+            "exif": {
+                "FileName": "radar",
+                "icon": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\radar\\radar.png",
+                "MIMEType": "application/custom",
+                "metadata": {
+                    "title": "Radar Maps",
+                    "version": "1.0.1",
+                    "description": "Radar maps of various locations",
+                    "author": "Andrew Johnson <lenzman@me.com>",
+                    "license": "SAGE2-Software-License",
+                    "keywords": [
+                        "maps",
+                        "d3",
+                        "geo",
+                        "weather"
+                    ]
+                },
+                "SAGE2thumbnail": "uploads\\assets\\apps\\radar"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\tank": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\tank",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\tank",
+            "exif": {
+                "FileName": "tank",
+                "icon": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\tank\\tank.webp",
+                "MIMEType": "application/custom",
+                "metadata": {
+                    "title": "Tank Game",
+                    "version": "1.0.0",
+                    "description": "Shoot'em up 2D tank game",
+                    "author": "Dylan Kobayashi <dylank@hawaii.edu>",
+                    "license": "SAGE2-Software-License",
+                    "keywords": [
+                        "canvas",
+                        "game",
+                        "2d"
+                    ]
+                },
+                "SAGE2thumbnail": "uploads\\assets\\apps\\tank"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\texture_cube": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\texture_cube",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\texture_cube",
+            "exif": {
+                "FileName": "texture_cube",
+                "icon": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\texture_cube\\cube.webp",
+                "MIMEType": "application/custom",
+                "metadata": {
+                    "title": "Textured Cube",
+                    "version": "1.0.0",
+                    "description": "A WebGL demonstation of animation and texturing",
+                    "author": "Thomas Marrinan <thomas.j.marrinan@gmail.com>",
+                    "license": "SAGE2-Software-License",
+                    "keywords": [
+                        "webgl",
+                        "animation",
+                        "3d"
+                    ]
+                },
+                "SAGE2thumbnail": "uploads\\assets\\apps\\texture_cube"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\threejs_loader_ctm": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\threejs_loader_ctm",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\threejs_loader_ctm",
+            "exif": {
+                "FileName": "threejs_loader_ctm",
+                "icon": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\threejs_loader_ctm\\threejs_loader_ctm.webp",
+                "MIMEType": "application/custom",
+                "metadata": {
+                    "title": "Three.js OpenCTM loader",
+                    "version": "1.0.0",
+                    "description": "A Three.js OpenCTM model loader example (adapted from http://threejs.org)",
+                    "author": "Luc Renambot <renambot@gmail.com>",
+                    "license": "SAGE2-Software-License",
+                    "keywords": [
+                        "three",
+                        "3d",
+                        "animation"
+                    ]
+                },
+                "SAGE2thumbnail": "uploads\\assets\\apps\\threejs_loader_ctm"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\threejs_sample": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\threejs_sample",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\threejs_sample",
+            "exif": {
+                "FileName": "threejs_sample",
+                "icon": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\threejs_sample\\threejs.webp",
+                "MIMEType": "application/custom",
+                "metadata": {
+                    "title": "Three.js minimal app",
+                    "version": "1.0.0",
+                    "description": "A simple Three.js demonstration",
+                    "author": "Luc Renambot <renambot@gmail.com>",
+                    "license": "SAGE2-Software-License",
+                    "keywords": [
+                        "three",
+                        "3d",
+                        "animation"
+                    ]
+                },
+                "SAGE2thumbnail": "uploads\\assets\\apps\\threejs_sample"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\threejs_shader": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\threejs_shader",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\threejs_shader",
+            "exif": {
+                "FileName": "threejs_shader",
+                "icon": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\threejs_shader\\threejs_shader.webp",
+                "MIMEType": "application/custom",
+                "metadata": {
+                    "title": "Three.js shader demo",
+                    "version": "1.0.0",
+                    "description": "A Three.js shader demonstration (adapted from http://threejs.org/)",
+                    "author": "Luc Renambot <renambot@gmail.com>",
+                    "license": "SAGE2-Software-License",
+                    "keywords": [
+                        "three",
+                        "3d",
+                        "animation"
+                    ]
+                },
+                "SAGE2thumbnail": "uploads\\assets\\apps\\threejs_shader"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\tweetcloud": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\tweetcloud",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\tweetcloud",
+            "exif": {
+                "FileName": "tweetcloud",
+                "icon": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\tweetcloud\\tweetcloud.png",
+                "MIMEType": "application/custom",
+                "metadata": {
+                    "title": "Tweet Cloud",
+                    "version": "1.0.0",
+                    "description": "Uses Twitter API to create word cloud of hashtags and usernames",
+                    "author": "Thomas Marrinan <thomas.j.marrinan@gmail.com>",
+                    "license": "SAGE2-Software-License",
+                    "keywords": [
+                        "twitter",
+                        "word cloud",
+                        "hashtag",
+                        "d3"
+                    ]
+                },
+                "SAGE2thumbnail": "uploads\\assets\\apps\\tweetcloud"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\UIC_crime_with_leaflet": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\UIC_crime_with_leaflet",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\UIC_crime_with_leaflet",
+            "exif": {
+                "FileName": "UIC_crime_with_leaflet",
+                "icon": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\UIC_crime_with_leaflet\\watch.png",
+                "MIMEType": "application/custom",
+                "metadata": {
+                    "title": "UIC crime",
+                    "version": "1.0.1",
+                    "description": "Shows crime data around UIC with D3.js and leaflet map API",
+                    "author": "Andrew Johnson <lenzman@me.com>",
+                    "license": "SAGE2-Software-License",
+                    "keywords": [
+                        "crime",
+                        "map",
+                        "leaflet",
+                        "d3",
+                        "geo"
+                    ]
+                },
+                "SAGE2thumbnail": "uploads\\assets\\apps\\UIC_crime_with_leaflet"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\unity": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\unity",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\unity",
+            "exif": {
+                "FileName": "unity",
+                "icon": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\unity\\unity.webp",
+                "MIMEType": "application/custom",
+                "metadata": {
+                    "title": "Unity3D viewer",
+                    "version": "1.0.0",
+                    "description": "Test to load Unity3D games",
+                    "author": "Luc Renambot <renambot@gmail.com>",
+                    "license": "SAGE2-Software-License",
+                    "keywords": [
+                        "unity3d",
+                        "3d",
+                        "plugin"
+                    ]
+                },
+                "SAGE2thumbnail": "uploads\\assets\\apps\\unity"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\US_weather": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\US_weather",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\US_weather",
+            "exif": {
+                "FileName": "US_weather",
+                "icon": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\US_weather\\weather.png",
+                "MIMEType": "application/custom",
+                "metadata": {
+                    "title": "US Weather",
+                    "version": "1.0.0",
+                    "description": "US Weather map using D3.js",
+                    "author": "Andrew Johnson <lenzman@me.com>",
+                    "license": "SAGE2-Software-License",
+                    "keywords": [
+                        "maps",
+                        "weather",
+                        "geo",
+                        "d3"
+                    ]
+                },
+                "SAGE2thumbnail": "uploads\\assets\\apps\\US_weather"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\wallMenuUI": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\wallMenuUI",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\wallMenuUI",
+            "exif": {
+                "FileName": "wallMenuUI",
+                "icon": null,
+                "MIMEType": "application/custom",
+                "metadata": {
+                    "title": "Wall Menu Interface",
+                    "version": "1.0.0",
+                    "description": "A touch and mouse menu interface",
+                    "author": "Arthur Nishimoto <arthur.nishimoto@gmail.com",
+                    "license": "SAGE2-Software-License",
+                    "keywords": [
+                        "2d",
+                        "canvas",
+                        "ui"
+                    ]
+                },
+                "SAGE2thumbnail": "uploads\\assets\\apps\\unknownapp"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\whiteboard": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\whiteboard",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\whiteboard",
+            "exif": {
+                "FileName": "whiteboard",
+                "icon": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\whiteboard\\whiteboard.png",
+                "MIMEType": "application/custom",
+                "metadata": {
+                    "title": "Whiteboard",
+                    "version": "1.0.0",
+                    "description": "A 2D drawing application using Wacom pen",
+                    "author": "Luc Renambot <renambot@gmail.com>",
+                    "license": "SAGE2-Software-License",
+                    "keywords": [
+                        "2d",
+                        "kinetic",
+                        "drawing",
+                        "wacom"
+                    ]
+                },
+                "SAGE2thumbnail": "uploads\\assets\\apps\\whiteboard"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\widget_demo": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\widget_demo",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\widget_demo",
+            "exif": {
+                "FileName": "widget_demo",
+                "icon": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\widget_demo\\widget.webp",
+                "MIMEType": "application/custom",
+                "metadata": {
+                    "title": "Widget Demo",
+                    "version": "1.0.0",
+                    "description": "A simple demo app to show widget in action",
+                    "author": "Krishna Bharadwaj <krishnaknbharadwaj@gmail.com>",
+                    "license": "SAGE2-Software-License",
+                    "keywords": [
+                        "demo",
+                        "widget"
+                    ]
+                },
+                "SAGE2thumbnail": "uploads\\assets\\apps\\widget_demo"
+            }
+        },
+        "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\zoom": {
+            "filename": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\zoom",
+            "url": null,
+            "id": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\zoom",
+            "exif": {
+                "FileName": "zoom",
+                "icon": "C:\\sage2\\sage2\\sage2\\public_HTTPS\\uploads\\apps\\zoom\\zoom.webp",
+                "MIMEType": "application/custom",
+                "metadata": {
+                    "title": "Multi-Res Image Viewer",
+                    "version": "1.0.0",
+                    "description": "High-resolution Image Viewer using the Openseadragon API",
+                    "author": "Luc Renambot <renambot@gmail.com>",
+                    "license": "SAGE2-Software-License",
+                    "keywords": [
+                        "openseadragon",
+                        "image",
+                        "viewer"
+                    ]
+                },
+                "SAGE2thumbnail": "uploads\\assets\\apps\\zoom"
+            }
+        }
+    }
+}
