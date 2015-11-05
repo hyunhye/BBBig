@@ -170,6 +170,8 @@ function radialMenu(){
 		this.idleMaximizeIcon.src = this.resrcPath + "maximize.svg";
 		this.idleTileIcon = new Image();
 		this.idleTileIcon.src = "images/ui/tilecontent.svg";
+		this.idleFreeIcon = new Image();
+		this.idleFreeIcon.src = "images/ui/tilecontent.svg";
 		
 		// radial menu icons
 		this.radialMenuIcon = new Image();
@@ -231,6 +233,9 @@ function radialMenu(){
 		this.radial2TileButton = this.createRadialButton( this.radialMenuIcon, false, menuButtonSize, menuButtonHitboxSize, 'centered', 'circle', 7.675, menuLevel2Radius )
 		this.radial2TileButton.setOverlayImage( this.idleTileIcon, overlayIconScale );
 		
+		this.radial2FreeButton = this.createRadialButton( this.radialMenuIcon, false, menuButtonSize, menuButtonHitboxSize, 'centered', 'circle', 7.025, menuLevel2Radius )
+		this.radial2FreeButton.setOverlayImage( this.idleFreeIcon, overlayIconScale );
+		
 		this.radial2ImageButton = new buttonWidget();
 		this.radial2ImageButton.init(0, this.ctx, null);
 		this.radial2ImageButton.setIdleImage( this.radialMenuIcon );
@@ -273,6 +278,7 @@ function radialMenu(){
 		this.radial2AppButton.alignment = 'centered';
 		this.radial2CloseAllButton.alignment = 'centered';
 		this.radial2TileButton.alignment = 'centered';
+		this.radial2FreeButton.alignment = 'centered';
 		
 		angle = (initAngle + angleSeparation * 1) * (Math.PI/180);
 		this.radial2ImageButton.setPosition( radialMenuCenter.x - menuLevel2Radius * Math.cos(angle), radialMenuCenter.y - menuLevel2Radius * Math.sin(angle) );
@@ -401,6 +407,7 @@ function radialMenu(){
 		{
 			this.radial2CloseAllButton.draw();
 			this.radial2TileButton.draw();
+			this.radial2FreeButton.draw();
 		}
 		
 		if( this.currentRadialState === 'radialMenu' )
@@ -830,6 +837,7 @@ function radialMenu(){
 		{
 			buttonOverCount += this.radial2CloseAllButton.onEvent(type, user.id, position, data);
 			buttonOverCount += this.radial2TileButton.onEvent(type, user.id, position, data);
+			buttonOverCount += this.radial2FreeButton.onEvent(type, user.id, position, data);
 		}
 		
 		if( this.radial2CloseAllButton.isClicked() && this.sendsToServer === true )
@@ -839,6 +847,10 @@ function radialMenu(){
 		if( this.radial2TileButton.isClicked() && this.sendsToServer === true )
 		{
 			this.wsio.emit('tileApplications');
+		}
+		if( this.radial2FreeButton.isClicked() && this.sendsToServer === true )
+		{
+			this.wsio.emit('freeApplications');
 		}
 		
 		if( this.radialImageButton.isClicked() || this.radial2ImageButton.isClicked() )
