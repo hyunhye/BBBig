@@ -481,19 +481,21 @@ function uiBuilder(json_cfg, clientID) {
 			this.radialMenus[data.id+"_menu"] = menu;
 			this.radialMenus[data.id+"_menu"].draw();
 		}
+		
+		/***** hyunhye *****/
         // visible에 상관없이 메뉴 만들기(draw)
-		//if( this.radialMenus[menuElem.id].visible === false )
-		//{
+		if( this.radialMenus[menuElem.id].visible === false )
+		{
 			menuElem.style.left = (data.x - this.offsetX - this.radialMenus[data.id+"_menu"].radialMenuCenter.x).toString() + "px";
 			menuElem.style.top  = (data.y - this.offsetY - this.radialMenus[data.id+"_menu"].radialMenuCenter.y).toString()  + "px";
 			
 			this.radialMenus[menuElem.id].thumbnailWindowElement.style.left = menuElem.style.left;
 			this.radialMenus[menuElem.id].thumbnailWindowElement.style.top = menuElem.style.top;
 			
-			this.radialMenus[menuElem.id].visible = true;
+			//this.radialMenus[menuElem.id].visible = true;
 			//menuElem.style.display = "block";
 			this.radialMenus[menuElem.id].draw();
-		//}
+		}
 	};
 	
 	this.radialMenuEvent = function(data) {
