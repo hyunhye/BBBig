@@ -1430,7 +1430,7 @@ function tileApplications() {
     }
 }
 
-// Display Free mode
+// Display Free mode // 우리가 건들여야하는 부분 (프리모드 아이콘 클릭하면 이 메소드가 호출됨)
 function freeApplications() {
     var app;
     var i, c, r;
