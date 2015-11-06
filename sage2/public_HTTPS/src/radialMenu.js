@@ -1238,7 +1238,7 @@ function radialMenu(){
 				var currentButton = this.imageThumbnailButtons[i];
 				
 				
-				if( nextCol > thumbWindowSize.x + (neededColumns+2) * (imageThumbSize + thumbSpacer) )
+				if( nextCol > thumbWindowSize.x + (neededColumns+4) * (imageThumbSize + thumbSpacer) )
 				{
 					curColumn = 0;
 					
