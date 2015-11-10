@@ -1450,36 +1450,8 @@ function freeApplications() {
     var arDiff = displayAr / averageWindowAspectRatio();
     var numWindows = applications.length;
 
-    numCols = Math.ceil(numWindows);
-    // 3 scenarios... windows are on average the same aspect ratio as the display
-    //if (arDiff >= 0.7 && arDiff <= 1.3) {
-        //numCols = Math.ceil(Math.sqrt(numWindows));
-        //numRows = Math.ceil(numWindows / numCols);
-    //}
-    //else if (arDiff < 0.7) {
-    //    // windows are much wider than display
-    //    c = Math.round(1 / (arDiff / 2.0));
-    //    if (numWindows <= c) {
-    //        numRows = numWindows;
-    //        numCols = 1;
-    //    }
-    //    else {
-    //        numCols = Math.max(2, Math.round(numWindows / c));
-    //        numRows = Math.round(Math.ceil(numWindows / numCols));
-    //    }
-    //}
-    //else {
-        // windows are much taller than display
-        //c = Math.round(arDiff * 2);
-        //if (numWindows <= c) {
-        //    numCols = numWindows;
-        //    numRows = 1;
-        //}
-        //else {
-        //    numRows = Math.max(2, Math.round(numWindows / c));
-        //    numCols = Math.round(Math.ceil(numWindows / numRows));
-        //}
-   // }
+    numCols = Math.ceil(Math.sqrt(numWindows));
+    numRows = Math.ceil(numWindows / numCols);
 
     // determine the bounds of the tiling area
     var titleBar = config.ui.titleBarHeight;
@@ -1491,8 +1463,8 @@ function freeApplications() {
     var areaW = config.totalWidth;
     var areaH = config.totalHeight - (1.0 * titleBar);
 
-    var tileW = Math.floor(areaW );
-    var tileH = Math.floor(areaH );
+    var tileW = Math.floor(areaW / numCols);
+    var tileH = Math.floor(areaH / numRows);
 
     // go through them in sorted order
     // applications.sort()
