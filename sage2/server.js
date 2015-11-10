@@ -1431,17 +1431,103 @@ function tileApplications() {
 }
 
 // Display Free mode // 우리가 건들여야하는 부분 (프리모드 아이콘 클릭하면 이 메소드가 호출됨)
+// hyunhye
 function freeApplications() {
 
-var PythonShell = require('python-shell');
+//var PythonShell = require('python-shell');
  
-PythonShell.run('spaceManager.py', function (err) {
-  if (err) {
-	console.log("Dynamic Mode err", err);
-  }
-  console.log('finished');
-});
+//PythonShell.run('spaceManager.py', function (err) {
+//  if (err) {
+//	console.log("Dynamic Mode err", err);
+//  }
+//  console.log('finished');
+//});
+    var app;
+    var i, c, r;
+    var numCols, numRows;
 
+    var displayAr = config.totalWidth / config.totalHeight;
+    var arDiff = displayAr / averageWindowAspectRatio();
+    var numWindows = applications.length;
+
+    // 3 scenarios... windows are on average the same aspect ratio as the display
+    //if (arDiff >= 0.7 && arDiff <= 1.3) {
+    //    numCols = Math.ceil(Math.sqrt(numWindows));
+    //    numRows = Math.ceil(numWindows / numCols);
+    //}
+    //else if (arDiff < 0.7) {
+    //    // windows are much wider than display
+    //    c = Math.round(1 / (arDiff / 2.0));
+    //    if (numWindows <= c) {
+    //        numRows = numWindows;
+    //        numCols = 1;
+    //    }
+    //    else {
+    //        numCols = Math.max(2, Math.round(numWindows / c));
+    //        numRows = Math.round(Math.ceil(numWindows / numCols));
+    //    }
+    //}
+    //else {
+        // windows are much taller than display
+        c = Math.round(arDiff * 2);
+        if (numWindows <= c) {
+            numCols = numWindows;
+            numRows = 1;
+        }
+        else {
+            numRows = Math.max(2, Math.round(numWindows / c));
+            numCols = Math.round(Math.ceil(numWindows / numRows));
+        }
+   // }
+
+    // determine the bounds of the tiling area
+    var titleBar = config.ui.titleBarHeight;
+    if (config.ui.auto_hide_ui === true) titleBar = 0;
+    var areaX = 0;
+    var areaY = Math.round(1.5 * titleBar); // keep 0.5 height as margin
+    if (config.ui.auto_hide_ui === true) areaY = -config.ui.titleBarHeight;
+
+    var areaW = config.totalWidth;
+    var areaH = config.totalHeight - (1.0 * titleBar);
+
+    var tileW = Math.floor(areaW / numCols);
+    var tileH = Math.floor(areaH / numRows);
+
+    // go through them in sorted order
+    // applications.sort()
+
+    var padding = 4;
+    // if only one application, no padding, i.e maximize
+    if (applications.length === 1) padding = 0;
+    r = numRows - 1;
+    c = 0;
+    for (i = 0; i < applications.length; i++) {
+        // get the application
+        app = applications[i];
+        // calculate new dimensions
+        var newdims = fitWithin(app, c * tileW + areaX, r * tileH + areaY, tileW, tileH, padding);
+        // update the data structure
+        app.left = newdims[0];
+        app.top = newdims[1] - titleBar;
+        app.width = newdims[2];
+        app.height = newdims[3];
+        // build the object to be sent
+        var updateItem = {
+            elemId: app.id,
+            elemLeft: app.left, elemTop: app.top,
+            elemWidth: app.width, elemHeight: app.height,
+            force: true, date: new Date()
+        };
+        // send the order
+        broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
+
+        c += 1;
+        if (c === numCols) {
+            c = 0;
+            r -= 1;
+        }
+    }
+    
 }
 
 // Remove all applications
@@ -1463,6 +1549,10 @@ function wsClearDisplay(wsio, data) {
 
 function wsTileApplications(wsio, data) {
 	tileApplications();
+}
+
+function wsFreeApplications(wsio, data) {
+    freeApplications();
 }
 
 
