@@ -394,6 +394,7 @@ function initializeWSClient(wsio) {
 		wsio.on('saveSesion',       wsSaveSesion);
 		wsio.on('clearDisplay',     wsClearDisplay);
 		wsio.on('tileApplications', wsTileApplications);
+		wsio.on('freeApplications', wsFreeApplications);
 	}
 	if(wsio.messages.sendsWebContentToLoad){
 		wsio.on('addNewWebElement', wsAddNewWebElement);
@@ -1434,14 +1435,6 @@ function tileApplications() {
 // hyunhye
 function freeApplications() {
 
-//var PythonShell = require('python-shell');
- 
-//PythonShell.run('spaceManager.py', function (err) {
-//  if (err) {
-//	console.log("Dynamic Mode err", err);
-//  }
-//  console.log('finished');
-//});
     var app;
     var i, c, r;
     var numCols, numRows;
@@ -1450,8 +1443,10 @@ function freeApplications() {
     var arDiff = displayAr / averageWindowAspectRatio();
     var numWindows = applications.length;
 
+
     numCols = Math.ceil(Math.sqrt(numWindows));
     numRows = Math.ceil(numWindows / numCols);
+   
 
     // determine the bounds of the tiling area
     var titleBar = config.ui.titleBarHeight;
