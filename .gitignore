@@ -1,37 +1,37 @@
-sage2/sage2/build/
+sage2/build/
 
-sage2/sage2/config/
+sage2/config/
 
-sage2/sage2/doc/
-
-
-sage2/sage2/extras/
+sage2/doc/
 
 
-sage2/sage2/GO-scripts/
+sage2/extras/
 
 
-sage2/sage2/keys/
-
-sage2/sage2/node_modules/
-
-sage2/sage2/public_HTTP/
+sage2/GO-scripts/
 
 
-sage2/sage2/sessions/
+sage2/keys/
+
+sage2/node_modules/
+
+sage2/public_HTTP/
 
 
-sage2/sage2/temp/
+sage2/sessions/
+
+
+sage2/temp/
 
 
 
-sage2/AUTHORS
+AUTHORS
 
 
-sage2/LICENSE
+LICENSE
 
 
-sage2/package.json
+package.json
 
 
-sage2/README.md
+README.md
