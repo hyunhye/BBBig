@@ -33,7 +33,7 @@ var overlayIconScale = 0.5; // image, pdf, etc image
 var thumbnailScrollScale = 1;
 var thumbnailDisableSelectionScrollDistance = 5; // Distance in pixels scroll window can move before button select is cancelled
 var thumbnailWindowSize = { x: 1224, y: 860 };
-var thumbnailPreviewWindowSize = { x: 550, y: 800 };
+var thumbnailPreviewWindowSize = { x: 550, y: 800 }; // 파일아이콘에 마우스 가져다 대면 미리보기 내용 뜨는 부분
 
 var radialMenuList = {};
 
@@ -191,8 +191,13 @@ function radialMenu(){
 		this.glowLineOpen.src = this.resrcPath + "glow_lines2A_menu_1024.png";
 		
 		this.thumbnailWindowFrame = new Image();
-		this.thumbnailWindowFrame.src = this.resrcPath +"thumbnail_window_frame2.png";
-		
+		this.thumbnailWindowFrame.src = this.resrcPath + "thumbnail_window_frame2.png";
+
+	    // seojin
+        /*
+		this.loadAllIcon = new Image();
+		this.loadAllIcon.src = "images/ui/tilecontent.svg";
+		*/
 		// Create buttons
 		// icon, useBackgroundColor, buttonSize, hitboxSize, alignment, hitboxType, radialAnglePos, radialDistance
 		this.radialDragButton = this.createRadialButton( this.radialDragIcon, false, 500, imageThumbSize, 'centered', 'circle', 0, 0 )
@@ -235,7 +240,7 @@ function radialMenu(){
 		
 		this.radial2FreeButton = this.createRadialButton( this.radialMenuIcon, false, menuButtonSize, menuButtonHitboxSize, 'centered', 'circle', 7.025, menuLevel2Radius )
 		this.radial2FreeButton.setOverlayImage( this.idleFreeIcon, overlayIconScale );
-		
+
 		this.radial2ImageButton = new buttonWidget();
 		this.radial2ImageButton.init(0, this.ctx, null);
 		this.radial2ImageButton.setIdleImage( this.radialMenuIcon );
@@ -294,9 +299,14 @@ function radialMenu(){
 		
 		angle = (initAngle + angleSeparation * 3) * (Math.PI/180);
 		this.radial2AppButton.setPosition( radialMenuCenter.x - menuLevel2Radius * Math.cos(angle), radialMenuCenter.y - menuLevel2Radius * Math.sin(angle) );
-		this.radial2AppButton.setRotation( angle - Math.PI/2 );
-	
-		
+		this.radial2AppButton.setRotation(angle - Math.PI / 2);
+	    // seojin
+	/*
+		this.radial2FreeButton = this.createRadialButton(this.radialMenuIcon, false, menuButtonSize, menuButtonHitboxSize, 'centered', 'circle', 7.025, menuLevel2Radius)
+		this.radial2FreeButton.setOverlayImage(this.idleFreeIcon, overlayIconScale);
+
+		this.loadAllIcon = new Image();
+		this.loadAllIcon.src = "images/ui/tilecontent.svg";*/
 	};
 	
 	this.createRadialButton = function( idleIcon, useBackgroundColor, buttonSize, hitboxSize, alignment, hitboxShape, radialPos, buttonRadius )
@@ -451,6 +461,7 @@ function radialMenu(){
 			
 			// Preview window
 			previewImageSize = this.element.width * previewWindowWidth;
+            // Preview window에 뜨는 미리보기 이미지
 			previewImageX = thumbnailWindowSize.x + imageThumbSize/2 - 10;
 			previewImageY = 60;
 				
