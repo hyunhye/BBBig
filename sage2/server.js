@@ -1436,7 +1436,9 @@ function freeApplications() {
 var PythonShell = require('python-shell');
  
 PythonShell.run('spaceManager.py', function (err) {
-  if (err) throw err;
+  if (err) {
+	console.log("Dynamic Mode err", err);
+  }
   console.log('finished');
 });
 
