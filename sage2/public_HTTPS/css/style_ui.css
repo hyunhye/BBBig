@@ -266,6 +266,18 @@ span {
 	text-align: center;
 }
 
+#freecontentContainer {
+	width: 100px;
+	float: left;
+	text-align: center;
+}
+
+#dynamiccontentContainer {
+	width: 100px;
+	float: left;
+	text-align: center;
+}
+
 #savesessionContainer {
 	width: 100px;
 	float: left;
