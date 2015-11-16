@@ -4,6 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=10.0, minimum-scale=1.0, user-scalable=1" />
 <title>SAGE2 UI - Mobile</title>
+
 <!--<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">-->
 <script type="text/javascript">
 	// SAGE2 is available for use under the SAGE2 Software License 
@@ -776,6 +777,14 @@
 			wsio.emit('tileApplications');
 			hideDialog('arrangementDialog');
 		}
+		else if(element.id === "freecontent") {
+			wsio.emit('freeApplications');
+			hideDialog('arrangementDialog');
+		}
+		else if(element.id === "dynamiccontent") {
+			wsio.emit('tileApplications');
+			hideDialog('arrangementDialog');
+		}
 		else if(element.id === "savesession") {
 			var template = "Session " + dateToYYYYMMDDHHMMSS(new Date());
 			var filename = prompt("Please enter a session name\n(Leave blank for name based on server's time)", template);
@@ -1140,12 +1149,21 @@
 		xhr.send();
 	}
 </script>
+<script type="text/javascript">
+function on_key_down() {
+	var keycode = event.keyCode;
+	if ( keycode == 13 ) {
+		interactor.startSAGE2Pointer(document.getElementById("bodyid")); // 브라우저 기능 키 무효화
+	}
+}	
+</script>
 
-<link rel="stylesheet" type="text/css" href="css/style_ui.css" media="screen">
+
+<link rel="stylesheet" type="text/css" href="css/style_ui.css" media="screen" >
 
 </head>
 
-<body onload="init()" onresize="resize()">
+<body onload="init()" onresize="resize()" onkeydown='on_key_down()' id="bodyid">
 	<div id="mainUI">
 		<div id="displayUI">
 			<canvas id="sage2UI"></canvas>
@@ -1197,7 +1215,7 @@
 		<img alt="sage2pointerHelp" id="sage2pointerHelp" src="images/SAGE2Pointer-help.svg"/>
 	</div>
 	
-	<!-- dialog for the App Launcher-->
+	<!-- 	for the App Launcher-->
 	<div id="appLauncherDialog" class="dialog">
 		<div id="appListContainer">
 			<table id="appList">
@@ -1278,13 +1296,23 @@
 				<img alt="clearcontent" id="clearcontent" src="images/ui/[graycircle]-clearcontent.svg" width="64" height="64"/>
 				<p>Clear All</p>
 			</div>
+			
+			<div id="savesessionContainer">
+				<img alt="savesession" id="savesession" src="images/ui/[graycircle]-savesession.svg" width="64" height="64"/>
+				<p>Save Session</p>
+			</div>
+			
 			<div id="tilecontentContainer">
 				<img alt="tilecontent" id="tilecontent" src="images/ui/[graycircle]-tilecontent.svg" width="64" height="64"/>
 				<p>Tile Content</p>
 			</div>
-			<div id="savesessionContainer">
-				<img alt="savesession" id="savesession" src="images/ui/[graycircle]-savesession.svg" width="64" height="64"/>
-				<p>Save Session</p>
+			<div id="freecontentContainer">
+				<img alt="freecontent" id="freecontent" src="images/ui/[graycircle]-tilecontent.svg" width="64" height="64"/>
+				<p>Free Content</p>
+			</div>
+			<div id="dynamiccontentContainer">
+				<img alt="dynamiccontent" id="dynamiccontent" src="images/ui/[graycircle]-tilecontent.svg" width="64" height="64"/>
+				<p>Dynamic Content</p>
 			</div>
 		</div>
 		<div id="arrangementButtons">
@@ -1376,7 +1404,7 @@
 	<div id="localfileDialog" class="dialog">
 		<div id="localfileItems">
 			<form name="localForm">
-				<input type="file" id="filenameForUpload" name="myfile" accept="image/*" class="button">
+				<input type="file" id="filenameForUpload" name='myfile[]' multiple accept="image/*" class="button">
 				<span id="localfileUploadBtn" class="button">Upload</span>
 			</form>
 			<span id="cancelFilesBtn2" class="button">Close</span>
