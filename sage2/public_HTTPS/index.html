@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head lang="en">
 <meta charset="utf-8" />
@@ -1075,15 +1075,6 @@
 			var application = selectedAppEntry.getAttribute("application");
 			
 			wsio.emit('loadApplication', {application: application});
-		}
-	}
-	
-	function loadSelectedFile() {
-		if(selectedFileEntry !== null) {
-			var application = selectedFileEntry.getAttribute("application");
-			var file = selectedFileEntry.getAttribute("file");
-			
-			wsio.emit('loadFileFromServer', {application: application, filename: file});
 		}
 	}
 	

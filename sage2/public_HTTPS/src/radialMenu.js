@@ -10,7 +10,6 @@
 
 // layout parameters
 
-// 이미지 아이콘 클릭시 radial2 메뉴, previewwindow창 동시에 꺼지는 거 해야됨 ing
 var imageThumbSize = 75;
 var thumbSpacer = 5;
 
@@ -73,8 +72,6 @@ function radialMenu() {
         this.radialMenuCenter = radialMenuCenter;
 
         this.settingMenuOpen = false;
-        // seojin - loadAll
-        this.imageMenuOpen = false;
 
         this.timer = 0;
         this.menuState = 'open';
@@ -147,7 +144,7 @@ function radialMenu() {
         // load thumbnail icons
         this.idleExitIcon = new Image();
         this.idleExitIcon.src = "images/ui/close.svg";
-
+        /*
         this.idleImageIcon = new Image();
         this.idleImageIcon.src = "images/ui/images.svg";
         this.idlePDFIcon = new Image();
@@ -156,6 +153,7 @@ function radialMenu() {
         this.idleVideoIcon.src = "images/ui/videos.svg";
         this.idleAppIcon = new Image();
         this.idleAppIcon.src = "images/ui/applauncher.svg";
+        */
         this.idleSessionIcon = new Image();
         this.idleSessionIcon.src = "images/ui/loadsession.svg";
         this.idleSaveSessionIcon = new Image();
@@ -176,9 +174,6 @@ function radialMenu() {
         this.idleTileIcon.src = "images/ui/tilecontent.svg";
         this.idleFreeIcon = new Image();
         this.idleFreeIcon.src = "images/ui/tilecontent.svg";
-        // seojin - loadAll
-        this.idleLoadAllIcon = new Image();
-        this.idleLoadAllIcon.src = "images/ui/clearcontent.svg";
 
 
 
@@ -210,7 +205,7 @@ function radialMenu() {
 
         this.radialCloseButton = this.createRadialButton(this.radialMenuIcon, false, menuButtonSize, menuButtonHitboxSize, 'centered', 'circle', 9, menuRadius)
         this.radialCloseButton.setOverlayImage(this.idleExitIcon, overlayIconScale);
-
+        /*
         this.radialImageButton = this.createRadialButton(this.radialMenuIcon, false, menuButtonSize, menuButtonHitboxSize, 'centered', 'circle', 1, menuRadius)
         this.radialImageButton.setOverlayImage(this.idleImageIcon, overlayIconScale);
 
@@ -222,7 +217,7 @@ function radialMenu() {
 
         this.radialAppButton = this.createRadialButton(this.radialMenuIcon, false, menuButtonSize, menuButtonHitboxSize, 'centered', 'circle', 3, menuRadius)
         this.radialAppButton.setOverlayImage(this.idleAppIcon, overlayIconScale);
-
+        */
         this.radialSessionButton = this.createRadialButton(this.radialMenuIcon, false, menuButtonSize, menuButtonHitboxSize, 'centered', 'circle', 4, menuRadius)
         this.radialSessionButton.setOverlayImage(this.idleSessionIcon, overlayIconScale);
 
@@ -244,11 +239,7 @@ function radialMenu() {
 
         this.radial2FreeButton = this.createRadialButton(this.radialMenuIcon, false, menuButtonSize, menuButtonHitboxSize, 'centered', 'circle', 7.025, menuLevel2Radius)
         this.radial2FreeButton.setOverlayImage(this.idleFreeIcon, overlayIconScale);
-
-        // seojin - loadAll
-        this.radial2ImageLoadAllButton = this.createRadialButton(this.radialMenuIcon, false, menuButtonSize, menuButtonHitboxSize, 'centered', 'circle', 11.25, menuLevel2Radius)
-        this.radial2ImageLoadAllButton.setOverlayImage(this.idleLoadAllIcon, overlayIconScale);
-
+        /*
         this.radial2ImageButton = new buttonWidget();
         this.radial2ImageButton.init(0, this.ctx, null);
         this.radial2ImageButton.setIdleImage(this.radialMenuIcon);
@@ -273,13 +264,13 @@ function radialMenu() {
         this.radial2AppButton.setIdleImage(this.radialMenuIcon);
         this.radial2AppButton.useBackgroundColor = false;
         this.radial2AppButton.setOverlayImage(this.idleAppIcon, overlayIconScale * menuButtonSize / menu2ButtonSize);
-
+        
 
         this.radial2ImageButton.setSize(menu2ButtonSize, menu2ButtonSize);
         this.radial2PDFButton.setSize(menu2ButtonSize, menu2ButtonSize);
         this.radial2VideoButton.setSize(menu2ButtonSize, menu2ButtonSize);
         this.radial2AppButton.setSize(menu2ButtonSize, menu2ButtonSize);
-
+        
 
         this.radial2ImageButton.setHitboxSize(menuButtonHitboxSize, menuButtonHitboxSize);
         this.radial2PDFButton.setHitboxSize(menuButtonHitboxSize, menuButtonHitboxSize);
@@ -293,8 +284,6 @@ function radialMenu() {
         this.radial2CloseAllButton.alignment = 'centered';
         this.radial2TileButton.alignment = 'centered';
         this.radial2FreeButton.alignment = 'centered';
-        // seojin - loadAll
-        this.radial2ImageLoadAllButton.alignment = 'centered';
 
         angle = (initAngle + angleSeparation * 1) * (Math.PI / 180);
         this.radial2ImageButton.setPosition(radialMenuCenter.x - menuLevel2Radius * Math.cos(angle), radialMenuCenter.y - menuLevel2Radius * Math.sin(angle));
@@ -311,7 +300,7 @@ function radialMenu() {
         angle = (initAngle + angleSeparation * 3) * (Math.PI / 180);
         this.radial2AppButton.setPosition(radialMenuCenter.x - menuLevel2Radius * Math.cos(angle), radialMenuCenter.y - menuLevel2Radius * Math.sin(angle));
         this.radial2AppButton.setRotation(angle - Math.PI / 2);
-
+        */
     };
 
     this.createRadialButton = function (idleIcon, useBackgroundColor, buttonSize, hitboxSize, alignment, hitboxShape, radialPos, buttonRadius) {
@@ -333,28 +322,6 @@ function radialMenu() {
 
         return button;
     };
-
-    // seojin - loadAll
-    /*
-	this.createLoadAllButton = function (idleIcon, useBackgroundColor, buttonSize, hitboxSize, alignment, hitboxShape, radialPos, buttonRadius) {
-	    button = new buttonWidget();
-	    button.init(0, this.ctx, null);
-	    button.setIdleImage(idleIcon);
-	    button.useBackgroundColor = useBackgroundColor;
-	    button.useEventOverColor = true;
-
-	    button.setSize(buttonSize * radialMenuScale, buttonSize * radialMenuScale);
-	    button.setHitboxSize(hitboxSize * radialMenuScale, hitboxSize * radialMenuScale);
-
-	    button.alignment = alignment;
-	    button.hitboxShape = hitboxShape;
-
-	    angle = (initAngle + angleSeparation * radialPos) * (Math.PI / 180);
-	    button.setPosition(radialMenuCenter.x - buttonRadius * radialMenuScale * Math.cos(angle), radialMenuCenter.y - buttonRadius * radialMenuScale * Math.sin(angle));
-	    button.setRotation(angle - Math.PI / 2);
-
-	    return button;
-	};*/
 
     this.drawImage = function (ctx, image, position, size, color, angle, centered) {
         //this.ctx.save();
@@ -437,18 +404,15 @@ function radialMenu() {
             this.radial2FreeButton.draw();
         }
 
-        // seojin - loadAll
-        //!!
-        if (this.imageMenuOpen) {
-            this.radial2ImageLoadAllButton.draw();
-        }
         
 
         if (this.currentRadialState === 'radialMenu') {
+            /*
             this.radialImageButton.draw();
             this.radialPDFButton.draw();
             this.radialVideoButton.draw();
             this.radialAppButton.draw();
+            */
             this.radialSessionButton.draw();
             this.radialSaveSessionButton.draw();
 
@@ -460,6 +424,7 @@ function radialMenu() {
             var currentThumbnailButtons = this.imageThumbnailButtons;
             // 선택 가능한 메뉴들의 종류
             // ~Window : 메뉴 선택시 뜨는 작은 창
+            /*
             if (this.currentMenuState === 'imageThumbnailWindow')
                 currentThumbnailButtons = this.imageThumbnailButtons;
             else if (this.currentMenuState === 'pdfThumbnailWindow')
@@ -468,7 +433,8 @@ function radialMenu() {
                 currentThumbnailButtons = this.videoThumbnailButtons;
             else if (this.currentMenuState === 'appThumbnailWindow')
                 currentThumbnailButtons = this.appThumbnailButtons;
-            else if (this.currentMenuState === 'sessionThumbnailWindow')
+            
+            else */if (this.currentMenuState === 'sessionThumbnailWindow')
                 currentThumbnailButtons = this.sessionThumbnailButtons;
 
             if (this.thumbWindowctx.redraw) {
@@ -566,7 +532,7 @@ function radialMenu() {
                     this.ctx.fillText("File Date: " + metadata.FileDate, metadataTextPosX, metadataTextPosY + metadataLine * 20);
                     metadataLine++;
                 }
-
+                /*
                 // Images
                 if (metadata.ImageSize) {
                     this.ctx.fillText("Resolution: " + metadata.ImageSize, metadataTextPosX, metadataTextPosY + metadataLine * 20);
@@ -625,7 +591,7 @@ function radialMenu() {
                 if (metadata.ShutterSpeed) {
                     this.ctx.fillText("Shutter Speed: " + metadata.ShutterSpeed, metadataTextPosX, metadataTextPosY + metadataLine * 20);
                     metadataLine++;
-                }
+                }*/
 
                 // GPS
                 if (metadata.GPSAltitude) {
@@ -640,7 +606,7 @@ function radialMenu() {
                     this.ctx.fillText("GPS TimeStamp: " + metadata.GPSTimeStamp, metadataTextPosX, metadataTextPosY + metadataLine * 20);
                     metadataLine++;
                 }
-
+                /*
                 // Video
                 if (metadata.Duration) {
                     this.ctx.fillText("Duration: " + metadata.Duration, metadataTextPosX, metadataTextPosY + metadataLine * 20);
@@ -694,7 +660,7 @@ function radialMenu() {
                         metadataLine++;
                     }
                 }
-
+                */
                 // Sessions
                 if (metadata.numapps) {
                     this.ctx.fillText("Applications: " + metadata.numapps);
@@ -747,10 +713,12 @@ function radialMenu() {
     };
 
     this.resetRadialButtonLitState = function () {
+        /*
         this.radialImageButton.isLit = false;
         this.radialPDFButton.isLit = false;
         this.radialVideoButton.isLit = false;
         this.radialAppButton.isLit = false;
+        */
         this.radialSessionButton.isLit = false;
     };
 
@@ -798,11 +766,11 @@ function radialMenu() {
         if (this.currentRadialState === 'radialMenu') {
             //this.element.width = radialMenuSize.x;
             //this.element.height = radialMenuSize.y;
-
+            /*
             buttonOverCount += this.radialImageButton.onEvent(type, user.id, position, data);
             buttonOverCount += this.radialPDFButton.onEvent(type, user.id, position, data);
             buttonOverCount += this.radialVideoButton.onEvent(type, user.id, position, data);
-            buttonOverCount += this.radialAppButton.onEvent(type, user.id, position, data);
+            buttonOverCount += this.radialAppButton.onEvent(type, user.id, position, data);*/
         }
 
         if (this.radialSettingsButton.isClicked()) {
@@ -821,12 +789,6 @@ function radialMenu() {
             buttonOverCount += this.radial2TileButton.onEvent(type, user.id, position, data);
             buttonOverCount += this.radial2FreeButton.onEvent(type, user.id, position, data);
         }
-        // seojin - loadAll
-        if (this.imageMenuOpen) {
-            buttonOverCount += this.radial2ImageLoadAllButton.onEvent(type, user.id, position, data);
-        }
-
-
         if (this.radial2CloseAllButton.isClicked() && this.sendsToServer === true) {
             this.wsio.emit('clearDisplay');
         }
@@ -836,34 +798,13 @@ function radialMenu() {
         if (this.radial2FreeButton.isClicked() && this.sendsToServer === true) {
             this.wsio.emit('freeApplications');
         }
-        // seojin - loadAll
-        if (this.radial2ImageLoadAllButton.isClicked() && this.sendsToServer === true) {
-            this.wsio.emit('loadAllImages'); 
-        }
-
-
-        /* 바꾸기 전
+        /*
         if (this.radialImageButton.isClicked() || this.radial2ImageButton.isClicked()) {
             this.resetRadialButtonLitState();
             if (this.setToggleMenu('imageThumbnailWindow')) {
                 this.radialImageButton.isLit = true;
             }
         } 
-        */
-        if (this.radialImageButton.isClicked() || this.radial2ImageButton.isClicked()) {
-            this.resetRadialButtonLitState();
-            // seojin - loadAll
-            if (this.imageMenuOpen) {
-                this.imageMenuOpen = false;
-                this.radialSettingsButton.isLit = false;
-            }
-            else {
-                this.imageMenuOpen = true;
-                if (this.setToggleMenu('imageThumbnailWindow')) {
-                    this.radialImageButton.isLit = true;
-                } 
-            }
-        }
 
         if (this.radialPDFButton.isClicked() || this.radial2PDFButton.isClicked()) {
             this.resetRadialButtonLitState();
@@ -882,7 +823,7 @@ function radialMenu() {
             if (this.setToggleMenu('appThumbnailWindow')) {
                 this.radialAppButton.isLit = true;
             }
-        }
+        }*/
         if (this.radialSessionButton.isClicked()) {
             this.resetRadialButtonLitState();
             if (this.setToggleMenu('sessionThumbnailWindow')) {
@@ -895,17 +836,19 @@ function radialMenu() {
         }
 
         // Level 2 -----------------------------------
-        if (this.currentRadialState === 'radialAppMenu2') {
+        /*if (this.currentRadialState === 'radialAppMenu2') {
+            
             this.radial2ImageButton.onEvent(type, user.id, position, data);
             this.radial2PDFButton.onEvent(type, user.id, position, data);
             this.radial2VideoButton.onEvent(type, user.id, position, data);
             this.radial2AppButton.onEvent(type, user.id, position, data);
-        }
+        
+        }*/
 
         // Thumbnail window ----------------------------
         if (this.currentMenuState !== 'radialMenu') {
             var currentThumbnailButtons = this.imageThumbnailButtons;
-
+            /*
             if (this.currentMenuState === 'imageThumbnailWindow')
                 currentThumbnailButtons = this.imageThumbnailButtons;
             else if (this.currentMenuState === 'pdfThumbnailWindow')
@@ -914,7 +857,7 @@ function radialMenu() {
                 currentThumbnailButtons = this.videoThumbnailButtons;
             else if (this.currentMenuState === 'appThumbnailWindow')
                 currentThumbnailButtons = this.appThumbnailButtons;
-            else if (this.currentMenuState === 'sessionThumbnailWindow')
+            else */if (this.currentMenuState === 'sessionThumbnailWindow')
                 currentThumbnailButtons = this.sessionThumbnailButtons;
 
             for (i = 0; i < currentThumbnailButtons.length; i++) {
@@ -1024,20 +967,22 @@ function radialMenu() {
         //console.log(serverFileList);
 
         this.thumbnailButtons = [];
+        /*
         this.imageThumbnailButtons = [];
         this.videoThumbnailButtons = [];
         this.pdfThumbnailButtons = [];
         this.appThumbnailButtons = [];
-        this.sessionThumbnailButtons = [];
+        */this.sessionThumbnailButtons = [];
 
         // Server file lists by type
+        /*
         imageList = serverFileList.images;
         pdfList = serverFileList.pdfs;
         videoList = serverFileList.videos;
         appList = serverFileList.apps;
-
+        */
         sessionList = serverFileList.sessions;
-
+        /*
         if (imageList != null) {
             validImages = 0;
             for (i = 0; i < imageList.length; i++) {
@@ -1126,7 +1071,7 @@ function radialMenu() {
                 this.thumbnailButtons.push(thumbnailButton);
                 this.appThumbnailButtons.push(thumbnailButton);
             }
-        }
+        }*/
         if (sessionList != null) {
             for (i = 0; i < sessionList.length; i++) {
                 thumbnailButton = new buttonWidget();
@@ -1183,7 +1128,7 @@ function radialMenu() {
         if (this.thumbnailWindowScrollOffset.x < maxScrollPosX)
             this.thumbnailWindowScrollOffset.x = maxScrollPosX;
         // --------------------------------------------------------------------
-
+        /*
         //console.log( this.thumbnailWindowScrollOffset.x, this.thumbnailWindowPosition.x - (maxCols - neededColumns + 2) * (imageThumbSize + thumbSpacer));
         if (this.currentMenuState === 'imageThumbnailWindow')
 
@@ -1264,7 +1209,7 @@ function radialMenu() {
 
                 curColumn++;
             }
-        }
+        }*/
         //curColumn = 0;
         //curRow += 2;
         curRow = 0;
