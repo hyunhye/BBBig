@@ -1609,6 +1609,7 @@ function wsLoadFileFromServer(wsio, data) {
     if (data.application === "load_session") {
         // if it's a session, then load it
         loadSession(data.filename);
+        console.log("seojin");
     }
     else {
         appLoader.loadFileFromLocalStorage(data, function (appInstance) {
