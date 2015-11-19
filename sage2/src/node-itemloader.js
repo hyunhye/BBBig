@@ -11,8 +11,6 @@
 /**
  * @module itemLoader
  */
-
-
 var fs        = require('fs');
 var path      = require('path');
 var url       = require('url');
@@ -25,9 +23,11 @@ var ytdl      = require('ytdl-core');
 
 var exiftool  = require('../src/node-exiftool');      // gets exif tags for images
 var assets    = require('../src/node-assets');        // asset management
-
+var tileApplications = require('../server');
+var freeApplications = require('../server');
 var imageMagick;
 mime.default_type = "application/custom";
+
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -38,7 +38,7 @@ function encodeReservedURL(url) {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
-function appLoader(publicDir, hostOrigin, displayWidth, displayHeight, titleBarHeight, imConstraints) {
+function appLoader(publicDir, hostOrigin, displayWidth, displayHeight, titleBarHeight, imConstraints) { // seojin 
 	this.publicDir = publicDir;
 	this.hostOrigin = hostOrigin;
 	this.displayWidth = displayWidth;
@@ -67,7 +67,6 @@ function appLoader(publicDir, hostOrigin, displayWidth, displayHeight, titleBarH
     	"pdf_viewer": "pdfs",
     	"custom_app": "apps"
     };
-	
 	imageMagick = gm.subClass(imConstraints);
 }
 
@@ -661,8 +660,9 @@ appLoader.prototype.manageAndLoadUploadedFile = function(file, callback) {
 				} else {
 					console.log("EXIF> Adding", data.FileName);
 					assets.addFile(data.SourceFile, data);
+                    // window에 이미지들 띄우는 함수임
 					_this.loadApplication({location: "file", path: localPath, url: url, external_url: external_url, type: mime_type, name: file.name, compressed: true}, function(appInstance) {
-						callback(appInstance);
+					    callback(appInstance); 
 					});
 				}
 			});
@@ -675,6 +675,7 @@ appLoader.prototype.manageAndLoadUploadedFile = function(file, callback) {
 	});
 };
 
+// window에 띄워질때 마지막으로 여기를 거침 seojin
 appLoader.prototype.loadApplication = function(appData, callback) {
 	var app = null;
 
@@ -684,7 +685,11 @@ appLoader.prototype.loadApplication = function(appData, callback) {
 		
 		if(app === "image_viewer"){
 			this.loadImageFromFile(appData.path, appData.type, appData.url, appData.external_url, appData.name, function(appInstance) {
-				callback(appInstance);
+			    callback(appInstance);
+			    // seojin
+                // tile모드일때, free모드일때, Dynamic모드일때 각각의 모드에 맞게 정렬하기
+			    tileApplications.tileApplications();
+			    
 			});
 		}
 		else if(app === "movie_player"){
