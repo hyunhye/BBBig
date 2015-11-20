@@ -1454,6 +1454,7 @@ function tileApplications() {
 // seojin - 안에 내용은 현혜가 전에 조금 했던 free모드 임
 // hyunhye
 function dynamicApplications() {
+    arrangementMode = 'dynamic';
     var i;
     var app;
     var spaceManager;
@@ -3718,3 +3719,4 @@ exports.tileApplications = tileApplications; // tile 모드
 exports.dynamicApplications = dynamicApplications; // 빈 공간 찾아서 위치함 
 exports.priorityApplications = priorityApplications; // 우선순위 따져서 위치함
 exports.arrangementModeCheck = arrangementModeCheck; // 정렬 모드 체크 
+exports.loadConfiguration = loadConfiguration;
