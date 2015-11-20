@@ -50,6 +50,7 @@ function SAGE2_interaction(wsio) {
 		var loaded = {};
 		var filesFinished = 0;
 		var total = 0;
+
 		
 		var progressCallback = function(event) {
 			if(loaded[event.target.id] === undefined) total += event.total;
@@ -57,18 +58,19 @@ function SAGE2_interaction(wsio) {
 			var uploaded = 0;
 			for(var key in loaded) uploaded += loaded[key];
 			var pc = uploaded/total;
-			if(_this.fileUploadProgress) _this.fileUploadProgress(pc);
+			if (_this.fileUploadProgress) _this.fileUploadProgress(pc);
 		};
 		
 		var loadCallback = function(event) {
 			filesFinished++;
-			if(_this.fileUploadComplete && filesFinished === files.length) _this.fileUploadComplete();
+			if (_this.fileUploadComplete && filesFinished === files.length) _this.fileUploadComplete();
 		};
 
 		for(var i=0; i<files.length; i++){
-			if(files[i].size <= this.maxUploadSize){
+		    if (files[i].size <= this.maxUploadSize) {
+
 				var formdata = new FormData();
-				formdata.append("file"+i.toString(), files[i]);
+				formdata.append("file"+i.toString(), files[i]); // 선택된 파일들이 무엇인지 저장되고, 화면 에 추가 됨
 				formdata.append("dropX", dropX);
 				formdata.append("dropY", dropY);
 				xhr = new XMLHttpRequest();
@@ -77,11 +79,18 @@ function SAGE2_interaction(wsio) {
 				xhr.upload.addEventListener('progress', progressCallback, false);
 				xhr.addEventListener('load', loadCallback, false);
 				xhr.send(formdata);
+				
 			}
 			else{
 				alert("File: " + files[i].name + " is too large (max size is " + (this.maxUploadSize / (1024*1024)) + " MB)");
-			}
+		    }
+		   // alert("seojin"); // 확인누르면 -> Adding 되고 -> tile 됨
+		    //this.wsio.emit('tileApplications');
 		}
+	    // this.wsio.emit('tileApplications'); // 전에까지 있던 애들이 타일 모드 됨
+	    // 여기에다가 하는 건 Form> --> tile들어감 --> EXIF>  
+	    // Form> --> EXIF> --> tile들어감 이렇게 순서로 돌아가도록 바꾸면 될듯?
+	    // EXIF> Adding   ... 이 로그 찍히는 곳 : node-itemloader.js 파일임
 	};
 	
 	this.uploadURL = function(url, dropX, dropY) {
@@ -98,7 +107,7 @@ function SAGE2_interaction(wsio) {
 		else if(ext === "mp4")  mimeType = "video/mp4";
 		else if(ext === "m4v")  mimeType = "video/mp4";
 		else if(ext === "webm") mimeType = "video/webm";
-		else if(ext === "pdf")  mimeType = "application/pdf";
+		else if (ext === "pdf") mimeType = "application/pdf";
 		console.log("URL: " + url + ", type: " + mimeType);
 
 		if (mimeType !== "") this.wsio.emit('addNewWebElement', {type: mimeType, url: url, position: [dropX, dropY]});

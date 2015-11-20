@@ -442,7 +442,7 @@ function radialMenu() {
         if (this.imageMenuOpen) {
             this.radial2ImageLoadAllButton.draw();
         }
-        
+
 
         if (this.currentRadialState === 'radialMenu') {
             this.radialImageButton.draw();
@@ -838,7 +838,7 @@ function radialMenu() {
         }
         // seojin - loadAll
         if (this.radial2ImageLoadAllButton.isClicked() && this.sendsToServer === true) {
-            this.wsio.emit('loadAllImages'); 
+            this.wsio.emit('loadAllImages');
         }
 
 
@@ -861,7 +861,7 @@ function radialMenu() {
                 this.imageMenuOpen = true;
                 if (this.setToggleMenu('imageThumbnailWindow')) {
                     this.radialImageButton.isLit = true;
-                } 
+                }
             }
         }
 
@@ -1290,310 +1290,272 @@ function radialMenu() {
 
 
 function buttonWidget() {
-	//this.element = null;
-	this.ctx = null;
-	this.resrcPath = null;
-	
-	this.posX = 100;
-	this.posY = 100;
-	this.angle = 0;
-	this.width = imageThumbSize;
-	this.height = imageThumbSize;
-	
-	this.hitboxWidth = imageThumbSize;
-	this.hitboxheight = imageThumbSize;
-	
-	this.defaultColor =  "rgba(210, 210, 210, 1.0)";
-	this.mouseOverColor = "rgba(210, 210, 10, 1.0 )";
-	this.clickedColor = "rgba(10, 210, 10, 1.0 )";
-	this.pressedColor = "rgba(10, 210, 210, 1.0 )";
-	
-	//this.releasedColor = "rgba(10, 10, 210, 1.0 )";
-	this.releasedColor =  "rgba(210, 210, 210, 1.0)";
-	
-	this.litColor = "rgba(10, 210, 210, 1.0 )";
-			
-	this.idleImage = null;
-	this.overlayImage = null;
-	
-	this.useBackgroundColor = true;
-	this.useEventOverColor = false;
-	this.simpleTint = false;
-	
-	this.alignment = 'left';
-	this.hitboxShape = 'box';
-	
-	this.isLit = false;
-	
-	// Button states:
-	// -1 = Disabled
-	// 0  = Idle
-	// 1  = Over
-	// 2  = Pressed
-	// 3  = Clicked
-	// 4  = Released
-	this.state = 0;
-	
-	this.buttonData = {};
-	
-	this.init = function(id, ctx, resrc)
-	{
-		//this.element = document.getElementById(id);
-		this.ctx = ctx
-		this.resrcPath = resrc;
-		
-		//console.log("buttonWidget init()");
-	}
-	 
-	this.setPosition = function( x, y )
-	{
-		this.posX = x;
-		this.posY = y;
-	}
-	
-	this.setRotation = function(a )
-	{
-		this.angle = a;
-	}
-	
-	this.setData = function( data )
-	{
-		this.buttonData = data;
-	}
-	
-	this.setIdleImage = function( image )
-	{
-		this.idleImage = image;
-	}
-	
-	this.setOverlayImage = function( overlayImage, scale )
-	{
-		this.overlayImage = overlayImage;
-		this.overlayScale = scale;
-	}
-	
-	this.setSize = function( w, h )
-	{
-		this.width = w;
-		this.height = h;
-	}
-	
-	this.setHitboxSize = function( w, h )
-	{
-		this.hitboxWidth = w;
-		this.hitboxheight = h;
-	}
-	
-	this.getData = function()
-	{
-		return this.buttonData;
-	}
-	
-	this.draw = function()
-	{
-		// Default - align 'left'
-		var translate = { x: this.posX, y: this.posY };
-		var offsetHitbox = { x: 0, y: 0 };
-		var offset = { x: 0, y: 0 };
-		
-		if( this.alignment === 'centered' )
-		{
-			offset = { x: -this.width/2, y: -this.height/2 };
-			offsetHitbox = { x: -this.hitboxWidth/2, y: -this.hitboxWidth/2 };
-		}
-		
-		this.ctx.save();
-		this.ctx.translate( translate.x, translate.y );
-			
-		if( this.state === 1 )
-		{
-			this.ctx.fillStyle = this.mouseOverColor;
-		}
-		else if( this.state === 3 )
-		{
-			this.ctx.fillStyle = this.clickedColor;
-			this.state = 2; // Pressed state
-		}
-		else if( this.state === 2 )
-		{
-			this.ctx.fillStyle = this.pressedColor;
-		}
-		else if( this.state === 4 )
-		{
-			this.ctx.fillStyle = this.releasedColor;
-			this.state = 1;
-		}
-		if( this.useBackgroundColor )
-		{
-			if( this.isLit )
-				this.ctx.fillStyle = this.litColor;
-			else
-				this.ctx.fillStyle = this.defaultColor;
-			
-			if( this.hitboxShape === 'box' )
-				this.ctx.fillRect(offsetHitbox.x, offsetHitbox.y, this.hitboxWidth, this.hitboxheight)
-			else if( this.hitboxShape === 'circle' )
-			{
-				//this.ctx.arc(0, 0, this.hitboxWidth/2,0,2*Math.PI);
-				//this.ctx.fillStyle = this.defaultColor;
-				//this.ctx.fill();
-			}
-		}
-		
-		// Draw icon aligned centered
-		if( this.idleImage != null )
-		{
-			//this.ctx.rotate( this.angle );
-			
-			// draw the original image
-			this.ctx.drawImage( this.idleImage, offset.x, offset.y, this.width, this.height );
-			
-			if( this.isLit === true )
-				this.drawTintImage( this.idleImage, offset, this.width, this.height, this.litColor, 0.5 );
+    //this.element = null;
+    this.ctx = null;
+    this.resrcPath = null;
 
-			// Tint the image
-			if( this.state !== 0 )
-			{
-				if( this.simpleTint )
-				{
-					this.ctx.fillRect(offsetHitbox.x, offsetHitbox.y, this.hitboxWidth, this.hitboxheight)
-				}
-				else
-				{
-					if( this.isLit === false && this.useEventOverColor)
-						this.drawTintImage( this.idleImage, offset, this.width, this.height, this.ctx.fillStyle, 0.8 );
-				}
-			}
-			
-		}
-		this.ctx.restore();
-		
-		if( this.overlayImage != null )
-		{
-			this.ctx.save();
-			this.ctx.translate( translate.x, translate.y );
-			this.ctx.drawImage( this.overlayImage, -this.width* this.overlayScale/2, -this.height* this.overlayScale/2, this.width * this.overlayScale, this.height * this.overlayScale);
-			this.ctx.restore();
-		}
-	};
-	 
-	this.drawTintImage = function( image, offset, width, height, color, alpha )
-	{
-		// Tint the image (Part 1)
-		// create offscreen buffer, 
-		buffer = document.createElement('canvas');
-		buffer.width = width;
-		buffer.height = height;
-		bx = buffer.getContext('2d');
+    this.posX = 100;
+    this.posY = 100;
+    this.angle = 0;
+    this.width = imageThumbSize;
+    this.height = imageThumbSize;
 
-		// fill offscreen buffer with the tint color
-		bx.fillStyle = color;
-		bx.fillRect(0,0,buffer.width,buffer.height);
+    this.hitboxWidth = imageThumbSize;
+    this.hitboxheight = imageThumbSize;
 
-		// destination atop makes a result with an alpha channel identical to fg, but with all pixels retaining their original color *as far as I can tell*
-		bx.globalCompositeOperation = "destination-atop";
-		bx.drawImage(image, 0, 0, width, height );
-		
-		//then set the global alpha to the amound that you want to tint it, and draw the buffer directly on top of it.
-		this.ctx.globalAlpha = alpha;
-				
-		// draw the tinted overlay
-		this.ctx.drawImage( buffer, offset.x, offset.y, width, height );
-	};
-	
-	this.onEvent = function( type, user, position, data )
-	{
-		if( this.isPositionOver( user, position ) )
-		{
-			if( type === "pointerPress" && this.state != 2 )
-			{
-				this.state = 3; // Click state
-				if( this.useEventOverColor )
-					this.ctx.redraw = true;
-			}
-			else if( type === "pointerRelease" )
-			{
-				this.state = 4;
-				if( this.useEventOverColor )
-					this.ctx.redraw = true;
-			}
-			else if( this.state !== 2 )
-			{
-				if( this.state !== 1 && this.useEventOverColor )
-					this.ctx.redraw = true;
-				this.state = 1;
-			}
-			
-			return 1;
-		}
-		else
-		{
-			if( this.state !== 0 && this.useEventOverColor )
-				this.ctx.redraw = true;
-			this.state = 0;
-			
-			return 0;
-		}
-	}
-	
-	this.isPositionOver = function(id, position) {
-		x = position.x;
-		y = position.y;
-		
-		if( this.alignment === 'centered' && this.hitboxShape === 'box' )
-		{
-			x += this.hitboxWidth/2;
-			y += this.hitboxheight/2;
-		}
-		
-		if( this.hitboxShape === 'box' )
-		{
-			if( x >= this.posX && x <= this.posX + this.hitboxWidth && y >= this.posY && y <= this.posY + this.hitboxheight )
-				return true;
-			else
-				return false;
-		
-		}
-		else if( this.hitboxShape === 'circle' )
-		{
-			var distance = Math.sqrt( Math.pow(Math.abs( x - this.posX ), 2) + Math.pow(Math.abs( y - this.posY ), 2) );
-			
-			if( distance <= this.hitboxWidth/2 )
-				return true;
-			else
-				return false;
-		}
-	};
-	
-	this.isOver = function()
-	{
-		if ( this.state === 1 )
-		{
-			return true;
-		}
-		else
-			return false;
-	}
-	
-	this.isClicked = function()
-	{
-		if ( this.state === 3 )
-		{
-			this.state = 2;
-			return true;
-		}
-		else
-			return false;
-	}
-	
-	this.isReleased = function()
-	{
-		if ( this.state === 4 )
-		{
-			this.state = 0;
-			return true;
-		}
-		else
-			return false;
-	}
+    this.defaultColor = "rgba(210, 210, 210, 1.0)";
+    this.mouseOverColor = "rgba(210, 210, 10, 1.0 )";
+    this.clickedColor = "rgba(10, 210, 10, 1.0 )";
+    this.pressedColor = "rgba(10, 210, 210, 1.0 )";
+
+    //this.releasedColor = "rgba(10, 10, 210, 1.0 )";
+    this.releasedColor = "rgba(210, 210, 210, 1.0)";
+
+    this.litColor = "rgba(10, 210, 210, 1.0 )";
+
+    this.idleImage = null;
+    this.overlayImage = null;
+
+    this.useBackgroundColor = true;
+    this.useEventOverColor = false;
+    this.simpleTint = false;
+
+    this.alignment = 'left';
+    this.hitboxShape = 'box';
+
+    this.isLit = false;
+
+    // Button states:
+    // -1 = Disabled
+    // 0  = Idle
+    // 1  = Over
+    // 2  = Pressed
+    // 3  = Clicked
+    // 4  = Released
+    this.state = 0;
+
+    this.buttonData = {};
+
+    this.init = function (id, ctx, resrc) {
+        //this.element = document.getElementById(id);
+        this.ctx = ctx
+        this.resrcPath = resrc;
+
+        //console.log("buttonWidget init()");
+    }
+
+    this.setPosition = function (x, y) {
+        this.posX = x;
+        this.posY = y;
+    }
+
+    this.setRotation = function (a) {
+        this.angle = a;
+    }
+
+    this.setData = function (data) {
+        this.buttonData = data;
+    }
+
+    this.setIdleImage = function (image) {
+        this.idleImage = image;
+    }
+
+    this.setOverlayImage = function (overlayImage, scale) {
+        this.overlayImage = overlayImage;
+        this.overlayScale = scale;
+    }
+
+    this.setSize = function (w, h) {
+        this.width = w;
+        this.height = h;
+    }
+
+    this.setHitboxSize = function (w, h) {
+        this.hitboxWidth = w;
+        this.hitboxheight = h;
+    }
+
+    this.getData = function () {
+        return this.buttonData;
+    }
+
+    this.draw = function () {
+        // Default - align 'left'
+        var translate = { x: this.posX, y: this.posY };
+        var offsetHitbox = { x: 0, y: 0 };
+        var offset = { x: 0, y: 0 };
+
+        if (this.alignment === 'centered') {
+            offset = { x: -this.width / 2, y: -this.height / 2 };
+            offsetHitbox = { x: -this.hitboxWidth / 2, y: -this.hitboxWidth / 2 };
+        }
+
+        this.ctx.save();
+        this.ctx.translate(translate.x, translate.y);
+
+        if (this.state === 1) {
+            this.ctx.fillStyle = this.mouseOverColor;
+        }
+        else if (this.state === 3) {
+            this.ctx.fillStyle = this.clickedColor;
+            this.state = 2; // Pressed state
+        }
+        else if (this.state === 2) {
+            this.ctx.fillStyle = this.pressedColor;
+        }
+        else if (this.state === 4) {
+            this.ctx.fillStyle = this.releasedColor;
+            this.state = 1;
+        }
+        if (this.useBackgroundColor) {
+            if (this.isLit)
+                this.ctx.fillStyle = this.litColor;
+            else
+                this.ctx.fillStyle = this.defaultColor;
+
+            if (this.hitboxShape === 'box')
+                this.ctx.fillRect(offsetHitbox.x, offsetHitbox.y, this.hitboxWidth, this.hitboxheight)
+            else if (this.hitboxShape === 'circle') {
+                //this.ctx.arc(0, 0, this.hitboxWidth/2,0,2*Math.PI);
+                //this.ctx.fillStyle = this.defaultColor;
+                //this.ctx.fill();
+            }
+        }
+
+        // Draw icon aligned centered
+        if (this.idleImage != null) {
+            //this.ctx.rotate( this.angle );
+
+            // draw the original image
+            this.ctx.drawImage(this.idleImage, offset.x, offset.y, this.width, this.height);
+
+            if (this.isLit === true)
+                this.drawTintImage(this.idleImage, offset, this.width, this.height, this.litColor, 0.5);
+
+            // Tint the image
+            if (this.state !== 0) {
+                if (this.simpleTint) {
+                    this.ctx.fillRect(offsetHitbox.x, offsetHitbox.y, this.hitboxWidth, this.hitboxheight)
+                }
+                else {
+                    if (this.isLit === false && this.useEventOverColor)
+                        this.drawTintImage(this.idleImage, offset, this.width, this.height, this.ctx.fillStyle, 0.8);
+                }
+            }
+
+        }
+        this.ctx.restore();
+
+        if (this.overlayImage != null) {
+            this.ctx.save();
+            this.ctx.translate(translate.x, translate.y);
+            this.ctx.drawImage(this.overlayImage, -this.width * this.overlayScale / 2, -this.height * this.overlayScale / 2, this.width * this.overlayScale, this.height * this.overlayScale);
+            this.ctx.restore();
+        }
+    };
+
+    this.drawTintImage = function (image, offset, width, height, color, alpha) {
+        // Tint the image (Part 1)
+        // create offscreen buffer, 
+        buffer = document.createElement('canvas');
+        buffer.width = width;
+        buffer.height = height;
+        bx = buffer.getContext('2d');
+
+        // fill offscreen buffer with the tint color
+        bx.fillStyle = color;
+        bx.fillRect(0, 0, buffer.width, buffer.height);
+
+        // destination atop makes a result with an alpha channel identical to fg, but with all pixels retaining their original color *as far as I can tell*
+        bx.globalCompositeOperation = "destination-atop";
+        bx.drawImage(image, 0, 0, width, height);
+
+        //then set the global alpha to the amound that you want to tint it, and draw the buffer directly on top of it.
+        this.ctx.globalAlpha = alpha;
+
+        // draw the tinted overlay
+        this.ctx.drawImage(buffer, offset.x, offset.y, width, height);
+    };
+
+    this.onEvent = function (type, user, position, data) {
+        if (this.isPositionOver(user, position)) {
+            if (type === "pointerPress" && this.state != 2) {
+                this.state = 3; // Click state
+                if (this.useEventOverColor)
+                    this.ctx.redraw = true;
+            }
+            else if (type === "pointerRelease") {
+                this.state = 4;
+                if (this.useEventOverColor)
+                    this.ctx.redraw = true;
+            }
+            else if (this.state !== 2) {
+                if (this.state !== 1 && this.useEventOverColor)
+                    this.ctx.redraw = true;
+                this.state = 1;
+            }
+
+            return 1;
+        }
+        else {
+            if (this.state !== 0 && this.useEventOverColor)
+                this.ctx.redraw = true;
+            this.state = 0;
+
+            return 0;
+        }
+    }
+
+    this.isPositionOver = function (id, position) {
+        x = position.x;
+        y = position.y;
+
+        if (this.alignment === 'centered' && this.hitboxShape === 'box') {
+            x += this.hitboxWidth / 2;
+            y += this.hitboxheight / 2;
+        }
+
+        if (this.hitboxShape === 'box') {
+            if (x >= this.posX && x <= this.posX + this.hitboxWidth && y >= this.posY && y <= this.posY + this.hitboxheight)
+                return true;
+            else
+                return false;
+
+        }
+        else if (this.hitboxShape === 'circle') {
+            var distance = Math.sqrt(Math.pow(Math.abs(x - this.posX), 2) + Math.pow(Math.abs(y - this.posY), 2));
+
+            if (distance <= this.hitboxWidth / 2)
+                return true;
+            else
+                return false;
+        }
+    };
+
+    this.isOver = function () {
+        if (this.state === 1) {
+            return true;
+        }
+        else
+            return false;
+    }
+
+    this.isClicked = function () {
+        if (this.state === 3) {
+            this.state = 2;
+            return true;
+        }
+        else
+            return false;
+    }
+
+    this.isReleased = function () {
+        if (this.state === 4) {
+            this.state = 0;
+            return true;
+        }
+        else
+            return false;
+    }
 }
