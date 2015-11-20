@@ -60,6 +60,10 @@ var sagepointer = require('./src/node-sagepointer');    // handles sage pointers
 var sageutils   = require('./src/node-utils');          // provides the current version number
 var websocketIO = require('./src/node-websocket.io');   // creates WebSocket server and clients
 
+// hyunhye
+var DynamicSpaceManager = require('./src/spaceManager');
+var Bounds = require('./src/globals');
+
 // Version calculation
 var SAGE2_version = sageutils.getShortVersion();
 
@@ -1448,119 +1452,61 @@ function tileApplications() {
 }
 
 // seojin - 안에 내용은 현혜가 전에 조금 했던 free모드 임
+// hyunhye
 function dynamicApplications() {
-
-    console.log("--------------");
-    // seojin
-    arrangementMode = 'dynamic';
+    var i;
     var app;
-    var preApp;
-    var i, c, r;
-    var numCols, numRows;
+    var spaceManager;
 
-    var displayAr = config.totalWidth / config.totalHeight;
-    var arDiff = displayAr / averageWindowAspectRatio();
-    var numWindows = applications.length;
-
-    //// 3 scenarios... windows are on average the same aspect ratio as the display
-    //   if (arDiff >= 0.7 && arDiff <= 1.3) {
-    numCols = Math.ceil(Math.sqrt(numWindows));
-    numRows = Math.ceil(numWindows / numCols);
-    //   }
-    //    else if (arDiff < 0.7) {
-    //      // windows are much wider than display
-    //      c = Math.round(1 / (arDiff/2.0));
-    //      if (numWindows <= c) {
-    //         numRows = numWindows;
-    //         numCols = 1;
-    //      }
-    //      else {
-    //         numCols = Math.max(2, Math.round(numWindows / c));
-    //         numRows = Math.round(Math.ceil(numWindows / numCols));
-    //      }
-    //   }
-    //   else {
-    //      // windows are much taller than display
-    //      c = Math.round(arDiff*2);
-    //      if (numWindows <= c) {
-    //         numCols = numWindows;
-    //         numRows = 1;
-    //      }
-    //      else {
-    //         numRows = Math.max(2, Math.round(numWindows / c));
-    //         numCols = Math.round(Math.ceil(numWindows / numRows));
-    //      }
-    //   }
-
-    // determine the bounds of the tiling area
     var titleBar = config.ui.titleBarHeight;
     if (config.ui.auto_hide_ui === true) titleBar = 0;
-    var areaX = 0;
-    var areaY = Math.round(1.5 * titleBar); // keep 0.5 height as margin
-    if (config.ui.auto_hide_ui === true) areaY = -config.ui.titleBarHeight;
-
-    var areaW = config.totalWidth;
-    var areaH = config.totalHeight - (1.0 * titleBar);
-
-    var tileW = Math.floor(areaW / numCols);
-    var tileH = Math.floor(areaH / numRows);
-
-    console.log("tile: " + tileW + "  " + tileH);
-    console.log("area: " + areaW + "  " + areaW);
-    // go through them in sorted order
-    // applications.sort()
-
     var padding = 4;
-    var sumWidth = 0;
+
     // if only one application, no padding, i.e maximize
     if (applications.length === 1) padding = 0;
-    r = 0;
-    c = 0;
-    for (i = 0; i < applications.length; i++) {
-        // get the application
 
+    for (i = 0; i < applications.length; i++) {
+        //app = applications[i];
+        var appData = {
+            id: applications[i].id,//.substring(12,13),
+            left: applications[i].left,
+            right: applications[i].left + applications[i].width,
+            bottom: applications[i].top + applications[i].height,
+            up: applications[i].top,
+            width: applications[i].width,
+            height: applications[i].height
+        }
+
+        console.log("----------" + appData.id + "------------")
+        console.log(appData.left + " " + appData.up + " " + appData.width + " " + appData.height);
+        if (i == 0) {
+            spaceManager = new DynamicSpaceManager(appData.left, appData.right, appData.up, appData.bottom, appData.width, appData.height);
+            spaceManager.clearRectangles();
+        }
+
+        var item = spaceManager.createFullRectangle(appData);
+
+        //fitWithin(applications[i], i*100 , i*100, 100, 100, padding);
         app = applications[i];
 
-        if (i === 0) preApp = applications[i];
-        else preApp = applications[i - 1];
+        var newdims = fitWithin(app, item.elemLeft, item.elemTop, item.elemWidth, item.elemHeight, padding);
+        console.log(app + " " + item.elemLeft + " " + item.elemTop + " " + item.elemWidth + " " + item.elemHeight);
+        applications[i].left = newdims[0];
+        applications[i].top = newdims[1] - titleBar;
+        applications[i].width = newdims[2];
+        applications[i].height = newdims[3];
 
-        // calculate new dimensions
-        var newdims = fitWithin(app, c * preApp.width + areaX, r * preApp.height + areaY, app.width, app.height, padding);
-        // update the data structure
-        app.left = newdims[0];
-        app.top = newdims[1] - titleBar;
-        sumWidth += app.width;
-        // app.width = newdims[2];
-        //app.height = newdims[3];
-
-        console.log("app: " + app.width + "  " + app.height);
-
-        // build the object to be sent
         var updateItem = {
             elemId: app.id,
             elemLeft: app.left, elemTop: app.top,
             elemWidth: app.width, elemHeight: app.height,
             force: true, date: new Date()
         };
+
         // send the order
         broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
 
-        c += 1;
-        if (sumWidth >= config.totalWidth) {
-            c = 0;
-            r += 1;
-        }
     }
-    //var PythonShell = require('python-shell');
-
-    //PythonShell.run('spaceManager.py', function (err) {
-    //    if (err) throw err;
-    //    console.log('finished');
-    //});
-
-
-
-
 }
 
 
