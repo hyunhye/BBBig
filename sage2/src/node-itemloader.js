@@ -25,6 +25,8 @@ var exiftool  = require('../src/node-exiftool');      // gets exif tags for imag
 var assets    = require('../src/node-assets');        // asset management
 var tileApplications = require('../server');
 var freeApplications = require('../server');
+var priorityApplications = require('../server');
+var arrangementModeCheck = require('../server');
 var imageMagick;
 mime.default_type = "application/custom";
 
@@ -678,18 +680,32 @@ appLoader.prototype.manageAndLoadUploadedFile = function(file, callback) {
 // window에 띄워질때 마지막으로 여기를 거침 seojin
 appLoader.prototype.loadApplication = function(appData, callback) {
 	var app = null;
-
 	if(appData.location === "file") {
 		app = this.mime2app[appData.type];
 		var dir = this.app2dir[app];
-		
-		if(app === "image_viewer"){
+	    // arrangementModeCheck의 return 값 접근
+		var arrangementMode = arrangementModeCheck.arrangementModeCheck();
+
+		if (app === "image_viewer") {
 			this.loadImageFromFile(appData.path, appData.type, appData.url, appData.external_url, appData.name, function(appInstance) {
 			    callback(appInstance);
 			    // seojin
-                // tile모드일때, free모드일때, Dynamic모드일때 각각의 모드에 맞게 정렬하기
-			    tileApplications.tileApplications();
-			    
+			    // tile모드일때, free모드일때, Dynamic모드일때 각각의 모드에 맞게 정렬하기
+			    if (arrangementMode == 'tile')
+			    {
+			        tileApplications.tileApplications();
+			    }
+			    else if (arrangementMode == 'dynamic')
+			    {
+			        freeApplications.dynamicApplications();
+			    }
+			    else if (arrangementMode == 'priority') {
+			        priorityApplications.priorityApplications();
+			    }
+			    else if (arrangementMode == 'default') {
+			    }
+			    else if (arrangementMode == 'empty mode') {
+			    }
 			});
 		}
 		else if(app === "movie_player"){

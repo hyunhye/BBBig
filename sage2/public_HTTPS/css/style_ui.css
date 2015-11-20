@@ -260,19 +260,25 @@ span {
 	text-align: center;
 }
 
+#defaultcontentContainer {
+	width: 100px;
+	float: left;
+	text-align: center;
+}
+
 #tilecontentContainer {
 	width: 100px;
 	float: left;
 	text-align: center;
 }
 
-#freecontentContainer {
+#dynamiccontentContainer {
 	width: 100px;
 	float: left;
 	text-align: center;
 }
 
-#dynamiccontentContainer {
+#prioritycontentContainer {
 	width: 100px;
 	float: left;
 	text-align: center;

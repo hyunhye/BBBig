@@ -764,16 +764,21 @@
                 wsio.emit('clearDisplay');
                 hideDialog('arrangementDialog');
             }
+            else if (element.id === "defaultcontent") {
+                // 정렬들 기능 해제
+                wsio.emit('defaultApplications');
+                hideDialog('arrangementDialog');
+            }
             else if (element.id === "tilecontent") {
                 wsio.emit('tileApplications');
                 hideDialog('arrangementDialog');
             }
-            else if (element.id === "freecontent") {
-                wsio.emit('freeApplications');
+            else if (element.id === "dynamiccontent") {
+                wsio.emit('dynamicApplications');
                 hideDialog('arrangementDialog');
             }
-            else if (element.id === "dynamiccontent") {
-                wsio.emit('tileApplications');
+            else if (element.id === "prioritycontent") {
+                wsio.emit('priorityApplications');
                 hideDialog('arrangementDialog');
             }
             else if (element.id === "savesession") {
@@ -1291,23 +1296,25 @@
                 <img alt="clearcontent" id="clearcontent" src="images/ui/[graycircle]-clearcontent.svg" width="64" height="64" />
                 <p>Clear All</p>
             </div>
-
             <div id="savesessionContainer">
                 <img alt="savesession" id="savesession" src="images/ui/[graycircle]-savesession.svg" width="64" height="64" />
                 <p>Save Session</p>
             </div>
-
+            <div id="defaultContainer">
+                <img alt="defaultcontent" id="defaultcontent" src="images/ui/[graycircle]-tilecontent.svg" width="64" height="64" />
+                <p>Default Content</p>
+            </div>
             <div id="tilecontentContainer">
                 <img alt="tilecontent" id="tilecontent" src="images/ui/[graycircle]-tilecontent.svg" width="64" height="64" />
                 <p>Tile Content</p>
             </div>
-            <div id="freecontentContainer">
-                <img alt="freecontent" id="freecontent" src="images/ui/[graycircle]-tilecontent.svg" width="64" height="64" />
-                <p>Free Content</p>
-            </div>
             <div id="dynamiccontentContainer">
                 <img alt="dynamiccontent" id="dynamiccontent" src="images/ui/[graycircle]-tilecontent.svg" width="64" height="64" />
                 <p>Dynamic Content</p>
+            </div>
+            <div id="prioritycontentContainer">
+                <img alt="prioritycontent" id="prioritycontent" src="images/ui/[graycircle]-tilecontent.svg" width="64" height="64" />
+                <p>Priority Content</p>
             </div>
         </div>
         <div id="arrangementButtons">
