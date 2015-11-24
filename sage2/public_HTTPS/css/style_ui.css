@@ -254,6 +254,11 @@ span {
 	overflow: auto;
 }
 
+#arrangementItems2 {
+	margin: 10px 10px 66px 10px;
+	overflow: auto;
+}
+
 #clearcontentContainer {
 	width: 100px;
 	float: left;

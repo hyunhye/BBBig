@@ -1427,12 +1427,16 @@ function tileApplications() {
         // get the application
         app = applications[i];
         // calculate new dimensions
+		console.log("Tile Mode");
+		console.log(app + " " + app.left + " " +  app.top + " " + app.width + " " + app.height);
         var newdims = fitWithin(app, c * tileW + areaX, r * tileH + areaY, tileW, tileH, padding);
         // update the data structure
         app.left = newdims[0];
         app.top = newdims[1] - titleBar;
         app.width = newdims[2];
         app.height = newdims[3];
+		
+		console.log(app + " " + app.left + " " +  app.top + " " + app.width + " " + app.height);
         // build the object to be sent
         var updateItem = {
             elemId: app.id,
@@ -1451,7 +1455,7 @@ function tileApplications() {
     }
 }
 
-// seojin - 안에 내용은 현혜가 전에 조금 했던 free모드 임
+// seojin
 // hyunhye
 function dynamicApplications() {
     arrangementMode = 'dynamic';
@@ -1467,15 +1471,15 @@ function dynamicApplications() {
     if (applications.length === 1) padding = 0;
 
     for (i = 0; i < applications.length; i++) {
-        //app = applications[i];
+        app = applications[i];
         var appData = {
-            id: applications[i].id,//.substring(12,13),
-            left: applications[i].left,
-            right: applications[i].left + applications[i].width,
-            bottom: applications[i].top + applications[i].height,
-            up: applications[i].top,
-            width: applications[i].width,
-            height: applications[i].height
+            id: app.id,//.substring(12,13),
+            left: app.left,
+            right: app.left + app.width,
+            bottom: app.top + app.height,
+            up: app.top,
+            width: app.width,
+            height: app.height
         }
 
         console.log("----------" + appData.id + "------------")
@@ -1488,14 +1492,14 @@ function dynamicApplications() {
         var item = spaceManager.createFullRectangle(appData);
 
         //fitWithin(applications[i], i*100 , i*100, 100, 100, padding);
-        app = applications[i];
+        
 
-        var newdims = fitWithin(app, item.elemLeft, item.elemTop, item.elemWidth, item.elemHeight, padding);
-        console.log(app + " " + item.elemLeft + " " + item.elemTop + " " + item.elemWidth + " " + item.elemHeight);
-        applications[i].left = newdims[0];
-        applications[i].top = newdims[1] - titleBar;
-        applications[i].width = newdims[2];
-        applications[i].height = newdims[3];
+        var newdims = fitWithin(app, item.elemLeft, item.elemBottom, item.elemWidth, item.elemHeight, padding);
+        console.log(app + " " + item.elemLeft + " " + item.elemBottom + " " + item.elemWidth + " " + item.elemHeight);
+        app.left = newdims[0];
+        app.top = newdims[1] - titleBar;
+        app.width = newdims[2];
+        app.height = newdims[3];
 
         var updateItem = {
             elemId: app.id,
