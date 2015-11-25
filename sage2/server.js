@@ -62,6 +62,8 @@ var websocketIO = require('./src/node-websocket.io');   // creates WebSocket ser
 
 // hyunhye
 var DynamicSpaceManager = require('./src/spaceManager');
+// seojin
+var PrioritySpaceManager = require('./src/spaceManager_priority')
 var Bounds = require('./src/globals');
 
 // Version calculation
@@ -1510,13 +1512,13 @@ function dynamicApplications() {
 
         // send the order
         broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
-
     }
 }
 
 
 // seojin - 안에 내용은 tile 모드임
 // -> 태그 저장을 통한 우선순위 배열로 바꿔주기
+// spaceManager_priority 내용 바꾸면서 해보자
 function priorityApplications() {
     // seojin
     arrangementMode = 'priority';
