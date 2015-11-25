@@ -710,12 +710,42 @@ appLoader.prototype.loadApplication = function(appData, callback) {
 		}
 		else if(app === "movie_player"){
 			this.loadVideoFromFile(appData.path, appData.type, appData.url, appData.external_url, appData.name, function(appInstance) {
-				callback(appInstance);
+			    callback(appInstance);
+			    // seojin
+			    // tile모드일때, free모드일때, Dynamic모드일때 각각의 모드에 맞게 정렬하기
+			    if (arrangementMode == 'tile') {
+			        tileApplications.tileApplications();
+			    }
+			    else if (arrangementMode == 'dynamic') {
+			        freeApplications.dynamicApplications();
+			    }
+			    else if (arrangementMode == 'priority') {
+			        priorityApplications.priorityApplications();
+			    }
+			    else if (arrangementMode == 'default') {
+			    }
+			    else if (arrangementMode == 'empty mode') {
+			    }
 			});
 		}
 		else if(app === "pdf_viewer"){
 			this.loadPdfFromFile(appData.path, appData.type, appData.url, appData.external_url, appData.name, function(appInstance) {
-				callback(appInstance);
+			    callback(appInstance);
+			    // seojin
+			    // tile모드일때, free모드일때, Dynamic모드일때 각각의 모드에 맞게 정렬하기
+			    if (arrangementMode == 'tile') {
+			        tileApplications.tileApplications();
+			    }
+			    else if (arrangementMode == 'dynamic') {
+			        freeApplications.dynamicApplications();
+			    }
+			    else if (arrangementMode == 'priority') {
+			        priorityApplications.priorityApplications();
+			    }
+			    else if (arrangementMode == 'default') {
+			    }
+			    else if (arrangementMode == 'empty mode') {
+			    }
 			});
 		}
 		else if(app === "custom_app"){
