@@ -1553,7 +1553,8 @@ function dynamicApplications() {
     var i;
     var app;
     var spaceManager;
-
+	var padding = 4;
+	 
     var titleBar = config.ui.titleBarHeight;
     if (config.ui.auto_hide_ui === true) titleBar = 0;
     var padding = 4;
@@ -1573,9 +1574,7 @@ function dynamicApplications() {
                                           updateItem.elemTop,
                                           updateItem.elemTop + updateItem.elemHeight,
                                           updateItem.elemWidth, updateItem.elemHeight);
-    console.log(updateItem.elemLeft + " " + updateItem.elemTop + " " + updateItem.elemWidth + " " + updateItem.elemHeight);
     spaceManager.clearRectangles();
-
 
     for (i = 1; i < applications.length; i++) {
         app = applications[i];
@@ -1589,13 +1588,14 @@ function dynamicApplications() {
             width: app.width,
             height: app.height
         }
-
+		// determine the bounds of the tiling area
+		var titleBar = config.ui.titleBarHeight;
         var item = spaceManager.createFullRectangle(appData);
 
-        app.left = item.itemLeft;
-        app.top = item.itemTop;
-        app.height = item.itemHeight;
-        app.width = item.itemWidth;
+        app.left = item.itemLeft + padding;
+        app.top = item.itemTop + padding + titleBar;
+        app.height = item.itemHeight - 2*padding;;
+        app.width = item.itemWidth - 2*padding;;
 
         var updateItem = {
             elemId: app.id,

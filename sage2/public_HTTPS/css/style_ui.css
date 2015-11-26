@@ -41,6 +41,15 @@ span {
 	color: #000000;
 }
 
+#mode {
+	margin-left: 30px;
+	margin-top: 30px;
+	margin-bottom:-20px;
+	
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 25px;
+}
+
 #mainUI {
 	margin: 0px;
 	overflow: auto;

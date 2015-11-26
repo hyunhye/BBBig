@@ -766,18 +766,30 @@
             }
             else if (element.id === "defaultcontent") {
                 // 정렬들 기능 해제
+				var mode = document.getElementById('mode');
+				mode.innerHTML = "default Mode";
+				
                 wsio.emit('defaultApplications');
                 hideDialog('arrangementDialog');
             }
             else if (element.id === "tilecontent") {
+				var mode = document.getElementById('mode');
+				mode.innerHTML = "Tile Mode";
+				
                 wsio.emit('tileApplications');
                 hideDialog('arrangementDialog');
             }
             else if (element.id === "dynamiccontent") {
+				var mode = document.getElementById('mode');
+				mode.innerHTML = "Dynamic Mode";
+				
                 wsio.emit('dynamicApplications');
                 hideDialog('arrangementDialog');
             }
             else if (element.id === "prioritycontent") {
+				var mode = document.getElementById('mode');
+				mode.innerHTML = "Priority Mode";
+				
                 wsio.emit('priorityApplications');
                 hideDialog('arrangementDialog');
             }
@@ -1167,6 +1179,9 @@
 </head>
 <body onload="init()" onresize="resize()" onkeydown='on_key_down()' id="bodyid">
     <div id="mainUI">
+		<div>
+			<p id="mode">mode</p>
+		</div>
         <div id="displayUI">
             <canvas id="sage2UI"></canvas>
         </div>
@@ -1303,7 +1318,7 @@
 		</div>
 			
 		<div id="arrangementItems2">
-				<div id="defaultcontentContainer">
+				<div id="defaultcontentContainer" >
 					<img alt="defaultcontent" id="defaultcontent" src="images/ui/[graycircle]-tilecontent.svg" width="64" height="64" />
 					<p>Default Content</p>
 				</div>
