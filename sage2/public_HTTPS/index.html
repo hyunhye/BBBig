@@ -767,7 +767,7 @@
             else if (element.id === "defaultcontent") {
                 // 정렬들 기능 해제
 				var mode = document.getElementById('mode');
-				mode.innerHTML = "default Mode";
+				mode.innerHTML = "Default Mode";
 				
                 wsio.emit('defaultApplications');
                 hideDialog('arrangementDialog');
@@ -1180,7 +1180,7 @@
 <body onload="init()" onresize="resize()" onkeydown='on_key_down()' id="bodyid">
     <div id="mainUI">
 		<div>
-			<p id="mode">mode</p>
+			<p id="mode">Default Mode</p>
 		</div>
         <div id="displayUI">
             <canvas id="sage2UI"></canvas>
