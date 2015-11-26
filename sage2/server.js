@@ -1553,28 +1553,25 @@ function dynamicApplications() {
     var i;
     var app;
     var spaceManager;
+	
 	var padding = 4;
+    // if only one application, no padding, i.e maximize
+    if (applications.length === 1) padding = 0;
 	 
     var titleBar = config.ui.titleBarHeight;
     if (config.ui.auto_hide_ui === true) titleBar = 0;
-    var padding = 4;
 
     // 윈도우가 하나도 없다면..
     if (applications.length === 0) return;
 
-    // if only one application, no padding, i.e maximize
-    if (applications.length === 1) padding = 0;
-
     // first app is biggest and center
-    var updateItem = tileApplicationsForDynamic(applications[0]);
+    // var updateItem = tileApplicationsForDynamic(applications[0]);
 
     console.log("--------------------first--------------------------------")
-    spaceManager = new DynamicSpaceManager(updateItem.elemLeft,
-                                          updateItem.elemLeft + updateItem.elemWidth,
-                                          updateItem.elemTop,
-                                          updateItem.elemTop + updateItem.elemHeight,
-                                          updateItem.elemWidth, updateItem.elemHeight);
-    spaceManager.clearRectangles();
+	spaceManager = new DynamicSpaceManager(applications[0].left,applications[0].left+applications[0].width,
+											applications[0].top,applications[0].top+applications[0].height,
+											applications[0].width, applications[0].height);
+	spaceManager.initializeEmptySpace();
 
     for (i = 1; i < applications.length; i++) {
         app = applications[i];
@@ -1594,8 +1591,8 @@ function dynamicApplications() {
 
         app.left = item.itemLeft + padding;
         app.top = item.itemTop + padding + titleBar;
-        app.height = item.itemHeight - 2*padding;;
-        app.width = item.itemWidth - 2*padding;;
+        app.height = item.itemHeight - 2*padding;
+        app.width = item.itemWidth - 2*padding;
 
         var updateItem = {
             elemId: app.id,
