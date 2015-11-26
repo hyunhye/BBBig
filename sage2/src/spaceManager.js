@@ -58,8 +58,6 @@ DynamicSpaceManager.prototype.createFullRectangle = function (app) {
     //print "app -> " + str(app.left) + " " + str(app.right) + " " + str(app.bottom) + " " + str(app.up)
 	var item;
     var aspectRatio = app.width/app.height;
-	console.log("-----------------------------------");
-	console.log("aspectRatio: "+aspectRatio);
 	
     var left = right = up = bottom = 0;
     var max_area = 0;
@@ -70,7 +68,6 @@ DynamicSpaceManager.prototype.createFullRectangle = function (app) {
 	
     // because we are looking for best fit. largest area does not guarantee optimal choice
 	for(var i=0; i < this.largestEmptySpaceList.length; i++){ 
-		console.log("********"+i+"********");
 		// ratio = x / y 	
 		space = this.largestEmptySpaceList[i];
 		console.log("largestEmptySpaceList["+i+"]:"+space.left+" "+space.right+" "+space.up+" "+space.bottom);
@@ -98,14 +95,12 @@ DynamicSpaceManager.prototype.createFullRectangle = function (app) {
                 right = left + app_width;
                 bottom = up + app_height;
 				
-				console.log("app___");
 				app.width = app_width;
 				app.height = app_height;
             }else {
                 right = left + app.width;
                 bottom = up + app.height;
 				
-				console.log("app...");
             }
             found = true; 
 
@@ -119,18 +114,11 @@ DynamicSpaceManager.prototype.createFullRectangle = function (app) {
         app.bottom = bottom;
 
 		this.bound = new Bounds(app.left,app.right,app.up,app.bottom);
-        this.addFullRectangle(this.bound);
-		// hyunhye
-		// 그 곳의 largestEmptySpaceList를 배열에서 삭제
-		for(var j = 0, space; space = this.largestEmptySpaceList[j] ; j++){
-				if(j == o){
-					//this.bound = new Bounds(space.left,space.right,space.up,space.bottom);	
-					this.largestEmptySpaceList.splice(j);
-				}
-		}
+        this.addFullRectangle(this.bound, o);
+		
     }
 	
-	item = {elemId: app.id,itemLeft: app.left, itemTop: app.up,itemWidth: app.width, itemHeight: app.height};
+	item = {elemId: app.id,itemLeft: app.left, itemTop: app.up,itemWidth: app.right-app.left, itemHeight:app.bottom-app.up};
 	return item;
 	
 }
@@ -451,23 +439,25 @@ DynamicSpaceManager.prototype.createStaticRectangle = function (app) {
 
 // -----------------------------------
 // MAIN PART : ADD FULL RECTANGLE
-DynamicSpaceManager.prototype.addFullRectangle = function (app) {
+DynamicSpaceManager.prototype.addFullRectangle = function (app, pos) {
 
     // todo -> refine..?
     // app = this.refine(app);
 	
-	// hyunhye : this.fullSpaceList.push(new_app);
+	// 1. add fullSpaceList
     this.fullSpaceList.push(app);
 	
-    // have list existing rectangles in largestEmptySpaceList that intersect || are adjacent to current app
+    // 2. CList = have list existing rectangles in largestEmptySpaceList 
+	//         		that intersect or are adjacent to current app
     var cList = [];
     var index = 0;
     var removeList = [];
 	
-    //for (space in this.largestEmptySpaceList) {
-	for(var i=0, space; space=this.largestEmptySpaceList[i]; i++){
-		
-        if (!(space.right < app.left || space.left > app.right || space.up < app.bottom || space.bottom > app.up)) {
+	console.log("app:"+app.left+" "+app.right+" "+app.up+" "+app.bottom);
+	for(var i=0, space; space=this.largestEmptySpaceList[i]; i++){	
+	// !((space.right < app.left) && (space.left > app.right) && (space.up < app.bottom) && (space.bottom > app.up))	
+	// if not (space.right < app.left or space.left > app.right or space.top < app.bottom or space.bottom > app.top)
+		if((space.right < app.left || space.left > app.right || space.top < app.bottom || space.bottom > app.top) == false) {
 			cList.push(space);
             removeList.push(index);
         }
@@ -483,82 +473,81 @@ DynamicSpaceManager.prototype.addFullRectangle = function (app) {
     var possibleLESList_bottom = [];
     var possibleLESList_up = [];
 	
-    //for (O in cList) {
 	console.log("cList.length: "+cList.length);
 	for(var i=0, O; O=cList[i]; i++){
         // current app : app  = F
-        // if O adjacent to any side e of F && external to F
-        // ?????? c||rect || not????
+        // if O adjacent to any side e of F and external to F
+        // ?????? correct or not????
         if (app.left == O.right){
-			console.log("CList right??"+O.right);
             adjacentLESList_left.push(O);
 		}
         else if (app.right == O.left){
-			console.log("CList left??"+O.left);
             adjacentLESList_right.push(O);
 		}
         else if (app.up == O.bottom){
-			console.log("CList bottom??"+O.bottom);
             adjacentLESList_up.push(O);
 		}
         else if (app.bottom == O.up){
-			console.log("CList?? up"+O.up);
 			adjacentLESList_bottom.push(O);
 		}
         else {
-			// hyunhye : remove(O);
-            // this.largestEmptySpaceList.remove(O);
-			for(var j = 0; j < this.largestEmptySpaceList.length ; j++){
-				if(this.largestEmptySpaceList[j] == O)
+			//for(var j = 0; j < this.largestEmptySpaceList.length ; j++){
+			//	if(this.largestEmptySpaceList[j] == O)
+			//		this.largestEmptySpaceList.splice(j);
+			//}
+			// 그 곳의 largestEmptySpaceList를 배열에서 삭제
+			for(var j = 0, space; space = this.largestEmptySpaceList[j] ; j++){
+				if(j == pos){
 					this.largestEmptySpaceList.splice(j);
+				}
 			}
-			
             // class Bounds - > left, right, up, bottom
             if (O.left < app.left){     // up left	
-				var bound = new Bounds(O.left, O.right, O.up, app.up);
+				var bound = new Bounds(O.left, app.left, O.up, O.bottom);
                 possibleLESList_left.push(bound);
 			}
             if (O.right > app.right){    // bottom right
-				var bound = new Bounds(O.left, O.right, O.up, app.up);
+				var bound = new Bounds(app.right, O.right, O.up, O.bottom);
                 possibleLESList_right.push(bound);
 			}
             if (O.bottom < app.bottom){  // bottom left 
-				var bound = new Bounds(O.left, O.right, O.up, app.up);
+				var bound = new Bounds(O.left, O.right, O.bottom,app.bottom);
                 possibleLESList_bottom.push(bound);
 			}
             if (O.up > app.up) {        // up right 
-				var bound = new Bounds(O.left, O.right, O.up, app.up);
-                possibleLESList_up.push(bound);
+				//if(app.up == 0) continue;
+				var bound = new Bounds(O.left, O.right,app.up, O.up); // hyunhye : app.up, O.up순서 바꿈
+				possibleLESList_up.push(bound);
+			
 			}
         }
     }
 	
-	
+	// 3. P not enclosed by any space in adjacentLESList[D] or any other space in possibleLESList[D]
     index = 0;
     var possibleLESList = [];
-    //for (P in possibleLESList_left) {
 	for(var i=0, P; P=possibleLESList_left[i]; i++){
-        // P not enclosed by any space in adjacentLESList[D] || any other space in possible LESList[D]
+        
         if (this.isNotInClosed(P, index, possibleLESList_left, adjacentLESList_left) == true)
             possibleLESList.push(P);
         index += 1;
     }
+	
     index = 0;
-    //for (P in possibleLESList_right) {
 	for(var i=0, P; P=possibleLESList_right[i]; i++){
         if (this.isNotInClosed(P, index, possibleLESList_right, adjacentLESList_right) == true)
             possibleLESList.push(P);
         index += 1;
     }
+	
     index = 0;
-    //for (P in possibleLESList_up) {
 	for(var i=0, P; P=possibleLESList_up[i]; i++){
         if (this.isNotInClosed(P, index, possibleLESList_up, adjacentLESList_up) == true)
             possibleLESList.push(P)
         index += 1;
     }
+	
     index = 0;
-    //for (P in possibleLESList_bottom) {
 	for(var i=0, P; P=possibleLESList_bottom[i]; i++){
         if (this.isNotInClosed(P, index, possibleLESList_bottom, adjacentLESList_bottom) == true)
             possibleLESList.push(P)
@@ -567,7 +556,7 @@ DynamicSpaceManager.prototype.addFullRectangle = function (app) {
 	
 	///////////////////////////////////////////////////////////
     index = 0;
-    //for (P in possibleLESList) {
+	
 	console.log("possibleLESList: "+possibleLESList.length);
 	for(var i=0, P; P=possibleLESList[i]; i++){
         this.largestEmptySpaceList.push(P);     
@@ -743,9 +732,8 @@ DynamicSpaceManager.prototype.isInClosed = function (P, possibleLESList) {
     return false;
 }
 DynamicSpaceManager.prototype.isNotInClosed = function (P, i, possibleLESList, adjacentLESList) {
-    //print "not in closed.... " + str(len(possibleLESList)) 
     var j = 0;
-    //for (possible in possibleLESList) {
+	
 	for(var n=0, possible; possible=possibleLESList[n]; n++){
         if (i != j) {
             if (possible.left <= P.left && P.right <= possible.right && possible.bottom <= P.bottom && P.up <= possible.up)
