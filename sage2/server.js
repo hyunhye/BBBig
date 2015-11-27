@@ -1159,7 +1159,7 @@ function averageWindowAspectRatio() {
 	return (totAr / num);
 }
 
-//hyunhye
+
 function fitWithin(app, x, y, width, height, margin) {
 	var titleBar = config.ui.titleBarHeight;
 	if (config.ui.auto_hide_ui===true) titleBar = 0;
@@ -1550,33 +1550,26 @@ function tileApplicationsForDynamic(app) {
 // updateItem에 이상한 값 들어오면 window 안 움직임!
 function dynamicApplications() {
     arrangementMode = 'dynamic';
+	
     var i;
     var app;
     var spaceManager;
+	
 	var padding = 4;
+    // if only one application, no padding, i.e maximize
+    if (applications.length === 1) padding = 0;
 	 
-    var titleBar = config.ui.titleBarHeight;
-    if (config.ui.auto_hide_ui === true) titleBar = 0;
-    var padding = 4;
-
     // 윈도우가 하나도 없다면..
     if (applications.length === 0) return;
 
-    // if only one application, no padding, i.e maximize
-    if (applications.length === 1) padding = 0;
-
     // first app is biggest and center
-    var updateItem = tileApplicationsForDynamic(applications[0]);
+    // var updateItem = tileApplicationsForDynamic(applications[0]);
 
     console.log("--------------------first--------------------------------")
-    spaceManager = new DynamicSpaceManager(updateItem.elemLeft,
-                                          updateItem.elemLeft + updateItem.elemWidth,
-                                          updateItem.elemTop,
-                                          updateItem.elemTop + updateItem.elemHeight,
-                                          updateItem.elemWidth, updateItem.elemHeight);
-    spaceManager.clearRectangles();
-
-    for (i = 1; i < applications.length; i++) {
+	spaceManager = new DynamicSpaceManager();
+	spaceManager.initializeEmptySpace();
+	
+    for (i = 0; i < applications.length; i++) {
         app = applications[i];
 
         var appData = {
@@ -1591,11 +1584,11 @@ function dynamicApplications() {
 		// determine the bounds of the tiling area
 		var titleBar = config.ui.titleBarHeight;
         var item = spaceManager.createFullRectangle(appData);
-
-        app.left = item.itemLeft + padding;
-        app.top = item.itemTop + padding + titleBar;
-        app.height = item.itemHeight - 2*padding;;
-        app.width = item.itemWidth - 2*padding;;
+		
+        app.left = item.itemLeft;
+        app.top = item.itemTop;// + 2*titleBar;
+        app.height = item.itemHeight;// - 2*padding;
+        app.width = item.itemWidth;// - 2*padding;
 
         var updateItem = {
             elemId: app.id,
@@ -1603,7 +1596,7 @@ function dynamicApplications() {
             elemWidth: app.width, elemHeight: app.height,
             force: true, date: new Date()
         };
-
+		
         // send the order
         broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
     }
@@ -3675,6 +3668,15 @@ function deleteApplication( elem ) {
 		if(broadcastWS !== null) broadcastWS.emit('stopMediaCapture', {streamId: broadcastID});
 	}
 	removeElement(applications, elem);
+		
+	// hyunhye
+	if(arrangementMode == "dynamic"){
+		dynamicApplications();
+	} else if(arrangementMode == "tile"){
+		tileApplications();
+	} else if(arrangementMode == "priority"){
+		priorityApplications();
+	}
 }
 
 // **************  Omicron section *****************
