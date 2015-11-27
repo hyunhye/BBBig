@@ -1550,6 +1550,7 @@ function tileApplicationsForDynamic(app) {
 // updateItem에 이상한 값 들어오면 window 안 움직임!
 function dynamicApplications() {
     arrangementMode = 'dynamic';
+	
     var i;
     var app;
     var spaceManager;
@@ -1568,12 +1569,12 @@ function dynamicApplications() {
     // var updateItem = tileApplicationsForDynamic(applications[0]);
 
     console.log("--------------------first--------------------------------")
-	spaceManager = new DynamicSpaceManager(applications[0].left,applications[0].left+applications[0].width,
+	spaceManager = new DynamicSpaceManager(applications[0].id,applications[0].left,applications[0].left+applications[0].width,
 											applications[0].top,applications[0].top+applications[0].height,
 											applications[0].width, applications[0].height);
 	spaceManager.initializeEmptySpace();
-
-    for (i = 1; i < applications.length; i++) {
+	
+    for (i = 0; i < applications.length; i++) {
         app = applications[i];
 
         var appData = {
@@ -1589,10 +1590,10 @@ function dynamicApplications() {
 		var titleBar = config.ui.titleBarHeight;
         var item = spaceManager.createFullRectangle(appData);
 
-        app.left = item.itemLeft + padding;
-        app.top = item.itemTop + padding + titleBar;
-        app.height = item.itemHeight - 2*padding;
-        app.width = item.itemWidth - 2*padding;
+        app.left = item.itemLeft;// + padding;
+        app.top = item.itemTop;// + padding + titleBar;
+        app.height = item.itemHeight;// - 2*padding;
+        app.width = item.itemWidth;// - 2*padding;
 
         var updateItem = {
             elemId: app.id,
