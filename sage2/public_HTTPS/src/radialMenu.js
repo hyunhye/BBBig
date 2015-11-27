@@ -438,7 +438,7 @@ function radialMenu() {
         }
 
         // seojin - loadAll
-        //!!
+        // !!
         if (this.imageMenuOpen) {
             this.radial2ImageLoadAllButton.draw();
         }
@@ -545,6 +545,7 @@ function radialMenu() {
             if (this.hoverOverThumbnail)
                 this.ctx.drawImage(this.hoverOverThumbnail, previewImageX, previewImageY, previewImageSize, previewImageSize);
 
+            // seojin
             // 메뉴 선택시 뜨는 작은 윈도우에 어떤 정보를 넣어줄 것인지
             if (this.hoverOverMeta) {
                 this.ctx.font = "16px sans-serif";
