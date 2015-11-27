@@ -1159,7 +1159,7 @@ function averageWindowAspectRatio() {
 	return (totAr / num);
 }
 
-//hyunhye
+
 function fitWithin(app, x, y, width, height, margin) {
 	var titleBar = config.ui.titleBarHeight;
 	if (config.ui.auto_hide_ui===true) titleBar = 0;
@@ -1559,9 +1559,6 @@ function dynamicApplications() {
     // if only one application, no padding, i.e maximize
     if (applications.length === 1) padding = 0;
 	 
-    var titleBar = config.ui.titleBarHeight;
-    if (config.ui.auto_hide_ui === true) titleBar = 0;
-
     // 윈도우가 하나도 없다면..
     if (applications.length === 0) return;
 
@@ -1569,9 +1566,7 @@ function dynamicApplications() {
     // var updateItem = tileApplicationsForDynamic(applications[0]);
 
     console.log("--------------------first--------------------------------")
-	spaceManager = new DynamicSpaceManager(applications[0].id,applications[0].left,applications[0].left+applications[0].width,
-											applications[0].top,applications[0].top+applications[0].height,
-											applications[0].width, applications[0].height);
+	spaceManager = new DynamicSpaceManager();
 	spaceManager.initializeEmptySpace();
 	
     for (i = 0; i < applications.length; i++) {
@@ -1589,9 +1584,9 @@ function dynamicApplications() {
 		// determine the bounds of the tiling area
 		var titleBar = config.ui.titleBarHeight;
         var item = spaceManager.createFullRectangle(appData);
-
-        app.left = item.itemLeft;// + padding;
-        app.top = item.itemTop;// + padding + titleBar;
+		
+        app.left = item.itemLeft;
+        app.top = item.itemTop;// + 2*titleBar;
         app.height = item.itemHeight;// - 2*padding;
         app.width = item.itemWidth;// - 2*padding;
 
@@ -1601,7 +1596,7 @@ function dynamicApplications() {
             elemWidth: app.width, elemHeight: app.height,
             force: true, date: new Date()
         };
-
+		
         // send the order
         broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
     }
@@ -3673,6 +3668,15 @@ function deleteApplication( elem ) {
 		if(broadcastWS !== null) broadcastWS.emit('stopMediaCapture', {streamId: broadcastID});
 	}
 	removeElement(applications, elem);
+		
+	// hyunhye
+	if(arrangementMode == "dynamic"){
+		dynamicApplications();
+	} else if(arrangementMode == "tile"){
+		tileApplications();
+	} else if(arrangementMode == "priority"){
+		priorityApplications();
+	}
 }
 
 // **************  Omicron section *****************

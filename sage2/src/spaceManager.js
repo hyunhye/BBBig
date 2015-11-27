@@ -4,16 +4,16 @@ var Bounds = require('../src/globals');
 //var getWidth = require('../src/globals');
 //var getHeight = require('../src/globals');
 
-function DynamicSpaceManager(id,left,right,up,bottom,width,height) {
+function DynamicSpaceManager() {
     //var section = parent;
-	this.id = id;
-	this.left = left;
-	this.right = right;
-	this.up = up;
-	this.bottom = bottom;
-	this.width = width;
-	this.height = height;
-    this.bound = new Bounds(left,right,up,bottom);
+	this.id;
+	this.left;
+	this.right;
+	this.up;
+	this.bottom;
+	this.width;
+	this.height;
+    this.bound;
     this.fullSpaceList = [];
     this.appList = [];
     this.largestEmptySpaceList = [];
@@ -35,9 +35,6 @@ DynamicSpaceManager.prototype.initializeEmptySpace = function(){
 	var bound = new Bounds(0,(config.resolution.width*nCols),0,(config.resolution.height*nRows));
 	this.largestEmptySpaceList.push(bound);
 	
-    //this.fullSpaceList = [];
-	// this.addFullRectangle(this.bound, 0);
-	
 }
 DynamicSpaceManager.prototype.updateBound = function (bound) {
     this.bound = bound;
@@ -49,34 +46,42 @@ DynamicSpaceManager.prototype.createFullRectangle = function (app) {
     //print "app -> " + str(app.left) + " " + str(app.right) + " " + str(app.bottom) + " " + str(app.up)
 	var item;
     var aspectRatio = app.width/app.height;
-	
+   
     var left = right = up = bottom = 0;
     var max_area = 0;
+	//var center_x = 0;
+    //var center_y = 0;
     var found = false;
+   
 	var space, a;
-	
-	var o;
-	
+   
+	var pos = 0;
+   
     // because we are looking for best fit. largest area does not guarantee optimal choice
-	for(var i=0; i < this.largestEmptySpaceList.length; i++){ 
-		// ratio = x / y 	
+    for(var i=0; i < this.largestEmptySpaceList.length; i++){ 
+		// ratio = x / y    
 		space = this.largestEmptySpaceList[i];
 		console.log("largestEmptySpaceList["+i+"]:"+space.left+" "+space.right+" "+space.up+" "+space.bottom);
 
         // 윈도우 크기 => 비율에 맞춰 줄이기
-        app_height = space.width / aspectRatio;
+        app_height = Math.round(space.width / aspectRatio);
         app_width = space.width;
-		
+      
         if (app_height > space.height) {  // 만약 윈도우 크기가 더 크면..
             app_height = space.height; // 윈도우 높이를 공간 높이로 바꾸고 
-            app_width = space.height * aspectRatio; // 윈도우 너비를 비율에 맞춰 바꾼다.
+            app_width = Math.round(space.height * aspectRatio); // 윈도우 너비를 비율에 맞춰 바꾼다.
         }
-		
+      
         // 면적 = 윈도우 높이 * 윈도우 너비
         a = app_height * app_width;
         if (a > max_area) {// 만약 면적이 최대 면적보다 크면
             max_area = a; // 최대 면적을 현재 면적으로 늘린다.
-			o = i; // 현재 largestEmptySpaceList 체크
+			pos = i; // 현재 largestEmptySpaceList 체크
+         
+			//center_x =space.right - Math.round(space.width/2);
+            //center_y =space.bottom - Math.round(space.height/2); 
+			//center_x = space.width/2;
+			//center_y = space.height/2;
 			
             left = space.left;
             up = space.up;
@@ -86,18 +91,26 @@ DynamicSpaceManager.prototype.createFullRectangle = function (app) {
             found = true; 
         }
     }
-	
+   
     if (found == true) {
         app.left = left;
-        app.right = right;
+        app.right = right ;
         app.up = up;
         app.bottom = bottom;
-
-		this.bound = new Bounds(app.left,app.right,app.up,app.bottom);
-        this.addFullRectangle(this.bound, o);
 		
-    }
-	
+		//var width = right - left;
+		//var height = bottom - up;
+		
+		//app.left = center_x - Math.round(width / 2);
+		//app.right = center_x + Math.round(width/2);
+		//app.bottom = center_y + Math.round(height / 2);
+		//app.up = center_y - Math.round(height/2);
+		  
+		this.bound = new Bounds(app.left,app.right,app.up,app.bottom);
+        this.addFullRectangle(this.bound, pos);
+      
+	}
+   
 	item = {elemId: app.id,itemLeft: app.left, itemTop: app.up,itemWidth: app.right-app.left, itemHeight:app.bottom-app.up};
 	return item;
 }
@@ -358,6 +371,7 @@ DynamicSpaceManager.prototype.adjustFullRectangle = function (app) {
             if (this.section.outSec != None && this.section.inType == USERINPUT_TYPE) {
                 var width = right - left;
                 var height = up - bottom;
+				
                 app.left = center_x - width / 2;
                 app.right = app.left + width;
                 app.bottom = center_y - height / 2;
@@ -371,6 +385,8 @@ DynamicSpaceManager.prototype.adjustFullRectangle = function (app) {
         // sailID???
         // this.addFullRectangle(app.id, Bounds(left, right, up, bottom)); //hyunhye : app.getId()		
     }
+	item = {elemId: app.id,itemLeft: app.left, itemTop: app.up,itemWidth: app.right-app.left, itemHeight:app.bottom-app.up};
+	return item;
 }
 
 // hyunhye
@@ -468,30 +484,26 @@ DynamicSpaceManager.prototype.addFullRectangle = function (app, pos) {
 			adjacentLESList_bottom.push(O);
 		}
         else {
-			for(var j = 0, space; space = this.largestEmptySpaceList[j] ; j++){
+			for(var j = 0; j < this.largestEmptySpaceList.length ; j++){
 				if(j == pos){
-					this.largestEmptySpaceList.splice(j);
+					this.largestEmptySpaceList.splice(pos,1);
+					//break;
 				}
 			}
             // class Bounds - > left, right, up, bottom
             if (O.left < app.left){     // up left	
-				console.log("1 : "+O.left+" "+app.left);
-				
 				var bound = new Bounds(O.left, app.left, O.up, O.bottom);
                 possibleLESList_left.push(bound);
 			}
             if (O.right > app.right){    // bottom right
-				console.log("2");
 				var bound = new Bounds(app.right, O.right, O.up, O.bottom);
                 possibleLESList_right.push(bound);
 			}
             if (O.bottom > app.bottom){  // bottom left 
-				console.log("3");
 				var bound = new Bounds(O.left, O.right, app.bottom, O.bottom);
                 possibleLESList_bottom.push(bound);
 			}
             if (O.up < app.up) {        // up right 
-				console.log("4");
 				//if(app.up == 0) continue;
 				var bound = new Bounds(O.left, O.right,O.up, app.up); // hyunhye : app.up, O.up순서 바꿈
 				possibleLESList_up.push(bound);
@@ -534,7 +546,7 @@ DynamicSpaceManager.prototype.addFullRectangle = function (app, pos) {
 	console.log("possibleLESList: "+possibleLESList.length);
 	for(var i=0, P; P=possibleLESList[i]; i++){
 		// load config file - looks for user defined file, then file that matches hostname, then uses default
-        this.largestEmptySpaceList.push(P);     
+		this.largestEmptySpaceList.push(P);     
     }
 
 }
@@ -703,7 +715,7 @@ DynamicSpaceManager.prototype.isNotInClosed = function (P, i, possibleLESList, a
     return true;
 }
 DynamicSpaceManager.prototype.refine = function (space) {
-    if (this.bound.left > space.getLeft())
+    if (this.bound.left > space.left)
         space.left = this.bound.left;
     if (this.bound.right < space.right)
         space.right = this.bound.right;
