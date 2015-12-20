@@ -267,19 +267,19 @@ DynamicSpaceManager.prototype.adjustFullRectangle = function (app) {
 
     var numApp = 0;
     var updateFlag = true;
-    var aspectRatio = this.width/this.height;
-    var max_width = this.bound.width;// * app.sizeDesire;
+    var aspectRatio = app.width/app.height;
+    var max_width = app.width;// * app.sizeDesire;
     var max_height = max_width / aspectRatio;
     var max_area = max_width * max_height;
     if (max_area == 0) {
         return;
     }
 
-    var expected_area = this.totalArea; //* app.sizeDesire;
+    var expected_area = app.width * app.height; //* app.sizeDesire;
     //print "*** expected_area = " + str(expected_area) + " area = " + str(max_area)
     if (expected_area < max_area) {
         // need to modify agian
-        max_height = this.bound.height;// * app.sizeDesire;
+        max_height = app.height;// * app.sizeDesire;
         max_width = max_height * aspectRatio;
         max_area = max_width * max_height;
         //print "*** re-adjusted... expected_area = " + str(expected_area) + " area = " + str(max_area)
