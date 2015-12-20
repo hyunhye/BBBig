@@ -112,6 +112,9 @@ appLoader.prototype.loadImageFromURL = function(url, mime_type, name, strictSSL,
 							callback(appInstance);
 						}
 					);
+				    // seojin
+				    // console.log(exif.Tag);
+					console.log("find image file-loadImageFromURL");
 				} else {
 					console.log("File not recognized:", file, mime_type, url);
 				}
@@ -267,13 +270,19 @@ appLoader.prototype.loadImageFromFile = function(file, mime_type, url, external_
 			}
 
 			// Query the exif data
-			var dims = assets.getDimensions(file);
-			var exif = assets.getExifData(file);
+			var dims = assets.getDimensions(file); // getDimensions : width, height return 됨
+			var exif = assets.getExifData(file); // getExifData : exif return 됨
 
 			if (dims) {
 				_this.loadImageFromDataBuffer(data, dims.width, dims.height, mime_type, url, external_url, name, exif, function(appInstance) {
 					callback(appInstance);
 				});
+			    // seojin
+			    // sage index.html에서 가지고있는 파일은 여기 로그 찍힘
+			    // Tag는 기존 SAGE2에 존재한 애들만 찍히네.. 왜지 ㅠ
+				console.log(exif.FileSize);
+				console.log("find image file-loadImageFromFile-1");
+				console.log(exif.Tag);
 			} else {
 				console.log("File not recognized:", file, mime_type, url);
 			}
@@ -304,6 +313,9 @@ appLoader.prototype.loadImageFromFile = function(file, mime_type, url, external_
 				_this.loadImageFromDataBuffer(buffer, dims.width, dims.height, "image/png", url, external_url, name, exif, function(appInstance) {
 					callback(appInstance);
 				});
+			    // seojin
+			    // console.log(exif.Tag);
+				console.log("find image file-loadImageFromFile-2");
 			} else {
 				console.log("File not recognized:", file, mime_type, url);
 			}
