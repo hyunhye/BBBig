@@ -1377,11 +1377,13 @@ function tileApplications() {
 
     // 3 scenarios... windows are on average the same aspect ratio as the display
     if (arDiff >= 0.7 && arDiff <= 1.3) {
+		console.log("1");
         numCols = Math.ceil(Math.sqrt(numWindows));
         numRows = Math.ceil(numWindows / numCols);
     }
     else if (arDiff < 0.7) {
         // windows are much wider than display
+		console.log("2");
         c = Math.round(1 / (arDiff / 2.0));
         if (numWindows <= c) {
             numRows = numWindows;
@@ -1394,12 +1396,16 @@ function tileApplications() {
     }
     else {
         // windows are much taller than display
+		console.log("3");
+		console.log("arDiff:"+arDiff);
         c = Math.round(arDiff * 2);
         if (numWindows <= c) {
+			console.log("4");
             numCols = numWindows;
             numRows = 1;
         }
         else {
+			console.log("5");
             numRows = Math.max(2, Math.round(numWindows / c));
             numCols = Math.round(Math.ceil(numWindows / numRows));
         }
@@ -1555,9 +1561,9 @@ function dynamicApplications() {
     var app;
     var spaceManager;
 	
-	var padding = 4;
+	//var padding = 4;
     // if only one application, no padding, i.e maximize
-    if (applications.length === 1) padding = 0;
+    //if (applications.length === 1) padding = 0;
 	 
     // 윈도우가 하나도 없다면..
     if (applications.length === 0) return;
