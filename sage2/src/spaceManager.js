@@ -49,8 +49,8 @@ DynamicSpaceManager.prototype.createFullRectangle = function (app) {
    
     var left = right = up = bottom = 0;
     var max_area = 0;
-	//var center_x = 0;
-    //var center_y = 0;
+	var center_x = 0;
+    var center_y = 0;
     var found = false;
    
 	var space, a;
@@ -58,19 +58,24 @@ DynamicSpaceManager.prototype.createFullRectangle = function (app) {
 	var pos = 0;
    
     // because we are looking for best fit. largest area does not guarantee optimal choice
+	if(this.largestEmptySpaceList.length == 0){
+		
+	}
     for(var i=0; i < this.largestEmptySpaceList.length; i++){ 
 		// ratio = x / y    
 		space = this.largestEmptySpaceList[i];
-		console.log("largestEmptySpaceList["+i+"]:"+space.left+" "+space.right+" "+space.up+" "+space.bottom);
 
         // 윈도우 크기 => 비율에 맞춰 줄이기
-        app_height = Math.round(space.width / aspectRatio);
+        app_height = Math.ceil(space.width / aspectRatio);
         app_width = space.width;
       
         if (app_height > space.height) {  // 만약 윈도우 크기가 더 크면..
             app_height = space.height; // 윈도우 높이를 공간 높이로 바꾸고 
-            app_width = Math.round(space.height * aspectRatio); // 윈도우 너비를 비율에 맞춰 바꾼다.
-        }
+            app_width = Math.ceil(space.height * aspectRatio); // 윈도우 너비를 비율에 맞춰 바꾼다.
+        }else if(app_width > space.width){
+            app_width = space.width; 
+            app_height = Math.ceil(space.width / aspectRatio); 
+		}
       
         // 면적 = 윈도우 높이 * 윈도우 너비
         a = app_height * app_width;
@@ -78,8 +83,8 @@ DynamicSpaceManager.prototype.createFullRectangle = function (app) {
             max_area = a; // 최대 면적을 현재 면적으로 늘린다.
 			pos = i; // 현재 largestEmptySpaceList 체크
          
-			//center_x =space.right - Math.round(space.width/2);
-            //center_y =space.bottom - Math.round(space.height/2); 
+			center_x =space.right - Math.ceil(space.width/2); 
+            center_y =space.bottom - Math.ceil(space.height/2);
 			//center_x = space.width/2;
 			//center_y = space.height/2;
 			
@@ -87,33 +92,31 @@ DynamicSpaceManager.prototype.createFullRectangle = function (app) {
             up = space.up;
 			right = left + app_width;
             bottom = up + app_height;
-        
-            found = true; 
         }
     }
    
-    if (found == true) {
-        app.left = left;
-        app.right = right ;
-        app.up = up;
-        app.bottom = bottom;
-		
-		//var width = right - left;
-		//var height = bottom - up;
-		
-		//app.left = center_x - Math.round(width / 2);
-		//app.right = center_x + Math.round(width/2);
-		//app.bottom = center_y + Math.round(height / 2);
-		//app.up = center_y - Math.round(height/2);
-		  
-		this.bound = new Bounds(app.left,app.right,app.up,app.bottom);
-        this.addFullRectangle(this.bound, pos);
-      
-	}
+    app.left = left;
+    app.right = right ;
+    app.up = up;
+    app.bottom = bottom;
+	
+	var width = right - left;
+	var height = bottom - up;
+	
+	app.left = center_x - Math.ceil(width / 2);
+	app.right = center_x + Math.ceil(width/2);
+	app.bottom = center_y + Math.ceil(height / 2);
+	app.up = center_y - Math.ceil(height/2);
+	if(app.left < 0) app.left = 0;
+	if(app.up < 0) app.up = 0;
+	
+	this.bound = new Bounds(app.left,app.right,app.up,app.bottom);
+    this.addFullRectangle(this.bound, pos);
    
-	item = {elemId: app.id,itemLeft: app.left, itemTop: app.up,itemWidth: app.right-app.left, itemHeight:app.bottom-app.up};
+	item = {id: app.id,left: app.left, up: app.up, bottom : app.bottom,right:app.right,width: app.right-app.left, height:app.bottom-app.up};
 	return item;
 }
+
 DynamicSpaceManager.prototype.searchExpandRectangle = function (app) {
     //print "search exp&& rectangle.... " 
     //print "before-", len(this.largestEmptySpaceList)
@@ -268,18 +271,20 @@ DynamicSpaceManager.prototype.adjustFullRectangle = function (app) {
     var numApp = 0;
     var updateFlag = true;
     var aspectRatio = app.width/app.height;
-    var max_width = app.width;// * app.sizeDesire;
+	var sizeDesire = 1;
+    var max_width = app.width * sizeDesire;
     var max_height = max_width / aspectRatio;
     var max_area = max_width * max_height;
+    var pos=0;
     if (max_area == 0) {
         return;
     }
 
-    var expected_area = app.width * app.height; //* app.sizeDesire;
+    var expected_area = app.width * app.height * sizeDesire;
     //print "*** expected_area = " + str(expected_area) + " area = " + str(max_area)
     if (expected_area < max_area) {
         // need to modify agian
-        max_height = app.height;// * app.sizeDesire;
+        max_height = app.height * sizeDesire;
         max_width = max_height * aspectRatio;
         max_area = max_width * max_height;
         //print "*** re-adjusted... expected_area = " + str(expected_area) + " area = " + str(max_area)
@@ -301,31 +306,37 @@ DynamicSpaceManager.prototype.adjustFullRectangle = function (app) {
 
     // because we are looking for best fit. largest area does not guarantee optimal choice
 	for(var i=0, space; space=this.largestEmptySpaceList[i]; i++){ 
+		console.log("largestEmptySpaceList["+i+"]:"+space.left+" "+space.right+" "+space.up+" "+space.bottom);
         space_width = space.width;
         space_height = space.height;
 
         if (space_width >= max_width && space_height >= max_height) {
             // case-1, max_width && max_height does fit in the space
+			console.log("case-1");
             app_width = max_width;
             app_height = max_height;
         }
         else {
             if (space_width < max_width) {
                 // case-2, max_width is greater than space
+				console.log("case-2");
                 app_height = space_width / aspectRatio;
                 app_width = space_width;
                 if (app_height > space_height) {
                     // case-2.1, ...
+					console.log("case-2.1");
                     app_height = space_height;
                     app_width = space_height * aspectRatio;
                 }
             }
             else {
                 // case-3,
+				console.log("case-3");
                 app_width = space_height * aspectRatio;
                 app_height = space_height;
                 if (app_width > space_width) {
                     // case-3.1, ...
+					console.log("case-3.1");
                     app_height = space_width / aspectRatio;
                     app_width = space_width;
                 }
@@ -333,54 +344,37 @@ DynamicSpaceManager.prototype.adjustFullRectangle = function (app) {
         }
         var area = app_height * app_width;
         if (area > max_area) {
+        	pos = i; // 현재 largestEmptySpaceList 체크
             max_area = area;
 
             left = space.left;
             bottom = space.bottom;
 
-            //if numApp == 1 : 
-            // hyejung
-            //left += int((space_width - app_width)/2.0)
-            //bottom += int((space_height - app_height)/2.0)
-
-            // todo? 
-            // put into center? - need policy adjustment
-            center_x = space.right - (space.width/2.0);
-            center_y = space.up - (space.height/2.0); 
+            center_x = space.right -  Math.ceil(space.width/2.0);
+            center_y = space.up + Math.ceil(space.height/2.0); 
 
             right = left + app_width;
-            up = bottom + app_height;
+            bottom = up + app_height;
+            
             found = true;
         }
     }
     if (found == true) {
-        // ???? strange stereo 3D.... it is from sageBaseGate...
-        if ((up % 2) == 1) {
-            up = up - 1;
-            bottom = bottom - 1;
-        }
 
         if (updateFlag == true) {
-            app.left = left;
-            app.right = right;
-            app.up = up;
-            app.bottom = bottom;
+        	var width = right - left;
+            var height = bottom - up;
+			
+            app.left = center_x - Math.ceil(width / 2);
+        	app.right = center_x + Math.ceil(width/2);
+        	app.bottom = center_y + Math.ceil(height / 2);
+        	app.up = center_y - Math.ceil(height/2);
 
-
-            // test mode
-            if (this.section.outSec != None && this.section.inType == USERINPUT_TYPE) {
-                var width = right - left;
-                var height = up - bottom;
-				
-                app.left = center_x - width / 2;
-                app.right = app.left + width;
-                app.bottom = center_y - height / 2;
-                app.up = app.bottom + height;
-            }
-            else {
-                this.bound = new Bounds(app.left,app.right,app.up,app.bottom);
-				this.addFullRectangle(this.bound, o);
-            }
+        	if(app.left < 0) app.left = 0;
+        	if(app.up < 0) app.up = 0;
+        	  
+        	this.bound = new Bounds(app.left,app.right,app.up,app.bottom);
+            this.addFullRectangle(this.bound, pos);
         }
         // sailID???
         // this.addFullRectangle(app.id, Bounds(left, right, up, bottom)); //hyunhye : app.getId()		
@@ -432,6 +426,7 @@ DynamicSpaceManager.prototype.createStaticRectangle = function (app) {
 
 // -----------------------------------
 // MAIN PART : ADD FULL RECTANGLE
+// hyunhye_addFullRectangle
 DynamicSpaceManager.prototype.addFullRectangle = function (app, pos) {
 
     // todo -> refine..?
@@ -444,15 +439,13 @@ DynamicSpaceManager.prototype.addFullRectangle = function (app, pos) {
 	//         		that intersect or are adjacent to current app
     var cList = [];
     var index = 0;
-    var removeList = [];
 	
-	console.log("app:"+app.left+" "+app.right+" "+app.up+" "+app.bottom);
+	console.log("pos: "+pos);
 	for(var i=0, space; space=this.largestEmptySpaceList[i]; i++){	
 	// !((space.right < app.left) && (space.left > app.right) && (space.up < app.bottom) && (space.bottom > app.up))	
 	// if not (space.right < app.left or space.left > app.right or space.top < app.bottom or space.bottom > app.top)
-		if((space.right < app.left || space.left > app.right || space.top < app.bottom || space.bottom > app.top) == false) {
+		if((space.right < app.left || space.left > app.right || space.up > app.bottom || space.bottom < app.up) == false) {
 			cList.push(space);
-            removeList.push(index);
         }
         index += 1;
     }
@@ -466,7 +459,6 @@ DynamicSpaceManager.prototype.addFullRectangle = function (app, pos) {
     var possibleLESList_bottom = [];
     var possibleLESList_up = [];
 	
-	console.log("cList.length: "+cList.length);
 	for(var i=0, O; O=cList[i]; i++){
         // current app : app  = F
         // if O adjacent to any side e of F and external to F
@@ -474,7 +466,7 @@ DynamicSpaceManager.prototype.addFullRectangle = function (app, pos) {
         if (app.left == O.right){
             adjacentLESList_left.push(O);
 		}
-        else if (app.right == O.left){
+        else if (app.right ==  O.left){
             adjacentLESList_right.push(O);
 		}
         else if (app.up == O.bottom){
@@ -484,30 +476,38 @@ DynamicSpaceManager.prototype.addFullRectangle = function (app, pos) {
 			adjacentLESList_bottom.push(O);
 		}
         else {
-			for(var j = 0; j < this.largestEmptySpaceList.length ; j++){
-				if(j == pos){
-					this.largestEmptySpaceList.splice(pos,1);
-					//break;
-				}
-			}
             // class Bounds - > left, right, up, bottom
             if (O.left < app.left){     // up left	
-				var bound = new Bounds(O.left, app.left, O.up, O.bottom);
-                possibleLESList_left.push(bound);
+				if(app.left - O.left > 100){
+					var bound = new Bounds(O.left, app.left, O.up, O.bottom);
+					possibleLESList_left.push(bound);
+				}
 			}
-            if (O.right > app.right){    // bottom right
-				var bound = new Bounds(app.right, O.right, O.up, O.bottom);
-                possibleLESList_right.push(bound);
+            if (O.right > app.right){    
+				if(O.right - app.right > 100){
+					var bound = new Bounds(app.right, O.right, O.up, O.bottom);
+					possibleLESList_right.push(bound);
+				}
 			}
             if (O.bottom > app.bottom){  // bottom left 
-				var bound = new Bounds(O.left, O.right, app.bottom, O.bottom);
-                possibleLESList_bottom.push(bound);
+				if(O.bottom - app.bottom > 100){
+					var bound = new Bounds(O.left, O.right, app.bottom, O.bottom);
+					possibleLESList_bottom.push(bound);
+				}
 			}
             if (O.up < app.up) {        // up right 
-				//if(app.up == 0) continue;
-				var bound = new Bounds(O.left, O.right,O.up, app.up); // hyunhye : app.up, O.up순서 바꿈
-				possibleLESList_up.push(bound);
+				if( app.up - O.up > 100){
+					var bound = new Bounds(O.left, O.right,O.up, app.up); // hyunhye : app.up, O.up순서 바꿈
+					possibleLESList_up.push(bound);
+				}
 			
+			}
+			
+			for(var j = 0; j < this.largestEmptySpaceList.length ; j++){
+				if(j === pos){
+					this.largestEmptySpaceList.splice(pos,1);
+					break;
+				}
 			}
         }
     }
@@ -542,13 +542,16 @@ DynamicSpaceManager.prototype.addFullRectangle = function (app, pos) {
         index += 1;
     }
 	
-	///////////////////////////////////////////////////////////
-	console.log("possibleLESList: "+possibleLESList.length);
 	for(var i=0, P; P=possibleLESList[i]; i++){
 		// load config file - looks for user defined file, then file that matches hostname, then uses default
+		if(P.width < 200 || P.height < 200) continue; // if width, height is shorter than 100, continue
 		this.largestEmptySpaceList.push(P);     
     }
+	
+	for(var i=0, space; space=this.largestEmptySpaceList[i]; i++){
+		console.log("largestEmptySpaceList["+i+"]:"+space.left+" "+space.right+" "+space.up+" "+space.bottom);
 
+	}
 }
 DynamicSpaceManager.prototype.removeFullRectangle = function (app) {
     //print "REMOVE FULL RECTANGLE... ... ..."

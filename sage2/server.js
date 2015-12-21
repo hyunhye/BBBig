@@ -405,7 +405,7 @@ function initializeWSClient(wsio) {
 		wsio.on('tileApplications', wsTileApplications);
 		wsio.on('priorityApplications', wsPriorityApplications);
 		wsio.on('dynamicApplications', wsDynamicApplications);
-		wsio.on('arrangementModeCheck', wsArrangementModeCheck); // seojin Á¤·Ä¸ðµå Ã¼Å©
+		wsio.on('arrangementModeCheck', wsArrangementModeCheck); // seojin ï¿½ï¿½ï¿½Ä¸ï¿½ï¿½ Ã¼Å©
 
 	}
 	if(wsio.messages.sendsWebContentToLoad){
@@ -1464,114 +1464,27 @@ function tileApplications() {
     }
 }
 
-// hyunhye
-function tileApplicationsForDynamic(app) {
-
-    //var app;
-    var i, c, r;
-    var numCols, numRows;
-
-    var displayAr = config.totalWidth / config.totalHeight;
-    var arDiff = displayAr / averageWindowAspectRatio();
-    var numWindows = applications.length;
-
-	var updateItem;
-	
-    // 3 scenarios... windows are on average the same aspect ratio as the display
-    if (arDiff >= 0.7 && arDiff <= 1.3) {
-        numCols = Math.ceil(Math.sqrt(numWindows));
-        numRows = Math.ceil(numWindows / numCols);
-    }
-    else if (arDiff < 0.7) {
-        // windows are much wider than display
-        c = Math.round(1 / (arDiff / 2.0));
-        if (numWindows <= c) {
-            numRows = numWindows;
-            numCols = 1;
-        }
-        else {
-            numCols = Math.max(2, Math.round(numWindows / c));
-            numRows = Math.round(Math.ceil(numWindows / numCols));
-        }
-    }
-    else {
-        // windows are much taller than display
-        c = Math.round(arDiff * 2);
-        if (numWindows <= c) {
-            numCols = numWindows;
-            numRows = 1;
-        }
-        else {
-            numRows = Math.max(2, Math.round(numWindows / c));
-            numCols = Math.round(Math.ceil(numWindows / numRows));
-        }
-    }
-
-    // determine the bounds of the tiling area
-    var titleBar = config.ui.titleBarHeight;
-    if (config.ui.auto_hide_ui === true) titleBar = 0;
-    var areaX = 0;
-    var areaY = Math.round(1.5 * titleBar); // keep 0.5 height as margin
-    if (config.ui.auto_hide_ui === true) areaY = -config.ui.titleBarHeight;
-
-    var areaW = config.totalWidth;
-    var areaH = config.totalHeight - (1.0 * titleBar);
-
-    var tileW = Math.floor(areaW / numCols);
-    var tileH = Math.floor(areaH / numRows);
-
-    // go through them in sorted order
-    // applications.sort()
-
-    var padding = 0;
-    // if only one application, no padding, i.e maximize
-    //if (applications.length === 1) padding = 0;
-    r = numRows - 1;
-    c = 0;
-	
-    var newdims = fitWithin(app, c * tileW + areaX, r * tileH + areaY, tileW, tileH, padding);
-    // update the data structure
-    app.left = newdims[0];
-    app.top = newdims[1] - titleBar;
-    app.width = newdims[2];
-    app.height = newdims[3];
-		
-	console.log(app + " " + app.left + " " +  app.top + " " + app.width + " " + app.height);
-    // build the object to be sent
-    updateItem = {
-        elemId: app.id,
-        elemLeft: app.left, elemTop: app.top,
-        elemWidth: app.width, elemHeight: app.height,
-        force: true, date: new Date()
-    };
-    // send the order
-    broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
-
-	
-	return updateItem;
-}
-
 // seojin
-// hyunhye -> ÁøÇàÁß
-// updateItem¿¡ ÀÌ»óÇÑ °ª µé¾î¿À¸é window ¾È ¿òÁ÷ÀÓ!
+// hyunhye -> ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+// updateItemï¿½ï¿½ ï¿½Ì»ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ window ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½!
 function dynamicApplications() {
     arrangementMode = 'dynamic';
 	
     var i;
     var app;
     var spaceManager;
-	
+	var sizeDesire;
 	//var padding = 4;
     // if only one application, no padding, i.e maximize
     //if (applications.length === 1) padding = 0;
 	 
-    // À©µµ¿ì°¡ ÇÏ³ªµµ ¾ø´Ù¸é..
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ì°¡ ï¿½Ï³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ù¸ï¿½..
     if (applications.length === 0) return;
 
     // first app is biggest and center
     // var updateItem = tileApplicationsForDynamic(applications[0]);
 
-    console.log("--------------------first--------------------------------")
+    console.log("-----------------------------------------------------")
 	spaceManager = new DynamicSpaceManager();
 	spaceManager.initializeEmptySpace();
 	
@@ -1588,13 +1501,13 @@ function dynamicApplications() {
             height: app.height
         }
 		// determine the bounds of the tiling area
-		var titleBar = config.ui.titleBarHeight;
+		// var titleBar = config.ui.titleBarHeight;
         var item = spaceManager.createFullRectangle(appData);
 		
-        app.left = item.itemLeft;
-        app.top = item.itemTop;// + 2*titleBar;
-        app.height = item.itemHeight;// - 2*padding;
-        app.width = item.itemWidth;// - 2*padding;
+        app.left = item.left;
+        app.top = item.up;// + 2*titleBar;
+        app.height = item.height;// - 2*padding;
+        app.width = item.width;// - 2*padding;
 
         var updateItem = {
             elemId: app.id,
@@ -1603,15 +1516,15 @@ function dynamicApplications() {
             force: true, date: new Date()
         };
 		
-        // send the order
-        broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
-    }
+		 // send the order
+		broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
+	}
 }
 
 
-// seojin - ¾È¿¡ ³»¿ëÀº tile ¸ðµåÀÓ
-// -> ÅÂ±× ÀúÀåÀ» ÅëÇÑ ¿ì¼±¼øÀ§ ¹è¿­·Î ¹Ù²ãÁÖ±â
-// spaceManager_priority ³»¿ë ¹Ù²Ù¸é¼­ ÇØº¸ÀÚ
+// seojin - ï¿½È¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ tile ï¿½ï¿½ï¿½ï¿½ï¿½
+// -> ï¿½Â±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ì¼±ï¿½ï¿½ï¿½ï¿½ ï¿½è¿­ï¿½ï¿½ ï¿½Ù²ï¿½ï¿½Ö±ï¿½
+// spaceManager_priority ï¿½ï¿½ï¿½ï¿½ ï¿½Ù²Ù¸é¼­ ï¿½Øºï¿½ï¿½ï¿½
 function priorityApplications() {
     // seojin
     arrangementMode = 'priority';
@@ -3826,8 +3739,8 @@ function arrangementModeCheck() {
 }
 
 // seojin
-exports.tileApplications = tileApplications; // tile ¸ðµå
-exports.dynamicApplications = dynamicApplications; // ºó °ø°£ Ã£¾Æ¼­ À§Ä¡ÇÔ 
-exports.priorityApplications = priorityApplications; // ¿ì¼±¼øÀ§ µûÁ®¼­ À§Ä¡ÇÔ
-exports.arrangementModeCheck = arrangementModeCheck; // Á¤·Ä ¸ðµå Ã¼Å© 
+exports.tileApplications = tileApplications; // tile ï¿½ï¿½ï¿½
+exports.dynamicApplications = dynamicApplications; // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½Æ¼ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ 
+exports.priorityApplications = priorityApplications; // ï¿½ì¼±ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½
+exports.arrangementModeCheck = arrangementModeCheck; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Ã¼Å© 
 exports.loadConfiguration = loadConfiguration;
