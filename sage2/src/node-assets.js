@@ -43,12 +43,18 @@ Asset.prototype.setURL = function(aUrl) {
 };
 
 Asset.prototype.setFilename = function(aFilename) {
+	// console.log("seojin - setFilename");
     this.filename = path.resolve(aFilename);
     this.id       = this.filename;
 };
 
 Asset.prototype.setEXIF = function(exifdata) {
+	// console.log("seojin - setEXIF");
     this.exif = exifdata;
+	// seojin 태그 추가 (태그의 값을 파일 명으로)
+	// this.exif.Tag = this.exif.FileName;
+	var tag = this.exif.FileName.split('.');
+	this.exif.Tag = tag[0];
 };
 
 Asset.prototype.width = function() {
@@ -107,6 +113,7 @@ saveAssets = function(filename) {
 
 addFile = function(filename,exif) {
 	// Add the asset in the array
+	console.log("addFile seojin"); // pc에있는 파일을 추가 시킬때만 이 함수 거쳐 감
 	var anAsset = new Asset();
 	anAsset.setFilename(filename);
 	anAsset.setEXIF(exif);
