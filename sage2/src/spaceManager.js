@@ -540,9 +540,9 @@ DynamicSpaceManager.prototype.addFullRectangle = function (app, pos) {
 		if(P.width < 200 || P.height < 200) continue; // if width, height is shorter than 100, continue
 		this.largestEmptySpaceList.push(P);     
     }
-	
+	console.log("--------------------------------------");
 	for(var i=0, space; space=this.largestEmptySpaceList[i]; i++){
-		console.log("largestEmptySpaceList["+i+"] left:"+space.left+" right"+space.right+" top"+space.up+" bottom"+space.bottom);
+		console.log("largestEmptySpaceList["+i+"] left:"+space.left+", right:"+space.right+", top:"+space.up+", bottom:"+space.bottom);
 
 	}
 }
