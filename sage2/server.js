@@ -1436,8 +1436,6 @@ function tileApplications() {
         // get the application
         app = applications[i];
         // calculate new dimensions
-		console.log("----------" +"Tile Mode"+"----------");
-		console.log(app + " " + app.left + " " +  app.top + " " + app.width + " " + app.height);
         var newdims = fitWithin(app, c * tileW + areaX, r * tileH + areaY, tileW, tileH, padding);
         // update the data structure
         app.left = newdims[0];

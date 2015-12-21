@@ -312,31 +312,26 @@ DynamicSpaceManager.prototype.adjustFullRectangle = function (app) {
 
         if (space_width >= max_width && space_height >= max_height) {
             // case-1, max_width && max_height does fit in the space
-			console.log("case-1");
             app_width = max_width;
             app_height = max_height;
         }
         else {
             if (space_width < max_width) {
                 // case-2, max_width is greater than space
-				console.log("case-2");
                 app_height = space_width / aspectRatio;
                 app_width = space_width;
                 if (app_height > space_height) {
                     // case-2.1, ...
-					console.log("case-2.1");
                     app_height = space_height;
                     app_width = space_height * aspectRatio;
                 }
             }
             else {
                 // case-3,
-				console.log("case-3");
                 app_width = space_height * aspectRatio;
                 app_height = space_height;
                 if (app_width > space_width) {
                     // case-3.1, ...
-					console.log("case-3.1");
                     app_height = space_width / aspectRatio;
                     app_width = space_width;
                 }
@@ -388,7 +383,6 @@ DynamicSpaceManager.prototype.checkAvailableSpace = function () {
     var height = 0;
     var width = 0;
 	var left=0,up=0;
-	console.log("this.bound : "+this.bound.left+" "+this.bound.right+" "+this.bound.up+" "+this.bound.bottom);
     //for (space in this.largestEmptySpaceList) {
 	for(var i=0, space; space=this.largestEmptySpaceList[i]; i++){
         if (space.left == this.bound.left && space.right == this.bound.right) {
@@ -440,7 +434,6 @@ DynamicSpaceManager.prototype.addFullRectangle = function (app, pos) {
     var cList = [];
     var index = 0;
 	
-	console.log("pos: "+pos);
 	for(var i=0, space; space=this.largestEmptySpaceList[i]; i++){	
 	// !((space.right < app.left) && (space.left > app.right) && (space.up < app.bottom) && (space.bottom > app.up))	
 	// if not (space.right < app.left or space.left > app.right or space.top < app.bottom or space.bottom > app.top)
@@ -549,7 +542,7 @@ DynamicSpaceManager.prototype.addFullRectangle = function (app, pos) {
     }
 	
 	for(var i=0, space; space=this.largestEmptySpaceList[i]; i++){
-		console.log("largestEmptySpaceList["+i+"]:"+space.left+" "+space.right+" "+space.up+" "+space.bottom);
+		console.log("largestEmptySpaceList["+i+"] left:"+space.left+" right"+space.right+" top"+space.up+" bottom"+space.bottom);
 
 	}
 }
