@@ -113,7 +113,7 @@ saveAssets = function(filename) {
 
 addFile = function(filename,exif) {
 	// Add the asset in the array
-	console.log("addFile seojin"); // pc에있는 파일을 추가 시킬때만 이 함수 거쳐 감
+	// console.log("addFile seojin"); // pc에있는 파일을 추가 시킬때만 이 함수 거쳐 감
 	var anAsset = new Asset();
 	anAsset.setFilename(filename);
 	anAsset.setEXIF(exif);
@@ -567,6 +567,7 @@ listApps = function() {
 	return result;
 };
 
+// seojin json파싱
 // regenrate all the assets thumbnails and EXIF data
 //    (needed with version upgrades)
 regenerateAssets = function() {

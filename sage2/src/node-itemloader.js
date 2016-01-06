@@ -280,7 +280,7 @@ appLoader.prototype.loadImageFromFile = function(file, mime_type, url, external_
 				// seojin
 				// console.log(exif.FileSize);
 				// console.log("find image file-loadImageFromFile-1");
-				console.log(exif.Tag);
+				console.log("Tag : "+ exif.Tag);
 			} else {
 				console.log("File not recognized:", file, mime_type, url);
 			}
@@ -671,7 +671,7 @@ appLoader.prototype.manageAndLoadUploadedFile = function(file, callback) {
 				if (err) {
 					console.log("internal error");
 				} else {
-					console.log("EXIF> Adding", data.FileName);
+					// console.log("EXIF> Adding", data.FileName);
 					assets.addFile(data.SourceFile, data);
 					// window에 이미지들 띄우는 함수임
 					_this.loadApplication({location: "file", path: localPath, url: url, external_url: external_url, type: mime_type, name: file.name, compressed: true}, function(appInstance) {
