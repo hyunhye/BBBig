@@ -56,7 +56,11 @@
 		"sprint": "^0.3.1",
 		"twit": "latest",
 		"ws": "latest",
-		"ytdl-core": "latest"
+		"ytdl-core": "latest",
+		"bower": "^1.4.1",
+		"express": "~3.4.6",
+		"multer": "^0.1.8",
+		"node-tesseract": "^0.2.7"
 	},
 	"bundledDependencies": [],
 	"devDependencies": {},
