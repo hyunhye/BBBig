@@ -7,7 +7,7 @@ var tesseract = require('node-tesseract');
 var multer  = require('multer');
 var fs = require('fs');
 var path = path = require('path');
-var imageDir = 'C:/Users/Administrator/Documents/BBBig/sage2/public_HTTPS/uploads/assets/';
+var imageDir = 'C:/Users/Administrator/Documents/BBBig/sage2/public_HTTPS/uploads/images/';
 
 
 module.exports = function(app) {

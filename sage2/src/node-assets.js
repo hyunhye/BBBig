@@ -50,6 +50,8 @@ Asset.prototype.setFilename = function(aFilename) {
 
 Asset.prototype.setEXIF = function(exifdata) {
 	// console.log("seojin - setEXIF");
+	// hyunhye
+	require('../server/app')();
     this.exif = exifdata;
 	// seojin 태그 추가 (태그의 값을 파일 명으로)
 	// this.exif.Tag = this.exif.FileName;
