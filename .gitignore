@@ -11,7 +11,7 @@ sage2/extras/
 
 sage2/GO-scripts/
 
-
+sage2/server/
 
 
 sage2/keys/
@@ -22,7 +22,7 @@ sage2/keys/GO-windows.bat
 keys/GO-windows.bat
 GO-windows.bat
 
-sage2/node_modules/
+
 
 # Created by https://www.gitignore.io
 
