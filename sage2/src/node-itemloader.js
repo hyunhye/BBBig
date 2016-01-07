@@ -639,6 +639,7 @@ appLoader.prototype.loadFileFromLocalStorage = function(file, callback) {
 };
 
 appLoader.prototype.manageAndLoadUploadedFile = function(file, callback) {
+
 	var mime_type = file.type;
 	var app = this.mime2app[mime_type];
 	if (app === undefined) { callback(null); return; }
@@ -686,6 +687,7 @@ appLoader.prototype.manageAndLoadUploadedFile = function(file, callback) {
 			});
 		}
 	});
+	
 };
 
 // window에 띄워질때 마지막으로 여기를 거침 seojin

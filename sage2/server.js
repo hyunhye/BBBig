@@ -405,7 +405,7 @@ function initializeWSClient(wsio) {
 		wsio.on('tileApplications', wsTileApplications);
 		wsio.on('priorityApplications', wsPriorityApplications);
 		wsio.on('dynamicApplications', wsDynamicApplications);
-		wsio.on('arrangementModeCheck', wsArrangementModeCheck); // seojin ���ĸ��?üũ
+		wsio.on('arrangementModeCheck', wsArrangementModeCheck); // seojin ���ĸ��?üũ
 
 	}
 	if(wsio.messages.sendsWebContentToLoad){
@@ -1520,7 +1520,7 @@ function dynamicApplications() {
 }
 
 
-// seojin - �ȿ� ������ tile �����?
+// seojin - �ȿ� ������ tile �����?
 // -> �±� ������ ���� �켱���� �迭�� �ٲ��ֱ�
 // spaceManager_priority ���� �ٲٸ鼭 �غ���
 function priorityApplications() {
@@ -2033,6 +2033,7 @@ function getUniqueAppId() {
 }
 
 function getApplications() {
+	console.log("what here?");
 	var uploadedApps = assets.listApps();
 	uploadedApps.sort(sageutils.compareTitle);
 	
@@ -2041,7 +2042,8 @@ function getApplications() {
 
 function getSavedFilesList() {
 	// Build lists of assets
-	var uploadedImages = assets.listImages();
+	// hyunhye
+	var uploadedImages = assets.listImages(); 
 	var uploadedVideos = assets.listVideos();
 	var uploadedPdfs   = assets.listPDFs();
 	var savedSessions  = listSessions();
@@ -3737,8 +3739,8 @@ function arrangementModeCheck() {
 }
 
 // seojin
-exports.tileApplications = tileApplications; // tile ���?
+exports.tileApplications = tileApplications; // tile ���?
 exports.dynamicApplications = dynamicApplications; // �� ���� ã�Ƽ� ��ġ�� 
 exports.priorityApplications = priorityApplications; // �켱���� ������ ��ġ��
-exports.arrangementModeCheck = arrangementModeCheck; // ���� ���?üũ 
+exports.arrangementModeCheck = arrangementModeCheck; // ���� ���?üũ 
 exports.loadConfiguration = loadConfiguration;

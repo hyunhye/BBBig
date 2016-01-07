@@ -1,13 +1,21 @@
 
 /**
  * Created by Minhaj on 6/20/15.
+ *
+ * Following steps done under this functions.
+ *
+ * 1. Uploads image under 'images' folder.
+ * 2. Grab text from image using 'tesseract-ocr'.
+ * 3. Return text in json format.
+ *
+ * @param req
+ * @param res
  */
-
 var tesseract = require('node-tesseract');
 var multer  = require('multer');
 var fs = require('fs');
 var path = path = require('path');
-var imageDir = 'C:/Users/Administrator/Documents/BBBig/sage2/public_HTTPS/uploads/images/';
+var imageDir = 'C:/Users/Administrator/Documents/BBBig/sage2/public_HTTPS/uploads/scanning/';
 
 
 module.exports = function(app) {
@@ -18,39 +26,32 @@ module.exports = function(app) {
         }
     ));
 
-
     getImages(imageDir, function (err, files) {
 
         for (var i=0; i<files.length; i++) {
             var result = process1(files[i]);
-            // console.log(files[i])
-            // imageLists += '<li><a href="/?image=' + files[i] + '">' + files[i] + '</li>';
-        }
-       
+        }  
     });
-
-
-   /* fs.readFile('image.jpg', function (err, data) {
-        if (err) throw err;
-        process1()
-    });*/
-
-
-    app.post("/api/ocr", process);
 
 };
 
 //get the list of jpg files in the image dir
 function getImages(imageDir, callback) {
-    var fileType = '.jpg',
+    var JPG = '.jpg',PNG = '.png',GIF='.gif',JPEG='.jpeg',
         files = [], i;
 
     fs.readdir(imageDir, function (err, list) {
 
         for(i=0; i<list.length; i++) {
-            if(path.extname(list[i]) === fileType) {
+            if(path.extname(list[i]) === JPG) {
                 files.push(list[i]); //store the file name into the array files
-            }
+            }else if(path.extname(list[i]) === PNG){
+				files.push(list[i]); //store the file name into the array files
+			}else if(path.extname(list[i]) === GIF){
+				files.push(list[i]); //store the file name into the array files
+			}else if(path.extname(list[i]) === JPEG){
+				files.push(list[i]); //store the file name into the array files
+			}
         }
         callback(err, files);
     });
@@ -65,29 +66,14 @@ var process1 = function(req) {
         if(err) {
             console.error(err);
         } else {
-            fs.unlink(path, function (err) {
-                if (err){
-                    res.json(500, "Error while scanning image");
-                }
+			fs.unlink(path, function (err) {
                 console.log('successfully deleted %s', path);
             });
-
             console.log(text)
         }
     });
 };
 
-/**
- * Following steps done under this functions.
- *
- * 1. Uploads image under '.tmp' folder.
- * 2. Grab text from image using 'tesseract-ocr'.
- * 3. Delete image from hardisk.
- * 4. Return text in json format.
- *
- * @param req
- * @param res
- */
 var process = function(req, res) {
 
     var path = req.files.file.path;
@@ -97,13 +83,7 @@ var process = function(req, res) {
         if(err) {
             console.error(err);
         } else {
-            fs.unlink(path, function (err) {
-                if (err){
-                    res.json(500, "Error while scanning image");
-                }
-                console.log('successfully deleted %s', path);
-            });
-
+			
             res.json(200, text);
         }
     });

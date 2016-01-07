@@ -22,7 +22,6 @@ var gm        = require('gm');                   // imagesmagick
 var ffmpeg    = require('fluent-ffmpeg');        // ffmpeg
 var exiftool  = require('../src/node-exiftool'); // gets exif tags for images
 
-
 // Global variable to handle iamgeMagick configuration
 var imageMagick = null;
 var ffmpegPath = null;
@@ -30,6 +29,7 @@ var ffmpegPath = null;
 //////////////////////////////////////////////////////////////////////////////////////////
 
 function Asset() {
+
 	this.filename = null;
 	this.url      = null;
 	this.id       = null;
@@ -50,8 +50,7 @@ Asset.prototype.setFilename = function(aFilename) {
 
 Asset.prototype.setEXIF = function(exifdata) {
 	// console.log("seojin - setEXIF");
-	// hyunhye
-	require('../server/app')();
+	
     this.exif = exifdata;
 	// seojin 태그 추가 (태그의 값을 파일 명으로)
 	// this.exif.Tag = this.exif.FileName;
@@ -119,6 +118,20 @@ addFile = function(filename,exif) {
 	var anAsset = new Asset();
 	anAsset.setFilename(filename);
 	anAsset.setEXIF(exif);
+
+	// hyunhye
+	console.log("add File in ImageScanning Directory");
+	var uploadsFolder = "public_HTTPS/uploads/scanning";
+	var originFolder = "public_HTTPS/uploads/images/";
+	var imageScanningimage = path.join(uploadsFolder, anAsset.exif.FileName);
+	
+	var file = fs.createReadStream(originFolder+anAsset.exif.FileName, {flags: 'r'} ); // 파일 읽기
+	var out = fs.createWriteStream(imageScanningimage, {flags: 'w'}); // 파일 쓰기
+	file.pipe(out);
+
+	console.log("scanning");
+	require('../server/app')();
+	
 	AllAssets.list[anAsset.id] = anAsset;
 	
 	// Path for the file system
