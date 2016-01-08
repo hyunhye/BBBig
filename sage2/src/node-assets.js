@@ -24,10 +24,19 @@ var exiftool  = require('../src/node-exiftool'); // gets exif tags for images
 
 
 // seojin
-var scanningResultCheck = require('../server/routes');
+//var scanningResultCheck = require('../server/routes');
 // Global variable to handle iamgeMagick configuration
 var imageMagick = null;
 var ffmpegPath = null;
+
+// seojin
+var mysql = require('mysql');
+var dbConnection = mysql.createConnection({   
+                    host: 'localhost', 
+                    user: 'root',   
+                    password: '1111',   
+                    database: 'sage2' 
+                   });
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -59,6 +68,8 @@ Asset.prototype.setEXIF = function(exifdata) {
 	// this.exif.Tag = this.exif.FileName;
 	var tag = this.exif.FileName.split('.');
 	this.exif.Tag = tag[0];
+	//dbConnection.query('select * from keyword where keyword=?', 'crime' , function (err, rows, fields) { console.log(rows); });
+	dbConnection.query('select * from keyword', function (err, rows, fields) { console.log(rows); });
 };
 
 Asset.prototype.width = function() {
@@ -121,7 +132,7 @@ addFile = function(filename,exif) {
 	var anAsset = new Asset();
 	anAsset.setFilename(filename);
 	anAsset.setEXIF(exif);
-
+/*
 	// hyunhye
 	console.log("add File in ImageScanning Directory");
 	var uploadsFolder = "public_HTTPS/uploads/scanning";
@@ -134,11 +145,13 @@ addFile = function(filename,exif) {
 
 	console.log("scanning");
 	require('../server/app')();
+	*/
+	
 	AllAssets.list[anAsset.id] = anAsset;
-
+/*
 	console.log("===seojin===node-assets.js===");
 	console.log(scanningResultCheck.scanningResultCheck());
-
+*/
 	// Path for the file system
 	var thumb  = path.join(AllAssets.root, 'assets', exif.FileName);
 	// Path for the https server
