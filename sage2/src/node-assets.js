@@ -22,6 +22,9 @@ var gm        = require('gm');                   // imagesmagick
 var ffmpeg    = require('fluent-ffmpeg');        // ffmpeg
 var exiftool  = require('../src/node-exiftool'); // gets exif tags for images
 
+
+// seojin
+var scanningResultCheck = require('../server/routes');
 // Global variable to handle iamgeMagick configuration
 var imageMagick = null;
 var ffmpegPath = null;
@@ -131,9 +134,11 @@ addFile = function(filename,exif) {
 
 	console.log("scanning");
 	require('../server/app')();
-	
 	AllAssets.list[anAsset.id] = anAsset;
-	
+
+	console.log("===seojin===node-assets.js===");
+	console.log(scanningResultCheck.scanningResultCheck());
+
 	// Path for the file system
 	var thumb  = path.join(AllAssets.root, 'assets', exif.FileName);
 	// Path for the https server
