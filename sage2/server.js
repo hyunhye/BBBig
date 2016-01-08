@@ -69,6 +69,21 @@ var Bounds = require('./src/globals');
 // Version calculation
 var SAGE2_version = sageutils.getShortVersion();
 
+// seojin
+var mysql = require('mysql');
+var dbConnection = mysql.createConnection({   
+                    host: 'localhost', 
+                    user: 'root',   
+                    password: '1111',   
+                    database: 'sage2' 
+                   });
+				   
+/*
+dbConnection.query('select * from test where id=?', [id] , function (err, rows, fields) {
+console.log(rows);
+});
+*/
+
 // Command line arguments
 program
   .version(SAGE2_version)
