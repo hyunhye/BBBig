@@ -21,10 +21,8 @@ var color     = require('color');
 var gm        = require('gm');                   // imagesmagick
 var ffmpeg    = require('fluent-ffmpeg');        // ffmpeg
 var exiftool  = require('../src/node-exiftool'); // gets exif tags for images
+var ImageScanning = require('../server/routes');
 
-
-// seojin
-var scanningResultCheck = require('../server/routes');
 // Global variable to handle iamgeMagick configuration
 var imageMagick = null;
 var ffmpegPath = null;
@@ -51,14 +49,31 @@ Asset.prototype.setFilename = function(aFilename) {
     this.id       = this.filename;
 };
 
+// 이미지 스캐닝을 통한 자동 태깅
 Asset.prototype.setEXIF = function(exifdata) {
 	// console.log("seojin - setEXIF");
-	
+	var imageScanning;
+	var scanningResult;
     this.exif = exifdata;
 	// seojin 태그 추가 (태그의 값을 파일 명으로)
-	// this.exif.Tag = this.exif.FileName;
+	
+	
+	// hyunhye
+	console.log("add File in ImageScanning Directory");
+	var uploadsFolder = "public_HTTPS/uploads/scanning";
+	var originFolder = "public_HTTPS/uploads/images/";
+	var imageScanningimage = path.join(uploadsFolder, this.exif.FileName);
+	
+	var file = fs.createReadStream(originFolder+this.exif.FileName, {flags: 'r'} ); // 파일 읽기
+	var out = fs.createWriteStream(imageScanningimage, {flags: 'w'}); // 파일 쓰기
+	file.pipe(out);
+
+	imageScanning = new ImageScanning();
+	imageScanning.process(this);
+	
 	var tag = this.exif.FileName.split('.');
 	this.exif.Tag = tag[0];
+	//this.exif.Text = scanningResult; 	
 };
 
 Asset.prototype.width = function() {
@@ -122,22 +137,7 @@ addFile = function(filename,exif) {
 	anAsset.setFilename(filename);
 	anAsset.setEXIF(exif);
 
-	// hyunhye
-	console.log("add File in ImageScanning Directory");
-	var uploadsFolder = "public_HTTPS/uploads/scanning";
-	var originFolder = "public_HTTPS/uploads/images/";
-	var imageScanningimage = path.join(uploadsFolder, anAsset.exif.FileName);
-	
-	var file = fs.createReadStream(originFolder+anAsset.exif.FileName, {flags: 'r'} ); // 파일 읽기
-	var out = fs.createWriteStream(imageScanningimage, {flags: 'w'}); // 파일 쓰기
-	file.pipe(out);
-
-	console.log("scanning");
-	require('../server/app')();
 	AllAssets.list[anAsset.id] = anAsset;
-
-	console.log("===seojin===node-assets.js===");
-	console.log(scanningResultCheck.scanningResultCheck());
 
 	// Path for the file system
 	var thumb  = path.join(AllAssets.root, 'assets', exif.FileName);
