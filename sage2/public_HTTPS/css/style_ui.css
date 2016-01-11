@@ -368,6 +368,7 @@ span {
 #speechDialog {
 	top: 50%;
 	left: 50%;
+	width: 600px;
 	-webkit-transform: translate(-50%, -50%);
 	-moz-transform: translate(-50%, -50%);
 	transform: translate(-50%, -50%);

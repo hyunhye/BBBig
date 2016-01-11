@@ -1511,13 +1511,12 @@ new gweb.analytics.AutoTrack({
 	<div id="speechDialog" class="dialog">
         <div id="speechItems">
 
-	<div class="" id="grid">
+		<div class="" id="grid">
 	  <div class="browser-landing" id="main">
       <div class="compact marquee-stacked" id="marquee">
         <div class="marquee-copy">
           <h1>
-            <a class="c1" href="http://dvcs.w3.org/hg/speech-api/raw-file/tip/speechapi.html">Web
-            Speech API</a> Demonstration
+		  태그를 말하세요.
           </h1>
         </div>
       </div>
@@ -1556,12 +1555,13 @@ new gweb.analytics.AutoTrack({
         </div>
         <div id="div_start">
           <button id="start_button" onclick="startButton(event)"><img alt="Start" id="start_img"
-          src="/intl/en/chrome/assets/common/images/content/mic.gif"></button>
+          src="images/ui/ready.png" width="50" height="50"></button>
         </div>
         <div id="results">
           <span class="final" id="final_span"></span> <span class="interim" id=
           "interim_span"></span>
         </div>
+		<!--
         <div id="copy">
           <button class="button" id="copy_button" onclick="copyButton()">Copy and Paste</button>
           <div id="copy_info">
@@ -1582,6 +1582,7 @@ new gweb.analytics.AutoTrack({
             </p>
           </div>
         </div>
+		-->
         <div class="compact marquee" id="div_language">
           <select id="select_language" onchange="updateCountry()">
             </select>&nbsp;&nbsp; <select id="select_dialect">
@@ -1725,17 +1726,17 @@ if (!('webkitSpeechRecognition' in window)) {
   recognition.onstart = function() {
     recognizing = true;
     showInfo('info_speak_now');
-    start_img.src = '/intl/en/chrome/assets/common/images/content/mic-animate.gif';
+    start_img.src = 'images/ui/onair.png';
   };
 
   recognition.onerror = function(event) {
     if (event.error == 'no-speech') {
-      start_img.src = '/intl/en/chrome/assets/common/images/content/mic.gif';
+      start_img.src = 'images/ui/ready.png';
       showInfo('info_no_speech');
       ignore_onend = true;
     }
     if (event.error == 'audio-capture') {
-      start_img.src = '/intl/en/chrome/assets/common/images/content/mic.gif';
+      start_img.src = 'images/ui/ready.png';
       showInfo('info_no_microphone');
       ignore_onend = true;
     }
@@ -1754,7 +1755,7 @@ if (!('webkitSpeechRecognition' in window)) {
     if (ignore_onend) {
       return;
     }
-    start_img.src = '/intl/en/chrome/assets/common/images/content/mic.gif';
+    start_img.src = 'images/ui/ready.png';
     if (!final_transcript) {
       showInfo('info_start');
       return;
@@ -1856,7 +1857,7 @@ function startButton(event) {
   ignore_onend = false;
   final_span.innerHTML = '';
   interim_span.innerHTML = '';
-  start_img.src = '/intl/en/chrome/assets/common/images/content/mic-slash.gif';
+  start_img.src = 'images/ui/ready.png';
   showInfo('info_allow');
   showButtons('none');
   start_timestamp = event.timeStamp;
@@ -1887,12 +1888,13 @@ function showButtons(style) {
   email_info.style.display = 'none';
 }
     </script>
-		
-        </div>
+
 		</div>
-        <div id="speechButtons">
+		<div id="speechButtons">
             <span id="speechCloseBtn" class="button">Close</span>
         </div>
+	</div>
+        
 		
 	
 </body>
