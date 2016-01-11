@@ -39,7 +39,7 @@ new gweb.analytics.AutoTrack({
         });
     </script>
 	
-	<!--Web speech API//-->
+	<!--Web speech API-->
 	
 	
 	
@@ -1272,7 +1272,7 @@ new gweb.analytics.AutoTrack({
             </div>
 			<!--Web Speech API-->
 			 <div id="speechContainer" class="uiButton">
-                <img id="speech" alt="speech" src="images/ui/[graycircle]-sage2pointer.svg" width="48" height="48" />
+                <img id="speech" alt="speech" src="images/ui/[graycircle]-speech.png" width="48" height="48" />
                 <p id="speechLabel">Speech</p>
             </div>
         </div>
@@ -1522,7 +1522,7 @@ new gweb.analytics.AutoTrack({
         </div>
       </div>
       <div class="compact marquee">
-        <div id="info">
+        <div id="speechInfo">
           <p id="info_start">
             Click on the microphone icon and begin speaking for as long as you like.
           </p>
@@ -1864,14 +1864,14 @@ function startButton(event) {
 
 function showInfo(s) {
   if (s) {
-    for (var child = info.firstChild; child; child = child.nextSibling) {
+    for (var child = speechInfo.firstChild; child; child = child.nextSibling) {
       if (child.style) {
         child.style.display = child.id == s ? 'inline' : 'none';
       }
     }
-    info.style.visibility = 'visible';
+    speechInfo.style.visibility = 'visible';
   } else {
-    info.style.visibility = 'hidden';
+    speechInfo.style.visibility = 'hidden';
   }
 }
 
