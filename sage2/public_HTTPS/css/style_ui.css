@@ -364,6 +364,20 @@ span {
 	overflow: auto;
 }
 
+/*Web Speech*/
+#speechDialog {
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	-moz-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+#speechItems {
+	margin: 10px 10px 66px 10px;
+	overflow: auto;
+}
+
 #browserDialog {
 	top: 50%;
 	left: 50%;
@@ -443,6 +457,12 @@ span {
 }
 
 #settingsCloseBtn {
+	position: absolute;
+	right: 10px;
+	bottom: 10px;
+}
+
+#speechCloseBtn {
 	position: absolute;
 	right: 10px;
 	bottom: 10px;

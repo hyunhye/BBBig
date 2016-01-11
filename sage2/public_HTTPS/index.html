@@ -611,6 +611,16 @@
             else if (element.id === "info" || element.id === "infoContainer" || element.id === "infoLabel") {
                 showDialog('infoDialog');
             }
+			<!--Web Speech API-->
+			else if (element.id === "speech" || element.id === "speechContainer" || element.id === "speechLabel") {
+                showDialog('speechDialog');
+            }
+			else if (element.id === "speechCloseBtn") {
+                selectedAppEntry = null;
+                hideDialog('speechDialog');
+            }
+			
+			
 
                 // App Launcher Dialog
             else if (element.id === "appOpenBtn") {
@@ -1220,6 +1230,11 @@
                 <img id="info" alt="info" src="images/ui/[graycircle]-info.svg" width="48" height="48" />
                 <p id="infoLabel">Information</p>
             </div>
+			<!--Web Speech API-->
+			 <div id="speechContainer" class="uiButton">
+                <img id="speech" alt="speech" src="images/ui/[graycircle]-sage2pointer.svg" width="48" height="48" />
+                <p id="speechLabel">Speech</p>
+            </div>
         </div>
     </div>
     <div class="clear"></div>
@@ -1449,5 +1464,17 @@
     <div id="textWidthTest"></div>
     <canvas id="mediaCanvas" style="display: none;"></canvas>
     <video id="mediaVideo" style="display: none;"></video>
+	
+
+	
+	<!--Web Speech API-->
+	<div id="speechDialog" class="dialog">
+        <div id="speechItems">
+        </div>
+        <div id="speechButtons">
+            <span id="speechCloseBtn" class="button">Close</span>
+        </div>
+		
+	
 </body>
 </html>
