@@ -1753,7 +1753,12 @@ function wsDeleteElementFromStoredFiles(wsio, data) {
 // hyunhye
 // Web Speech Result
 function wsWebSpeechResult(wsio, data){
-	console.log(data.interim_transcript);
+	console.log(trim(data.final_transcript));// 앞, 뒤 띄어쓰기 제거해야함!
+}
+
+// 나중에 Priority mode 에서 이것 가지고 가서 태그 체크 함
+function trim(str) {
+	return str.replace( /(^\s*)|(\s*$)/g, "");
 }
 
 // **************  Adding Web Content (URL) *****************

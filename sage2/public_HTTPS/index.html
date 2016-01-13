@@ -369,7 +369,10 @@ new gweb.analytics.AutoTrack({
             var info = document.getElementById('info');
             info.width = Math.floor(48 * menuScale);
             info.height = Math.floor(48 * menuScale);
-
+			var speech = document.getElementById('speech');
+            speech.width = Math.floor(48 * menuScale);
+            speech.height = Math.floor(48 * menuScale);
+			
             var uiButton = getCSSProperty("style_ui.css", ".uiButton");
             if (uiButton !== null) {
                 uiButton.style.width = Math.floor(165 * menuScale) + "px";
@@ -1748,6 +1751,7 @@ if (!('webkitSpeechRecognition' in window)) {
     }
   };
 
+  
   recognition.onresult = function(event) {
     var interim_transcript = '';
     if (typeof(event.results) == 'undefined') {
@@ -1758,9 +1762,9 @@ if (!('webkitSpeechRecognition' in window)) {
     }
     for (var i = event.resultIndex; i < event.results.length; ++i) {
       if (event.results[i].isFinal) {
-        //final_transcript += event.results[i][0].transcript;
+        final_transcript = event.results[i][0].transcript;
       } else {
-        interim_transcript += event.results[i][0].transcript;
+        interim_transcript = event.results[i][0].transcript;
       }
     }
     final_transcript = capitalize(final_transcript);
@@ -1768,7 +1772,9 @@ if (!('webkitSpeechRecognition' in window)) {
     interim_span.innerHTML = linebreak(interim_transcript);
 	
 	// hyunhye
-	wsio.emit('webSpeechResult', { interim_transcript: interim_transcript });
+	//wsio.emit('webSpeechResult', { interim_transcript: interim_transcript });
+	wsio.emit('webSpeechResult', { final_transcript:final_transcript });
+	
 	
     if (final_transcript || interim_transcript) {
 	  //alert(interim_transcript);
