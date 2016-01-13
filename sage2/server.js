@@ -1546,6 +1546,15 @@ function dynamicApplications() {
 // spaceManager_priority ���� �ٲٸ鼭 �غ���
 function priorityApplications() {
     // seojin
+	// speechResult : 음성 인식 결과 있으면
+	// applications (올라가있는 파일들)의 태그를 다 가지고 와서 비교후 일치하는게 가운데에 가장 크게
+	// speechResult : 음성 인식 결과 없으면
+	// applications (올라가있는 파일들)의 태그를 다 가지고 와서 숫자 큰게 가장 가운데에 가장 크게
+	for (i = 0; i < applications.length; i++) {
+		console.log(applications[i].Tag);
+	}
+
+	
     arrangementMode = 'priority';
     var app;
     var i, c, r;
@@ -1749,13 +1758,14 @@ function wsDeleteElementFromStoredFiles(wsio, data) {
 		// I dont know
 	}
 }
-
+var speechResult = '';
 // hyunhye
 // Web Speech Result
 function wsWebSpeechResult(wsio, data){
-	console.log(trim(data.final_transcript));// 앞, 뒤 띄어쓰기 제거해야함!
+	// console.log(trim(data.final_transcript));
+	speechResult = trim(data.final_transcript);
+	console.log(speechResult);
 }
-
 // 나중에 Priority mode 에서 이것 가지고 가서 태그 체크 함
 function trim(str) {
 	return str.replace( /(^\s*)|(\s*$)/g, "");

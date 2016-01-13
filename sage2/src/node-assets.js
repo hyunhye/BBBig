@@ -82,8 +82,9 @@ Asset.prototype.setEXIF = function(exifdata) {
    this.exif.Tag = tag[0];
    //this.exif.Text = scanningResult;    
    
+   // DB 접속해서 그결과 로그 찍음
    //dbConnection.query('select * from keyword where keyword=?', 'crime' , function (err, rows, fields) { console.log(rows); });
-   dbConnection.query('select * from keyword', function (err, rows, fields) { console.log(rows); });
+   // dbConnection.query('select * from keyword', function (err, rows, fields) { console.log(rows); });
 };
 
 Asset.prototype.width = function() {
