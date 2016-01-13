@@ -278,6 +278,8 @@ new gweb.analytics.AutoTrack({
             wsio.on('stopMediaCapture', function () {
                 if (interactor.mediaStream != null) interactor.mediaStream.stop();
             });
+			
+
 
             var sage2UI = document.getElementById('sage2UI');
 
@@ -1558,31 +1560,9 @@ new gweb.analytics.AutoTrack({
           src="images/ui/ready.png" width="50" height="50"></button>
         </div>
         <div id="results">
-          <span class="final" id="final_span"></span> <span class="interim" id=
-          "interim_span"></span>
+          <span class="final" id="final_span"></span> <span class="interim" id="interim_span"></span>
         </div>
-		<!--
-        <div id="copy">
-          <button class="button" id="copy_button" onclick="copyButton()">Copy and Paste</button>
-          <div id="copy_info">
-            <p>
-              Press Control-C to copy text.
-            </p>
-            <p>
-              (Command-C on Mac.)
-            </p>
-          </div><button class="button" id="email_button" onclick="emailButton()">Create
-          Email</button>
-          <div id="email_info">
-            <p>
-              Text sent to default email application.
-            </p>
-            <p>
-              (See chrome://settings/handlers to change.)
-            </p>
-          </div>
-        </div>
-		-->
+		
         <div class="compact marquee" id="div_language">
           <select id="select_language" onchange="updateCountry()">
             </select>&nbsp;&nbsp; <select id="select_dialect">
@@ -1598,8 +1578,6 @@ var chrmMenuBar = new chrm.ui.MenuBar();
       var chrmscroll = new chrm.ui.SmoothScroll('scroll');
       chrmscroll.init();
 
-
-
   window.___gcfg = { lang: 'en' };
   (function() {
     var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
@@ -1607,17 +1585,13 @@ var chrmMenuBar = new chrm.ui.MenuBar();
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
   })();
 
-
-
-
-      var doubleTracker = new gweb.analytics.DoubleTrack('floodlight', {
+	var doubleTracker = new gweb.analytics.DoubleTrack('floodlight', {
           src: 2542116,
           type: 'clien612',
           cat: 'chrom0'
       });
-      doubleTracker.track();
-
-      doubleTracker.trackClass('doubletrack', true);
+    doubleTracker.track();
+	doubleTracker.trackClass('doubletrack', true);
     </script> <script>
 var langs =
 [['Afrikaans',       ['af-ZA']],
@@ -1756,6 +1730,7 @@ if (!('webkitSpeechRecognition' in window)) {
       return;
     }
     start_img.src = 'images/ui/ready.png';
+	
     if (!final_transcript) {
       showInfo('info_start');
       return;
@@ -1783,7 +1758,7 @@ if (!('webkitSpeechRecognition' in window)) {
     }
     for (var i = event.resultIndex; i < event.results.length; ++i) {
       if (event.results[i].isFinal) {
-        final_transcript += event.results[i][0].transcript;
+        //final_transcript += event.results[i][0].transcript;
       } else {
         interim_transcript += event.results[i][0].transcript;
       }
@@ -1791,7 +1766,12 @@ if (!('webkitSpeechRecognition' in window)) {
     final_transcript = capitalize(final_transcript);
     final_span.innerHTML = linebreak(final_transcript);
     interim_span.innerHTML = linebreak(interim_transcript);
+	
+	// hyunhye
+	wsio.emit('webSpeechResult', { interim_transcript: interim_transcript });
+	
     if (final_transcript || interim_transcript) {
+	  //alert(interim_transcript);
       showButtons('inline-block');
     }
   };

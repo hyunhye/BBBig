@@ -265,6 +265,7 @@ var wsioServer = new websocketIO.Server({server: server});
 wsioServer.onconnection(function(wsio) {
 	wsio.onclose(closeWebSocketClient);
 	wsio.on('addClient', wsAddClient);
+
 });
 
 function closeWebSocketClient(wsio) {
@@ -333,6 +334,7 @@ function wsAddClient(wsio, data) {
 	} else {
 		wsio.clientID = -1;
 	}
+	
 
 	// types of data sent/received to server from client through WebSockets
 	wsio.messages.sendsPointerData                  = data.sendsPointerData                 || false;
@@ -373,6 +375,10 @@ function initializeWSClient(wsio) {
 	wsio.emit('initialize', {UID: uniqueID, time: new Date(), start: startTime});
 	
 	if(wsio === masterDisplay) wsio.emit('setAsMasterDisplay');
+	
+	// hyunhye
+	// Web Speech Results
+	wsio.on('webSpeechResult', wsWebSpeechResult);
 	
 	// set up listeners based on what the client sends
 	if(wsio.messages.sendsPointerData){
@@ -1744,7 +1750,11 @@ function wsDeleteElementFromStoredFiles(wsio, data) {
 	}
 }
 
-
+// hyunhye
+// Web Speech Result
+function wsWebSpeechResult(wsio, data){
+	console.log(data.interim_transcript);
+}
 
 // **************  Adding Web Content (URL) *****************
 
