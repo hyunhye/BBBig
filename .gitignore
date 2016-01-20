@@ -1,7 +1,7 @@
 sage2/build/
 
-sage2/config/
-sage2/config/defaultWin-cfg.json
+../sage2/config/
+../sage2/config/defaultWin-cfg.json
 
 sage2/doc/
 
@@ -14,7 +14,7 @@ sage2/GO-scripts/
 sage2/node_modules/
 
 
-sage2/keys/
+../sage2/keys/
 sage2/keys/127.0.0.1-ca.crt
 sage2/keys/127.0.0.1-server.crt
 sage2/keys/127.0.0.1-server.key

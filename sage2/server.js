@@ -1546,12 +1546,10 @@ function dynamicApplications() {
 // spaceManager_priority ���� �ٲٸ鼭 �غ���
 function priorityApplications() {
     // seojin
-	// speechResult : 음성 인식 결과 있으면
-	// applications (올라가있는 파일들)의 태그를 다 가지고 와서 비교후 일치하는게 가운데에 가장 크게
 	// speechResult : 음성 인식 결과 없으면
 	// applications (올라가있는 파일들)의 태그를 다 가지고 와서 숫자 큰게 가장 가운데에 가장 크게
 	for (i = 0; i < applications.length; i++) {
-		console.log(applications[i].Tag);
+		console.log("server tag: "+applications[i].tag);
 	}
 
 	
