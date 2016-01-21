@@ -848,6 +848,34 @@ new gweb.analytics.AutoTrack({
                 wsio.emit('priorityApplications');
                 hideDialog('arrangementDialog');
             }
+			else if (element.id === "Priority_grid") {
+				var mode = document.getElementById('mode');
+				mode.innerHTML = "Priority Mode";
+				
+                wsio.emit('priorityGridApplications');
+                hideDialog('arrangementDialog');
+            }
+			else if (element.id === "Priority_thumbnail") {
+				var mode = document.getElementById('mode');
+				mode.innerHTML = "Priority Mode";
+				
+                wsio.emit('priorityThumbnailApplications');
+                hideDialog('arrangementDialog');
+            }
+			else if (element.id === "Priority_static") {
+				var mode = document.getElementById('mode');
+				mode.innerHTML = "Priority Mode";
+				
+                wsio.emit('priorityStaticApplications');
+                hideDialog('arrangementDialog');
+            }
+			else if (element.id === "Priority_ratio") {
+				var mode = document.getElementById('mode');
+				mode.innerHTML = "Priority Mode";
+				
+                wsio.emit('priorityRatioApplications');
+                hideDialog('arrangementDialog');
+            }
             else if (element.id === "savesession") {
                 var template = "Session " + dateToYYYYMMDDHHMMSS(new Date());
                 var filename = prompt("Please enter a session name\n(Leave blank for name based on server's time)", template);
@@ -1394,6 +1422,22 @@ new gweb.analytics.AutoTrack({
 				<div id="prioritycontentContainer">
 					<img alt="prioritycontent" id="prioritycontent" src="images/ui/[graycircle]-tilecontent.svg" width="64" height="64" />
 					<p>Priority Content</p>
+				</div>
+				<div id="Priority_gridContainer">
+					<img alt="Priority_grid" id="Priority_grid" src="images/ui/[graycircle]-tilecontent.svg" width="64" height="64" />
+					<p>Priority_grid</p>
+				</div>
+				<div id="Priority_thumbnailContainer">
+					<img alt="Priority_thumbnail" id="Priority_thumbnail" src="images/ui/[graycircle]-tilecontent.svg" width="64" height="64" />
+					<p>Priority_thumbnail</p>
+				</div>
+				<div id="Priority_staticContainer">
+					<img alt="Priority_static" id="Priority_static" src="images/ui/[graycircle]-tilecontent.svg" width="64" height="64" />
+					<p>Priority_static</p>
+				</div>
+				<div id="Priority_ratioContainer">
+					<img alt="Priority_ratio" id="Priority_ratio" src="images/ui/[graycircle]-tilecontent.svg" width="64" height="64" />
+					<p>Priority_ratio</p>
 				</div>
         </div>
         <div id="arrangementButtons">

@@ -298,6 +298,27 @@ span {
 	text-align: center;
 }
 
+#Priority_gridContainer {
+	width: 100px;
+	float: left;
+	text-align: center;
+}
+#Priority_thumbnailContainer {
+	width: 100px;
+	float: left;
+	text-align: center;
+}
+#Priority_staticContainer {
+	width: 100px;
+	float: left;
+	text-align: center;
+}
+#Priority_ratioContainer {
+	width: 100px;
+	float: left;
+	text-align: center;
+}
+
 #savesessionContainer {
 	width: 100px;
 	float: left;
