@@ -1705,19 +1705,19 @@ function wsPriorityApplications(wsio, data) {
     priorityApplications();
 }
 
-function wsPriorityApplications(wsio, data) {
+function wsPriorityGridApplications(wsio, data) {
     priorityGridApplications();
 }
 
-function wsPriorityApplications(wsio, data) {
+function wsPriorityThumbnailApplications(wsio, data) {
     priorityThumbnailApplications();
 }
 
-function wsPriorityApplications(wsio, data) {
+function wsPriorityStaticApplications(wsio, data) {
     priorityStaticApplications();
 }
 
-function wsPriorityApplications(wsio, data) {
+function wsPriorityRatioApplications(wsio, data) {
     priorityRatioApplications();
 }
 
