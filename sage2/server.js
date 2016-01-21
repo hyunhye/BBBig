@@ -1549,7 +1549,9 @@ function priorityApplications() {
 	// speechResult : 음성 인식 결과 없으면
 	// applications (올라가있는 파일들)의 태그를 다 가지고 와서 숫자 큰게 가장 가운데에 가장 크게
 	for (i = 0; i < applications.length; i++) {
-		console.log("server tag: "+applications[i].tag);
+		if(applications[i].tag == speechResult) {
+			console.log("priority tag: "+applications[i].tag);
+		}
 	}
 
 	
