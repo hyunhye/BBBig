@@ -24,7 +24,9 @@ function SAGE2DisplayUI() {
 		var i;
 		var sage2UI = document.getElementById('sage2UI');
 		var ctx = sage2UI.getContext('2d');
-		
+
+
+	
 		// background
 		ctx.fillStyle = "rgba(180, 180, 180, 1.0)";
 		ctx.fillRect(0, 0, sage2UI.width, sage2UI.height);
@@ -195,6 +197,13 @@ function SAGE2DisplayUI() {
 				this.drawRoundedRect(ctx, progressX, progressY, percentWidth, progressHeight, progressRadius, true, false);
 			}
 		}
+		
+		// hyunhye : draw line
+		// section???
+		ctx.beginPath();
+		ctx.moveTo(100, 150);
+		ctx.lineTo(100, 250);
+		ctx.stroke();
 	};
 	
 	this.setUploadPercent = function(percent) {
