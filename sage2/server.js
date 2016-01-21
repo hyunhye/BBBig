@@ -425,6 +425,10 @@ function initializeWSClient(wsio) {
 		wsio.on('defaultApplications', wsDefaultApplications);
 		wsio.on('tileApplications', wsTileApplications);
 		wsio.on('priorityApplications', wsPriorityApplications);
+		wsio.on('priorityGridApplications', wsPriorityGridApplications);
+		wsio.on('priorityThumbnailApplications', wsPriorityThumbnailApplications);
+		wsio.on('priorityStaticApplications', wsPriorityStaticApplications);
+		wsio.on('priorityRatioApplications', wsPriorityRatioApplications);
 		wsio.on('dynamicApplications', wsDynamicApplications);
 		wsio.on('arrangementModeCheck', wsArrangementModeCheck); // seojin ���ĸ��?üũ
 
@@ -1540,10 +1544,6 @@ function dynamicApplications() {
 	}
 }
 
-
-// seojin - �ȿ� ������ tile �����?
-// -> �±� ������ ���� �켱���� �迭�� �ٲ��ֱ�
-// spaceManager_priority ���� �ٲٸ鼭 �غ���
 function priorityApplications() {
     // seojin
 	// speechResult : 음성 인식 결과 없으면
@@ -1569,6 +1569,109 @@ function priorityApplications() {
 
 }
 
+// Priority 누르면
+// 태그별로 섹션이 바둑판 모양으로 나뉘어 짐 (구분선)
+// 음성인식된 태그를 가진 데이터들이 가장 크게 배경에 겹쳐서 띄워짐
+function priorityGridApplications() {
+    // seojin
+	// speechResult : 음성 인식 결과 없으면
+	// applications (올라가있는 파일들)의 태그를 다 가지고 와서 숫자 큰게 가장 가운데에 가장 크게
+	for (i = 0; i < applications.length; i++) {
+		console.log("server tag: "+applications[i].tag);
+	}
+	 
+    arrangementMode = 'priority';
+    var app;
+    var i, c, r;
+    var numCols, numRows;
+
+    var displayAr = config.totalWidth / config.totalHeight;
+    var arDiff = displayAr / averageWindowAspectRatio();
+    var numWindows = applications.length;
+	
+	console.log("displayAr:"+displayAr);
+	console.log("averageWindowAspectRatio:"+averageWindowAspectRatio());
+	console.log("arDiff:"+arDiff);
+
+}
+
+// Priority 누르면
+// 음성인식된 태그를 가진 데이터들이 가장 크게 띄워짐
+// 나머지 데이터들은 하단에 썸네일 형식으로 띄워짐
+function priorityThumbnailApplications() {
+    // seojin
+	// speechResult : 음성 인식 결과 없으면
+	// applications (올라가있는 파일들)의 태그를 다 가지고 와서 숫자 큰게 가장 가운데에 가장 크게
+	for (i = 0; i < applications.length; i++) {
+		console.log("server tag: "+applications[i].tag);
+	}
+	 
+    arrangementMode = 'priority';
+    var app;
+    var i, c, r;
+    var numCols, numRows;
+
+    var displayAr = config.totalWidth / config.totalHeight;
+    var arDiff = displayAr / averageWindowAspectRatio();
+    var numWindows = applications.length;
+	
+	console.log("displayAr:"+displayAr);
+	console.log("averageWindowAspectRatio:"+averageWindowAspectRatio());
+	console.log("arDiff:"+arDiff);
+
+}
+
+// Priority 누르면
+// client display 1,2,3 안에 음성인식된 태그를 가진 데이터들이 크게 띄워짐
+// 나머지 데이터들은 좌측, 우측에 타일모드로 띄워짐
+function priorityStaticApplications() {
+    // seojin
+	// speechResult : 음성 인식 결과 없으면
+	// applications (올라가있는 파일들)의 태그를 다 가지고 와서 숫자 큰게 가장 가운데에 가장 크게
+	for (i = 0; i < applications.length; i++) {
+		console.log("server tag: "+applications[i].tag);
+	}
+	 
+    arrangementMode = 'priority';
+    var app;
+    var i, c, r;
+    var numCols, numRows;
+
+    var displayAr = config.totalWidth / config.totalHeight;
+    var arDiff = displayAr / averageWindowAspectRatio();
+    var numWindows = applications.length;
+	
+	console.log("displayAr:"+displayAr);
+	console.log("averageWindowAspectRatio:"+averageWindowAspectRatio());
+	console.log("arDiff:"+arDiff);
+
+}
+
+// Priority 누르면
+// 일정 비율을 설정해 두어 그 안에 음성인식된 태그를 가진 데이터들이 크게 띄워짐
+// 나머지 데이터들은 좌측, 우측에 타일모드로 띄워짐
+function priorityRatioApplications() {
+    // seojin
+	// speechResult : 음성 인식 결과 없으면
+	// applications (올라가있는 파일들)의 태그를 다 가지고 와서 숫자 큰게 가장 가운데에 가장 크게
+	for (i = 0; i < applications.length; i++) {
+		console.log("server tag: "+applications[i].tag);
+	}
+	 
+    arrangementMode = 'priority';
+    var app;
+    var i, c, r;
+    var numCols, numRows;
+
+    var displayAr = config.totalWidth / config.totalHeight;
+    var arDiff = displayAr / averageWindowAspectRatio();
+    var numWindows = applications.length;
+	
+	console.log("displayAr:"+displayAr);
+	console.log("averageWindowAspectRatio:"+averageWindowAspectRatio());
+	console.log("arDiff:"+arDiff);
+
+}
 
 
 
@@ -1600,6 +1703,22 @@ function wsTileApplications(wsio, data) {
 
 function wsPriorityApplications(wsio, data) {
     priorityApplications();
+}
+
+function wsPriorityApplications(wsio, data) {
+    priorityGridApplications();
+}
+
+function wsPriorityApplications(wsio, data) {
+    priorityThumbnailApplications();
+}
+
+function wsPriorityApplications(wsio, data) {
+    priorityStaticApplications();
+}
+
+function wsPriorityApplications(wsio, data) {
+    priorityRatioApplications();
 }
 
 function wsDynamicApplications(wsio, data) {
@@ -3561,6 +3680,14 @@ function deleteApplication( elem ) {
 		tileApplications();
 	} else if(arrangementMode == "priority"){
 		priorityApplications();
+	} else if(arrangementMode == "priority_grid"){
+		priorityGridApplications();
+	} else if(arrangementMode == "priority_thumbnail"){
+		priorityThumbnailApplications();
+	} else if(arrangementMode == "priority_static"){
+		priorityStaticApplications();
+	} else if(arrangementMode == "priority_ratio"){
+		priorityRatioApplications();
 	}
 }
 
@@ -3708,5 +3835,9 @@ function arrangementModeCheck() {
 exports.tileApplications = tileApplications; // tile ���?
 exports.dynamicApplications = dynamicApplications; // �� ���� ã�Ƽ� ��ġ�� 
 exports.priorityApplications = priorityApplications; // �켱���� ������ ��ġ��
+exports.priorityGridApplications = priorityGridApplications;
+exports.priorityThumbnailApplications = priorityThumbnailApplications;
+exports.priorityStaticApplications = priorityStaticApplications;
+exports.priorityRatioApplications = priorityRatioApplications;
 exports.arrangementModeCheck = arrangementModeCheck; // ���� ���?üũ 
 exports.loadConfiguration = loadConfiguration;
