@@ -63,8 +63,6 @@ Asset.prototype.setEXIF = function(exifdata) {
    var scanningResult;
     this.exif = exifdata;
    // seojin 태그 추가 (태그의 값을 파일 명으로)
-   
-   
    // hyunhye
    console.log("add File in ImageScanning Directory");
    var uploadsFolder = "public_HTTPS/uploads/scanning";
@@ -78,8 +76,28 @@ Asset.prototype.setEXIF = function(exifdata) {
    imageScanning = new ImageScanning();
    imageScanning.process(this);
    
+   // 지금 상태 : 일단 파일명으로 가져와서 태그 달리는데 맨 뒤에 한글자 짤림
    var tag = this.exif.FileName.split('.');
-   this.exif.Tag = tag[0];
+   var tag2 = tag[0].substring(0, String(tag[0]).length-1);
+   
+   
+   // uploads로 pc에 있는 파일 올릴때에 여기 거침
+   // seojin
+   // 태그값이 없을 때만 파일명으로 태그 추가
+   /*
+   console.log("setEXIF");
+   if(!this.exif.Tag) {
+	   console.log("tag no");
+	 this.exif.Tag = tag[0];
+   } else {
+	   console.log("tag yes");
+	     
+   }*/
+   
+   this.exif.Tag = tag2;
+   
+   
+   
    //this.exif.Text = scanningResult;    
    
    // DB 접속해서 그결과 로그 찍음
