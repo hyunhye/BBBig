@@ -257,6 +257,14 @@ span {
 	transform: translate(-50%, -50%);
 }
 
+#PriorityDialog {
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	-moz-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
 
 #arrangementItems {
 	margin: 10px 10px 66px 10px;
@@ -336,6 +344,11 @@ span {
 	bottom: 10px;
 }
 
+#priorityCloseBtn {
+	position: absolute;
+	right: 10px;
+	bottom: 10px;
+}
 
 
 #infoDialog {

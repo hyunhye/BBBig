@@ -647,6 +647,9 @@ new gweb.analytics.AutoTrack({
             else if (element.id === "arrangement" || element.id === "arrangementContainer" || element.id === "arrangementLabel") {
                 showDialog('arrangementDialog');
             }
+			else if (element.id === "prioritycontentContainer" || element.id === "prioritycontent") {
+                showDialog('PriorityDialog');
+            }
             else if (element.id === "settings" || element.id === "settingsContainer" || element.id === "settingsLabel") {
                 showDialog('settingsDialog');
             }
@@ -752,6 +755,10 @@ new gweb.analytics.AutoTrack({
             else if (element.id === "arrangementCloseBtn") {
                 hideDialog('arrangementDialog');
             }
+			
+			else if (element.id === "priorityCloseBtn") {
+                hideDialog('PriorityDialog');
+            }
 
                 // Info Dialog
             else if (element.id === "infoCloseBtn") {
@@ -850,31 +857,35 @@ new gweb.analytics.AutoTrack({
             }
 			else if (element.id === "Priority_grid") {
 				var mode = document.getElementById('mode');
-				mode.innerHTML = "Priority Mode";
+				mode.innerHTML = "Priority_grid Mode";
 				
                 wsio.emit('priorityGridApplications');
                 hideDialog('arrangementDialog');
+				hideDialog('PriorityDialog');
             }
 			else if (element.id === "Priority_thumbnail") {
 				var mode = document.getElementById('mode');
-				mode.innerHTML = "Priority Mode";
-				
+				mode.innerHTML = "Priority_thumbnail Mode";
+
                 wsio.emit('priorityThumbnailApplications');
                 hideDialog('arrangementDialog');
+				hideDialog('PriorityDialog');
             }
 			else if (element.id === "Priority_static") {
 				var mode = document.getElementById('mode');
-				mode.innerHTML = "Priority Mode";
+				mode.innerHTML = "Priority_static Mode";
 				
                 wsio.emit('priorityStaticApplications');
                 hideDialog('arrangementDialog');
+				hideDialog('PriorityDialog');
             }
 			else if (element.id === "Priority_ratio") {
 				var mode = document.getElementById('mode');
-				mode.innerHTML = "Priority Mode";
+				mode.innerHTML = "Priority_ratio Mode";
 				
                 wsio.emit('priorityRatioApplications');
                 hideDialog('arrangementDialog');
+				hideDialog('PriorityDialog');
             }
             else if (element.id === "savesession") {
                 var template = "Session " + dateToYYYYMMDDHHMMSS(new Date());
@@ -1424,6 +1435,14 @@ new gweb.analytics.AutoTrack({
 					<p>Priority Content</p>
 				</div>
         </div>
+		
+        <div id="arrangementButtons">
+            <span id="arrangementCloseBtn" class="button">Close</span>
+        </div>
+    </div>
+	
+	<!-- dialog for the Priority Mode-->
+    <div id="PriorityDialog" class="dialog">
 		<div id="arrangementItems3">
 				<div id="Priority_gridContainer">
 					<img alt="Priority_grid" id="Priority_grid" src="images/ui/[graycircle]-tilecontent.svg" width="64" height="64" />
@@ -1442,13 +1461,11 @@ new gweb.analytics.AutoTrack({
 					<p>Priority_ratio</p>
 				</div>
         </div>
-		
-		
-		
-        <div id="arrangementButtons">
-            <span id="arrangementCloseBtn" class="button">Close</span>
+        <div id="priorityButtons">
+            <span id="priorityCloseBtn" class="button">Close</span>
         </div>
     </div>
+	
     <!-- dialog for the Info -->
     <div id="infoDialog" class="dialog">
         <div id="infoItems">

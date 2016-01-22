@@ -197,13 +197,6 @@ function SAGE2DisplayUI() {
 				this.drawRoundedRect(ctx, progressX, progressY, percentWidth, progressHeight, progressRadius, true, false);
 			}
 		}
-		
-		// hyunhye : draw line
-		// section???
-		ctx.beginPath();
-		ctx.moveTo(100, 150);
-		ctx.lineTo(100, 250);
-		ctx.stroke();
 	};
 	
 	this.setUploadPercent = function(percent) {
@@ -432,7 +425,7 @@ function SAGE2DisplayUI() {
 			if(dTop < 10) {
 				mTop = 10-dTop;
 				dTop = 10;
-			}
+			} 
 			displayUI.style.marginTop = dTop.toString() + "px";
 			menuUI.style.marginTop = mTop.toString() + "px";
 		}
@@ -444,4 +437,18 @@ function SAGE2DisplayUI() {
 		
 		this.draw();
 	};
+	
+	this.drawThumbnailLine = function() {
+	console.log("draw line");
+		var sage2UI = document.getElementById('sage2UI');
+		var ctx = sage2UI.getContext('2d');
+		// hyunhye : draw line
+		// section???
+		ctx.beginPath();
+		ctx.moveTo(0, 250);
+		ctx.lineTo(5400, 250);
+		ctx.stroke();
+	};
 }
+
+module.exports = SAGE2DisplayUI;
