@@ -1,7 +1,5 @@
 sage2/build/
 
-../sage2/config/
-../sage2/config/defaultWin-cfg.json
 
 sage2/doc/
 
@@ -14,24 +12,16 @@ sage2/GO-scripts/
 sage2/node_modules/
 
 
-keys/
+
+sage2/keys/
+sage2/config
+
 public_HTTPS/uploads/assets
 config/
 
-sage2/keys/127.0.0.1-ca.crt
-sage2/keys/127.0.0.1-server.crt
-sage2/keys/127.0.0.1-server.key
-sage2/keys/GO-windows.bat
-keys/GO-windows.bat
-GO-windows.bat
-
 sage2/public_HTTP/
 
-sage2/public_HTTPS/uploads/assets
-
 sage2/sessions/
-sage2/sessions/default.json
-
 sage2/tmp/
 
 sage2/server/
