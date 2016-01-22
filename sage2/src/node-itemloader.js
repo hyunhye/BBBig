@@ -658,8 +658,9 @@ appLoader.prototype.manageAndLoadUploadedFile = function(file, callback) {
 	var external_url = this.hostOrigin + encodeReservedURL(url);
 	var localPath    = path.join(this.publicDir, url);
 
+	// hyunhye 
 	// Filename exists, then add date
-	if (fs.existsSync(localPath)) {
+	/*if (fs.existsSync(localPath)) {
 		// Add the date to filename
 		var filen  = file.name;
 		var splits = filen.split('.');
@@ -669,7 +670,7 @@ appLoader.prototype.manageAndLoadUploadedFile = function(file, callback) {
 		url = path.join("uploads", dir, newfilename);
 		external_url = this.hostOrigin + encodeReservedURL(url);
 		localPath    = path.join(this.publicDir, url);
-	}
+	}*/
 
 	fs.rename(file.path, localPath, function(err) {
 		if(err) throw err;
