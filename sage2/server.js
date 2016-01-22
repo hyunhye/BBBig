@@ -62,8 +62,6 @@ var websocketIO = require('./src/node-websocket.io');   // creates WebSocket ser
 
 // hyunhye
 var DynamicSpaceManager = require('./src/spaceManager');
-// seojin
-var PrioritySpaceManager = require('./src/spaceManager_priority')
 var Bounds = require('./src/globals');
 
 // Version calculation
@@ -1686,55 +1684,125 @@ function priorityGridApplications() {
             r -= 1;
         }
     }
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-		}
+}
 
-// Priority 누르면
+// ******************** Thumbnail ********************
 // 음성인식된 태그를 가진 데이터들이 가장 크게 띄워짐
 // 나머지 데이터들은 하단에 썸네일 형식으로 띄워짐
 function priorityThumbnailApplications() {
 	
 	arrangementMode = 'priority_thumbnail';
-	
-    // seojin
-	// speechResult : 음성 인식 결과 없으면
-	// applications (올라가있는 파일들)의 태그를 다 가지고 와서 숫자 큰게 가장 가운데에 가장 크게
-	for (i = 0; i < applications.length; i++) {
-		console.log("server tag: "+applications[i].tag);
-	}
-	 
+
+	// ***** Part0 : Prepare(initialize)
     var app;
     var i, c, r;
     var numCols, numRows;
 
     var displayAr = config.totalWidth / config.totalHeight;
-    var arDiff = displayAr / averageWindowAspectRatio();
     var numWindows = applications.length;
-	
-	console.log("displayAr:"+displayAr);
-	console.log("averageWindowAspectRatio:"+averageWindowAspectRatio());
-	console.log("arDiff:"+arDiff);
 
+    // the number of row is 1
+    numCols = numWindows;
+    numRows = 1;
+     
+    // determine the bounds of the tiling area
+    var titleBar = config.ui.titleBarHeight;
+    if (config.ui.auto_hide_ui === true) titleBar = 0;
+    var areaX = 0;
+    var areaY = Math.round(1.5 * titleBar) + 1200; // keep 0.5 height as margin 
+												   // thumbnail space is fixed
+												   // what pixel??
+    if (config.ui.auto_hide_ui === true) areaY = -config.ui.titleBarHeight;
+
+    var areaW = config.totalWidth;
+    var areaH = config.totalHeight - (1.0 * titleBar) - 1200;  // thumbnail space is fixed
+
+    var tileW = Math.floor(areaW / numCols);
+    var tileH = Math.floor(areaH / numRows);
+
+    var padding = 4;
+    // if only one application, no padding, i.e maximize
+    if (applications.length === 1) padding = 0;
+    r = numRows - 1;
+    c = 0;
+	
+	// ********** If priority is first, then that is largest size and dynamic mode **********
+	// ***** Part1 : First, the value of priority is the number of applications
+	if(speechResult == null || speechResult == ""){
+		var count = 0 ;
+		for (i = 0; i < applications.length; i++) { // count the number of tags
+			
+		}
+	}
+	// ***** Part2 : Second, the value of priority is web speech result
+	else{ 
+		var spaceManager = new DynamicSpaceManager();
+		spaceManager.initializeEmptySpaceForPriority();
+		for (i = 0; i < applications.length; i++) { // compare speechResult to each application's tag
+			app = applications[i];
+			if(app.tag == speechResult){ // ***** Part2-1 : tag that is same speechResult..
+				// Dynamic Mode (or Tile Mode..??)
+				var appData = {
+					id: app.id,
+					left: app.left,
+					right: app.left + app.width,
+					bottom: app.top + app.height,
+					up: app.top,
+					width: app.width,
+					height: app.height
+				}
+				
+				var item = spaceManager.createFullRectangle(appData);
+				
+				app.left = item.left;
+				app.top = item.up;
+				app.height = item.height;
+				app.width = item.width;
+
+				var updateItem = {
+					elemId: app.id,
+					elemLeft: app.left, elemTop: app.top,
+					elemWidth: app.width, elemHeight: app.height,
+					force: true, date: new Date()
+				};
+				 // send the order
+				broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
+				
+			}else{  // ***** Part2-2 : others is shown in thumbnail
+					// thumbnail is shown tiled mode 
+					// one line??
+					
+				// calculate new dimensions
+				var newdims = fitWithin(app, c * tileW + areaX, r * tileH + areaY, tileW, tileH, padding);
+				// update the data structure
+				app.left = newdims[0];
+				app.top = newdims[1] - titleBar;
+				app.width = newdims[2];
+				app.height = newdims[3];
+				
+				// build the object to be sent
+				var updateItem = {
+					elemId: app.id,
+					elemLeft: app.left, elemTop: app.top,
+					elemWidth: app.width, elemHeight: app.height,
+					force: true, date: new Date()
+				};
+				
+				// send the order
+				broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
+
+				c += 1;
+				if (c === numCols) {
+					c = 0;
+					r -= 1;
+				}
+			}
+		}
+	}
 }
 
-// Priority 누르면
-// client display 1,2,3 안에 음성인식된 태그를 가진 데이터들이 크게 띄워짐
+// ******************** Static ********************
+// Priority 누르면 client display 1,2,3 안에 음성인식된 태그를 가진 데이터들이 크게 띄워짐
 // 나머지 데이터들은 좌측, 우측에 타일모드로 띄워짐
 function priorityStaticApplications() {
 	
