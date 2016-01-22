@@ -62,8 +62,6 @@ var websocketIO = require('./src/node-websocket.io');   // creates WebSocket ser
 
 // hyunhye
 var DynamicSpaceManager = require('./src/spaceManager');
-// seojin
-var PrioritySpaceManager = require('./src/spaceManager_priority')
 var Bounds = require('./src/globals');
 
 // Version calculation
