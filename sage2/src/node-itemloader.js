@@ -27,6 +27,12 @@ var tileApplications = require('../server');
 var freeApplications = require('../server');
 var priorityApplications = require('../server');
 var arrangementModeCheck = require('../server');
+var priorityGridApplications = require('../server');
+var priorityThumbnailApplications = require('../server');
+var priorityStaticApplications = require('../server');
+var priorityRatioApplications = require('../server');
+
+
 var imageMagick;
 mime.default_type = "application/custom";
 
@@ -721,6 +727,18 @@ appLoader.prototype.loadApplication = function(appData, callback) {
 			    }
 			    else if (arrangementMode == 'empty mode') {
 			    }
+				else if (arrangementMode == 'priority_grid') {
+			        priorityGridApplications.priorityGridApplications();
+			    }
+				else if (arrangementMode == 'priority_thumbnail') {
+			        priorityThumbnailApplications.priorityThumbnailApplications();
+			    }
+				else if (arrangementMode == 'priority_static') {
+			        priorityStaticApplications.priorityStaticApplications();
+			    }
+				else if (arrangementMode == 'priority_ratio') {
+			        priorityRatioApplications.priorityRatioApplications();
+			    }
 			});
 		}
 		else if(app === "movie_player"){
@@ -741,6 +759,18 @@ appLoader.prototype.loadApplication = function(appData, callback) {
 			    }
 			    else if (arrangementMode == 'empty mode') {
 			    }
+				else if (arrangementMode == 'priority_grid') {
+			        priorityApplications.priorityApplications();
+			    }
+				else if (arrangementMode == 'priority_thumbnail') {
+			        priorityApplications.priorityApplications();
+			    }
+				else if (arrangementMode == 'priority_static') {
+			        priorityApplications.priorityApplications();
+			    }
+				else if (arrangementMode == 'priority_ratio') {
+			        priorityApplications.priorityApplications();
+			    }
 			});
 		}
 		else if(app === "pdf_viewer"){
@@ -760,6 +790,18 @@ appLoader.prototype.loadApplication = function(appData, callback) {
 			    else if (arrangementMode == 'default') {
 			    }
 			    else if (arrangementMode == 'empty mode') {
+			    }
+				else if (arrangementMode == 'priority_grid') {
+			        priorityApplications.priorityApplications();
+			    }
+				else if (arrangementMode == 'priority_thumbnail') {
+			        priorityApplications.priorityApplications();
+			    }
+				else if (arrangementMode == 'priority_static') {
+			        priorityApplications.priorityApplications();
+			    }
+				else if (arrangementMode == 'priority_ratio') {
+			        priorityApplications.priorityApplications();
 			    }
 			});
 		}

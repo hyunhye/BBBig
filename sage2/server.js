@@ -231,6 +231,8 @@ var appLoader = new loader(public_https, hostOrigin, config.totalWidth, config.t
 var applications = [];
 var controls = []; // Each element represents a control widget bar
 var appAnimations = {};
+// seojin : priority grid ★
+var applicationsTag = [];
 
 
 // sets up the background for the display clients (image or color)
@@ -1569,36 +1571,147 @@ function priorityApplications() {
 
 }
 
-// Priority 누르면
-// 태그별로 섹션이 바둑판 모양으로 나뉘어 짐 (구분선)
-// 음성인식된 태그를 가진 데이터들이 가장 크게 배경에 겹쳐서 띄워짐
+// seojin : priority grid ★
+// - 태그별로 섹션이 바둑판 모양으로 나뉘어 짐 (구분선)
+// - 음성인식된 태그를 가진 데이터들이 가장 크게 배경에 겹쳐서 띄워짐 -> 이거 부터 하기
 function priorityGridApplications() {
-    // seojin
-	// speechResult : 음성 인식 결과 없으면
-	// applications (올라가있는 파일들)의 태그를 다 가지고 와서 숫자 큰게 가장 가운데에 가장 크게
-	for (i = 0; i < applications.length; i++) {
-		console.log("server tag: "+applications[i].tag);
-	}
-	 
-    arrangementMode = 'priority';
+	
+	arrangementMode = 'priority_grid';
+		
+		
     var app;
     var i, c, r;
     var numCols, numRows;
 
     var displayAr = config.totalWidth / config.totalHeight;
     var arDiff = displayAr / averageWindowAspectRatio();
-    var numWindows = applications.length;
+    var numWindows;
 	
 	console.log("displayAr:"+displayAr);
 	console.log("averageWindowAspectRatio:"+averageWindowAspectRatio());
 	console.log("arDiff:"+arDiff);
+	
+	
+	for (i = 0; i < applications.length; i++) {
+		if(applications[i].tag == speechResult) {
+			applicationsTag[i] = applications[i];
+			var numWindows = applicationsTag.length;
+			// 전체화면 다 써서 가장 맨위로 올라오도록 Tile 모드
+			console.log("priority tag: "+applications[i].tag);
+		}
+	}
 
-}
+    // 3 scenarios... windows are on average the same aspect ratio as the display
+    if (arDiff >= 0.7 && arDiff <= 1.3) {
+		console.log("1");
+        numCols = Math.ceil(Math.sqrt(numWindows));
+        numRows = Math.ceil(numWindows / numCols);
+    }
+    else if (arDiff < 0.7) {
+        // windows are much wider than display
+		console.log("2");
+        c = Math.round(1 / (arDiff / 2.0));
+        if (numWindows <= c) {
+            numRows = numWindows;
+            numCols = 1;
+        }
+        else {
+            numCols = Math.max(2, Math.round(numWindows / c));
+            numRows = Math.round(Math.ceil(numWindows / numCols));
+        }
+    }
+    else {
+        // windows are much taller than display
+		console.log("3");
+		console.log("arDiff:"+arDiff);
+        c = Math.round(arDiff * 2);
+        if (numWindows <= c) {
+			console.log("4");
+            numCols = numWindows;
+            numRows = 1;
+        }
+        else {
+			console.log("5");
+            numRows = Math.max(2, Math.round(numWindows / c));
+            numCols = Math.round(Math.ceil(numWindows / numRows));
+        }
+    }
+
+    // determine the bounds of the tiling area
+    var titleBar = config.ui.titleBarHeight;
+    if (config.ui.auto_hide_ui === true) titleBar = 0;
+    var areaX = 0;
+    var areaY = Math.round(1.5 * titleBar); // keep 0.5 height as margin
+    if (config.ui.auto_hide_ui === true) areaY = -config.ui.titleBarHeight;
+
+    var areaW = config.totalWidth;
+    var areaH = config.totalHeight - (1.0 * titleBar);
+
+    var tileW = Math.floor(areaW / numCols);
+    var tileH = Math.floor(areaH / numRows);
+
+    // go through them in sorted order
+    // applications.sort()
+
+    var padding = 4;
+    // if only one application, no padding, i.e maximize
+    if (applicationsTag.length === 1) padding = 0;
+    r = numRows - 1;
+    c = 0;
+    for (i = 0; i < applicationsTag.length; i++) {
+        // get the application
+        app = applicationsTag[i];
+        // calculate new dimensions
+        var newdims = fitWithin(app, c * tileW + areaX, r * tileH + areaY, tileW, tileH, padding);
+        // update the data structure
+        app.left = newdims[0];
+        app.top = newdims[1] - titleBar;
+        app.width = newdims[2];
+        app.height = newdims[3];
+		
+		console.log(app + " " + app.left + " " +  app.top + " " + app.width + " " + app.height);
+        // build the object to be sent
+        var updateItem = {
+            elemId: app.id,
+            elemLeft: app.left, elemTop: app.top,
+            elemWidth: app.width, elemHeight: app.height,
+            force: true, date: new Date()
+        };
+        // send the order
+        broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
+
+        c += 1;
+        if (c === numCols) {
+            c = 0;
+            r -= 1;
+        }
+    }
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		}
 
 // Priority 누르면
 // 음성인식된 태그를 가진 데이터들이 가장 크게 띄워짐
 // 나머지 데이터들은 하단에 썸네일 형식으로 띄워짐
 function priorityThumbnailApplications() {
+	
+	arrangementMode = 'priority_thumbnail';
+	
     // seojin
 	// speechResult : 음성 인식 결과 없으면
 	// applications (올라가있는 파일들)의 태그를 다 가지고 와서 숫자 큰게 가장 가운데에 가장 크게
@@ -1606,7 +1719,6 @@ function priorityThumbnailApplications() {
 		console.log("server tag: "+applications[i].tag);
 	}
 	 
-    arrangementMode = 'priority';
     var app;
     var i, c, r;
     var numCols, numRows;
@@ -1625,14 +1737,15 @@ function priorityThumbnailApplications() {
 // client display 1,2,3 안에 음성인식된 태그를 가진 데이터들이 크게 띄워짐
 // 나머지 데이터들은 좌측, 우측에 타일모드로 띄워짐
 function priorityStaticApplications() {
+	
+	arrangementMode = 'priority_static';
     // seojin
 	// speechResult : 음성 인식 결과 없으면
 	// applications (올라가있는 파일들)의 태그를 다 가지고 와서 숫자 큰게 가장 가운데에 가장 크게
 	for (i = 0; i < applications.length; i++) {
 		console.log("server tag: "+applications[i].tag);
 	}
-	 
-    arrangementMode = 'priority';
+	
     var app;
     var i, c, r;
     var numCols, numRows;
@@ -1647,18 +1760,16 @@ function priorityStaticApplications() {
 
 }
 
-// Priority 누르면
-// 일정 비율을 설정해 두어 그 안에 음성인식된 태그를 가진 데이터들이 크게 띄워짐
-// 나머지 데이터들은 좌측, 우측에 타일모드로 띄워짐
+// seojin : priority ratio
+// - 일정 비율을 설정해 두어 그 안에 음성인식된 태그를 가진 데이터들이 크게 띄워짐
+// - 나머지 데이터들은 좌측, 우측에 타일모드로 띄워짐
 function priorityRatioApplications() {
-    // seojin
-	// speechResult : 음성 인식 결과 없으면
-	// applications (올라가있는 파일들)의 태그를 다 가지고 와서 숫자 큰게 가장 가운데에 가장 크게
+	
+	arrangementMode = 'priority_ratio';
 	for (i = 0; i < applications.length; i++) {
 		console.log("server tag: "+applications[i].tag);
 	}
-	 
-    arrangementMode = 'priority';
+	
     var app;
     var i, c, r;
     var numCols, numRows;
