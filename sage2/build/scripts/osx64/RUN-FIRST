@@ -1,5 +1,0 @@
-#!/bin/sh
-
-cd /Applications/SAGE2/keys/
-./GO-mac
-

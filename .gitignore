@@ -12,8 +12,9 @@ sage2/GO-scripts/
 sage2/node_modules/
 
 
-keys/
-../sage2/keys/
+
+sage2/keys/
+sage2/config
 
 public_HTTPS/uploads/assets
 config/
