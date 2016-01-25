@@ -1,41 +1,33 @@
+# sage2
 sage2/build/
-
 
 sage2/doc/
 
-
 sage2/extras/
-
 
 sage2/GO-scripts/
 
 sage2/node_modules/
 
-
-
 sage2/keys/
-sage2/config
 
-public_HTTPS/uploads/assets
-config/
+sage2/config/
+
+sage2/public_HTTPS/uploads/assets
 
 sage2/public_HTTP/
 
 sage2/sessions/
+
 sage2/tmp/
 
 sage2/server/
 
-
-
 AUTHORS
-
 
 LICENSE
 
-
 package.json
-
 
 README.md
 
