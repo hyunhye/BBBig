@@ -63,18 +63,21 @@ Asset.prototype.setEXIF = function(exifdata) {
    var scanningResult;
     this.exif = exifdata;
    // seojin 태그 추가 (태그의 값을 파일 명으로)
-   // hyunhye
-   console.log("add File in ImageScanning Directory");
-   var uploadsFolder = "public_HTTPS/uploads/scanning";
-   var originFolder = "public_HTTPS/uploads/images/";
-   var imageScanningimage = path.join(uploadsFolder, this.exif.FileName);
    
-   var file = fs.createReadStream(originFolder+this.exif.FileName, {flags: 'r'} ); // 파일 읽기
-   var out = fs.createWriteStream(imageScanningimage, {flags: 'w'}); // 파일 쓰기
-   file.pipe(out);
+   // ***** if file is image, then excute image scanning
+   var imagefile = this.exif.FileName.split('.');
+   if(imagefile[1] == "png" || imagefile[1] == "jpg" || imagefile[1] == "gif" || imagefile[1] == "jpeg"){
+		var uploadsFolder = "public_HTTPS/uploads/scanning";
+		var originFolder = "public_HTTPS/uploads/images/";
+		var imageScanningimage = path.join(uploadsFolder, this.exif.FileName);
+	   
+		var file = fs.createReadStream(originFolder+this.exif.FileName, {flags: 'r'} ); // 파일 읽기
+		var out = fs.createWriteStream(imageScanningimage, {flags: 'w'}); // 파일 쓰기
+		file.pipe(out);
 
-   imageScanning = new ImageScanning();
-   imageScanning.process(this);
+		imageScanning = new ImageScanning();
+		imageScanning.process(this);
+   }
    
    // 지금 상태 : 일단 파일명으로 가져와서 태그 달리는데 맨 뒤에 한글자 짤림
    var tag = this.exif.FileName.split('.');
@@ -95,9 +98,7 @@ Asset.prototype.setEXIF = function(exifdata) {
    }*/
    
    this.exif.Tag = tag2;
-   
-   
-   
+
    //this.exif.Text = scanningResult;    
    
    // DB 접속해서 그결과 로그 찍음

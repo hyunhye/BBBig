@@ -14,7 +14,7 @@ var tesseract = require('node-tesseract');
 var multer  = require('multer');
 var fs = require('fs');
 var path = path = require('path');
-var imageDir = 'C:/sage2/sage2/sage2/public_HTTPS/uploads/scanning/';
+var imageDir = 'C:/Users/Administrator/Documents/BBBig/sage2/public_HTTPS/uploads/scanning/';
 
 function ImageScanning(){
 	this.scanningResult="";

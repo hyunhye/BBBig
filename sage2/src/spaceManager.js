@@ -48,7 +48,7 @@ DynamicSpaceManager.prototype.initializeEmptySpaceForPriority = function(){
 	var nCols  = config.layout.columns;
 
 	// largestEmptySpaceList에 넣기
-	var bound = new Bounds(0,(config.resolution.width*nCols),0,((config.resolution.height-800)*nRows));
+	var bound = new Bounds(0,(config.resolution.width*nCols),0,((config.resolution.height-500)*nRows));
 	this.largestEmptySpaceList.push(bound);
 	
 }
@@ -324,7 +324,7 @@ DynamicSpaceManager.prototype.adjustFullRectangle = function (app) {
 
     // because we are looking for best fit. largest area does not guarantee optimal choice
 	for(var i=0, space; space=this.largestEmptySpaceList[i]; i++){ 
-		console.log("largestEmptySpaceList["+i+"]:"+space.left+" "+space.right+" "+space.up+" "+space.bottom);
+		//console.log("largestEmptySpaceList["+i+"]:"+space.left+" "+space.right+" "+space.up+" "+space.bottom);
         space_width = space.width;
         space_height = space.height;
 
@@ -558,9 +558,8 @@ DynamicSpaceManager.prototype.addFullRectangle = function (app, pos) {
 		if(P.width < 200 || P.height < 200) continue; // if width, height is shorter than 100, continue
 		this.largestEmptySpaceList.push(P);     
     }
-	console.log("--------------------------------------");
 	for(var i=0, space; space=this.largestEmptySpaceList[i]; i++){
-		console.log("largestEmptySpaceList["+i+"] left:"+space.left+", right:"+space.right+", top:"+space.up+", bottom:"+space.bottom);
+		//console.log("largestEmptySpaceList["+i+"] left:"+space.left+", right:"+space.right+", top:"+space.up+", bottom:"+space.bottom);
 
 	}
 }
@@ -964,7 +963,7 @@ DynamicSpaceManager.prototype.shove = function (app, windows) {
     }
     //del index_range_list //todo
 
-    console.log("s||ted ... result");
+    console.log("sorted ... result");
     // print "s||ted ... result"
     for (app_space in index_list) {
         //print app_space

@@ -1841,7 +1841,7 @@ if (!('webkitSpeechRecognition' in window)) {
 	// hyunhye
 	//wsio.emit('webSpeechResult', { interim_transcript: interim_transcript });
 	wsio.emit('webSpeechResult', { final_transcript:final_transcript });
-	
+	wsio.emit('priorityThumbnailApplications');
 	
     if (final_transcript || interim_transcript) {
 	  //alert(interim_transcript);
