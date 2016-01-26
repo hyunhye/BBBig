@@ -229,8 +229,6 @@ var appLoader = new loader(public_https, hostOrigin, config.totalWidth, config.t
 var applications = [];
 var controls = []; // Each element represents a control widget bar
 var appAnimations = {};
-// seojin : priority grid ★
-var applicationsTag = [];
 
 
 // sets up the background for the display clients (image or color)
@@ -1572,10 +1570,15 @@ function priorityApplications() {
 // seojin : priority grid ★
 // - 태그별로 섹션이 바둑판 모양으로 나뉘어 짐 (구분선)
 // - 음성인식된 태그를 가진 데이터들이 가장 크게 배경에 겹쳐서 띄워짐 -> 이거 부터 하기
+
+function priorityApplicationsTagCheck(){
+	
+}
+
 function priorityGridApplications() {
 	
 	arrangementMode = 'priority_grid';
-		
+	var applicationsTag = [];
 		
     var app;
     var i, c, r;
@@ -1593,7 +1596,7 @@ function priorityGridApplications() {
 	for (i = 0; i < applications.length; i++) {
 		if(applications[i].tag == speechResult) {
 			applicationsTag[i] = applications[i];
-			var numWindows = applicationsTag.length;
+			numWindows = applicationsTag.length;
 			// 전체화면 다 써서 가장 맨위로 올라오도록 Tile 모드
 			console.log("priority tag: "+applications[i].tag);
 		}
@@ -1658,7 +1661,7 @@ function priorityGridApplications() {
     c = 0;
     for (i = 0; i < applicationsTag.length; i++) {
         // get the application
-        app = applicationsTag[i];
+        app = applicationsTag[i]; // 이거를 못 읽음 왜...? ㅠㅠ
         // calculate new dimensions
         var newdims = fitWithin(app, c * tileW + areaX, r * tileH + areaY, tileW, tileH, padding);
         // update the data structure
