@@ -260,7 +260,8 @@ appLoader.prototype.loadImageFromDataBuffer = function(buffer, width, height, mi
 		animation: false,
 		metadata: metadata,
 		date: new Date(),
-		tag: tag
+		tag: tag,
+		index: 0
 	};
 	this.scaleAppToFitDisplay(appInstance);
 	callback(appInstance);
