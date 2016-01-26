@@ -22,36 +22,14 @@ function DynamicSpaceManager() {
 }
 
 // hyunhye : largest empty-space 초기화
-DynamicSpaceManager.prototype.initializeEmptySpace = function(){
-
-	// load config file - looks for user defined file, then file that matches hostname, then uses default
-	var config = loadConfiguration.loadConfiguration();
-	
-	// config = config;
-	var nRows  = config.layout.rows;
-	var nCols  = config.layout.columns;
+DynamicSpaceManager.prototype.initializeEmptySpace = function(x,width,y,height){
 
 	// largestEmptySpaceList에 넣기
-	var bound = new Bounds(0,(config.resolution.width*nCols),0,(config.resolution.height*nRows));
+	var bound = new Bounds(x,width,y,height);
 	this.largestEmptySpaceList.push(bound);
 	
 }
 
-// hyunhye : largest empty-space 초기화
-DynamicSpaceManager.prototype.initializeEmptySpaceForPriority = function(){
-
-	// load config file - looks for user defined file, then file that matches hostname, then uses default
-	var config = loadConfiguration.loadConfiguration();
-	
-	// config = config;
-	var nRows  = config.layout.rows;
-	var nCols  = config.layout.columns;
-
-	// largestEmptySpaceList에 넣기
-	var bound = new Bounds(0,(config.resolution.width*nCols),0,((config.resolution.height-500)*nRows));
-	this.largestEmptySpaceList.push(bound);
-	
-}
 
 DynamicSpaceManager.prototype.updateBound = function (bound) {
     this.bound = bound;
