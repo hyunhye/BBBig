@@ -429,6 +429,8 @@ function initializeWSClient(wsio) {
 		wsio.on('priorityStaticApplications', wsPriorityStaticApplications);
 		wsio.on('priorityRatioApplications', wsPriorityRatioApplications);
 		wsio.on('dynamicApplications', wsDynamicApplications);
+		wsio.on('googleImageLayoutApplications', wsGoogleImageLayoutApplications);
+		wsio.on('binPackingApplications', wsBinPackingApplications);
 		wsio.on('arrangementModeCheck', wsArrangementModeCheck); // seojin ���ĸ��?üũ
 
 	}
@@ -1256,137 +1258,143 @@ function printMatrix(dist) {
 
 // seojin
 var arrangementMode = 'empty mode';
-function tileApplications2() {
+
+//  ******************** Dynamic Mode Part ******************** //
+function DynamicForPrioritySpace(spaceManager,app){
+	// Dynamic Mode (or Tile Mode..??)
+	var appData = {
+		id: app.id,
+		left: app.left,
+		right: app.left + app.width,
+		bottom: app.top + app.height,
+		up: app.top,
+		width: app.width,
+		height: app.height
+	}
+	
+	var item = spaceManager.createFullRectangle(appData);
+	
+	app.left = item.left;
+	app.top = item.up;
+	app.height = item.height;
+	app.width = item.width;
+
+	var updateItem = {
+		elemId: app.id,
+		elemLeft: app.left, elemTop: app.top,
+		elemWidth: app.width, elemHeight: app.height,
+		force: true, date: new Date()
+	};
+	 // send the order
+	broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');	
+
+}
+
+// ******************** Tile Mode Part ********************//
+function TileForPrioritySpace(app, newdims){
+
+	// update the data structure
+	app.left = newdims[0];
+	app.top = newdims[1];
+	app.width = newdims[2];
+	app.height = newdims[3];
+	
+	// build the object to be sent
+	var updateItem = {
+		elemId: app.id,
+		elemLeft: app.left, elemTop: app.top,
+		elemWidth: app.width, elemHeight: app.height,
+		force: true, date: new Date()
+	};
+	
+	// send the order
+	broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
+
+}
+
+// count the number of each tag
+function countEachTags(applications){
+	var i, j, app;
+	var count =  new Array();
+	var countIndex = 0;
+	count[countIndex] = 1; // first tag
+	for (i = 0; i < applications.length; i++) { // count the number of tags
+		app = applications[i];
+		
+		for(j = 0 ; j < i ; j++){
+			if(app.tag == applications[j].tag){
+				count[applications[j].index] += 1;
+				app.index = applications[j].index;
+				break;
+			}
+		}
+		if(j==i){
+			countIndex += 1;
+			count[countIndex] = 1;
+			app.index = countIndex;
+		}
+	}
+	return count;
+}
+
+// count tags equal to speechResult
+function countTag(applications){
+	var i;
+	var count = 0;
+	for (i = 0; i < applications.length; i++) {
+		if(applications[i].tag == speechResult.toLowerCase()){
+			count++;
+		}
+	}
+	return count;
+}
+
+// what is priority tag of index and count when web speech result is not existed
+function defualtPriorityTag(count){
+	var i;
+	var priorityTag = 0;
+	var max = 0;
+	for (i = 0; i < count.length; i++) {
+		//console.log("count"+count[i]);
+		if(max < count[i]){
+			max = count[i];
+			priorityTag = i;
+		}
+	}
+	return [priorityTag, max];
+}
+
+// applications not priority tag
+function applicationsNotPriority(){
+	var i;
 	var app;
-	var i, j, c, r;
-	var numCols, numRows;
-
-	var displayAr  = config.totalWidth / config.totalHeight;
-	var arDiff     = displayAr / averageWindowAspectRatio();
-	var numWindows = applications.length;
-
-	// 3 scenarios... windows are on average the same aspect ratio as the display
-	if (arDiff >= 0.7 && arDiff <= 1.3) {
-		numCols = Math.ceil(Math.sqrt( numWindows ));
-		numRows = Math.ceil(numWindows / numCols);
-	}
-    else if (arDiff < 0.7) {
-		// windows are much wider than display
-		c = Math.round(1 / (arDiff/2.0));
-		if (numWindows <= c) {
-			numRows = numWindows;
-			numCols = 1;
-		}
-		else {
-			numCols = Math.max(2, Math.round(numWindows / c));
-			numRows = Math.round(Math.ceil(numWindows / numCols));
+	var priorityTag = [0,0];
+	var count = countEachTags(applications);
+	priorityTag = defualtPriorityTag(count);
+	
+	// new arraylist : collect applications not priority tag
+	var apps = new Array();
+	
+	for (i = 0; i < applications.length; i++) {
+		app = applications[i];
+		if(speechResult == null || speechResult == ""){
+			if(app.index != priorityTag[0]){
+				apps.push(app);
+			}
+		}else{
+			if(app.tag != speechResult.toLowerCase()){
+				apps.push(app);
+			}
 		}
 	}
-	else {
-		// windows are much taller than display
-		c = Math.round(arDiff*2);
-		if (numWindows <= c) {
-			numCols = numWindows;
-			numRows = 1;
-		}
-		else {
-			numRows = Math.max(2, Math.round(numWindows / c));
-			numCols = Math.round(Math.ceil(numWindows / numRows));
-		}
-	}
-
-    // determine the bounds of the tiling area
-	var titleBar = config.ui.titleBarHeight;
-	if (config.ui.auto_hide_ui===true) titleBar = 0;
-	var areaX = 0;
-	var areaY = Math.round(1.5 * titleBar); // keep 0.5 height as margin
-	if (config.ui.auto_hide_ui===true) areaY = - config.ui.titleBarHeight;
-
-	var areaW = config.totalWidth;
-	var areaH = config.totalHeight-(1.0*titleBar);
-
-	var tileW = Math.floor(areaW / numCols);
-	var tileH = Math.floor(areaH / numRows);
-
-	var padding = 4;
-	// if only one application, no padding, i.e maximize
-	if (applications.length===1) padding = 0;
-
-    var centroidsApps  = [];
-    var centroidsTiles = [];
-    r = numRows-1;
-    c = 0;
-    // Caculate apps and tiles centers
-    for (i=0; i<applications.length; i++) {
-		app =  applications[i];
-		centroidsApps[i] = {x: app.left+app.width/2.0, y: app.top+app.height/2.0};
-		console.log('centroid appl:', i, app.title, centroidsApps[i]);
-
-		centroidsTiles[i] = {x: (c*tileW+areaX)+tileW/2.0, y: (r*tileH+areaY)+tileH/2.0};
-		console.log('centroid tile:', i, centroidsTiles[i]);
-
-        c += 1;
-        if (c === numCols) {
-            c  = 0;
-            r -= 1;
-        }
-	}
-	// Calculate distances
-	var distances = Create2DArray(applications.length);
-	for (i=0; i<applications.length; i++) {
-		for (j=0; j<applications.length; j++) {
-			var d = distance2D(centroidsApps[i], centroidsTiles[j]);
-			distances[i][j] = d;
-		}
-	}
-	// dump the matrix
-	printMatrix(distances);
-	for (i=0; i<applications.length; i++) {
-		var idx = findMinimum(distances[i]);
-		console.log('Min:', i, idx, distances[i][idx].toFixed(2));
-	}
-
-    r = numRows-1;
-    c = 0;
-	for (i=0; i<applications.length; i++) {
-		// pick an app
-		var appid = findMinimum(distances[i]);
-		// get the application
-		app =  applications[ appid ];
-
-		console.log('Round:', i, appid, distances[i][appid].toFixed(2), app.title);
-		for (j=0; j<applications.length; j++) distances[j][appid] = Number.MAX_VALUE;
-
-		// calculate new dimensions
-		console.log('tiling:', i, c, r, app.title);
-        var newdims = fitWithin(app, c*tileW+areaX, r*tileH+areaY, tileW, tileH, padding);
-
-		printMatrix(distances);
-
-        // update the data structure
-        app.left   = newdims[0];
-        app.top    = newdims[1] - titleBar;
-		app.width  = newdims[2];
-		app.height = newdims[3];
-		// build the object to be sent
-		var updateItem = {elemId: app.id,
-							elemLeft: app.left, elemTop: app.top,
-							elemWidth: app.width, elemHeight: app.height,
-							force: true, date: new Date()};
-		// send the order
-		broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
-
-        c += 1;
-        if (c === numCols) {
-            c  = 0;
-            r -= 1;
-        }
-    }
+	
+	return apps;
 }
 
 function defaultApplications() {
     arrangementMode = 'default';
 }
+
 function tileApplications() {
     // seojin
     arrangementMode = 'tile';
@@ -1505,44 +1513,14 @@ function dynamicApplications() {
     // �����찡 �ϳ��� ���ٸ�..
     if (applications.length === 0) return;
 
-    // first app is biggest and center
-    // var updateItem = tileApplicationsForDynamic(applications[0]);
-
-    console.log("-----------------------------------------------------")
-	spaceManager = new DynamicSpaceManager();
+	// ***** Part3 : the largest number of tag is largest size and dynamic mode
+	var spaceManager = new DynamicSpaceManager();
 	spaceManager.initializeEmptySpace(0,config.totalWidth,0,config.totalHeight);
-	
-    for (i = 0; i < applications.length; i++) {
-        app = applications[i];
-
-        var appData = {
-            id: app.id,
-            left: app.left,
-            right: app.left + app.width,
-            bottom: app.top + app.height,
-            up: app.top,
-            width: app.width,
-            height: app.height
-        }
-		// determine the bounds of the tiling area
-		// var titleBar = config.ui.titleBarHeight;
-        var item = spaceManager.createFullRectangle(appData);
-		
-        app.left = item.left;
-        app.top = item.up;// + 2*titleBar;
-        app.height = item.height;// - 2*padding;
-        app.width = item.width;// - 2*padding;
-
-        var updateItem = {
-            elemId: app.id,
-            elemLeft: app.left, elemTop: app.top,
-            elemWidth: app.width, elemHeight: app.height,
-            force: true, date: new Date()
-        };
-		
-		 // send the order
-		broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
+	for (i = 0; i < applications.length; i++) { // compare speechResult to each application's tag
+		app = applications[i];
+		DynamicForPrioritySpace(spaceManager,app);
 	}
+	
 }
 
 function priorityApplications() {
@@ -1570,50 +1548,110 @@ function priorityApplications() {
 
 }
 
-// seojin : priority grid ★
-// - 태그별로 섹션이 바둑판 모양으로 나뉘어 짐 (구분선)
-// - 음성인식된 태그를 가진 데이터들이 가장 크게 배경에 겹쳐서 띄워짐 -> 이거 부터 하기
-
-function priorityApplicationsTagCheck(){
-	
-}
-
+// seojin : priority grid 
+// - 태그별로 섹션이 바둑판 모양으로 나뉘어 짐
+// - 음성인식된 태그를 가진 데이터들이 가장 크게 배경에 겹쳐서 띄워짐
 function priorityGridApplications() {
-	
-	arrangementMode = 'priority_grid';
-	var applicationsTag = [];
-		
-    var app;
-    var i, c, r;
-    var numCols, numRows;
+   
+   arrangementMode = 'priority_grid';
+   /** displayTag[tagcount][datacount[]] **/
+   /** 태그값을 기반으로 2차원 배열 생성 **/
+   var results = applications.slice(0);
+   var applength = applications.length;
 
-    var displayAr = config.totalWidth / config.totalHeight;
-    var arDiff = displayAr / averageWindowAspectRatio();
-    var numWindows;
-	
-	console.log("displayAr:"+displayAr);
-	console.log("averageWindowAspectRatio:"+averageWindowAspectRatio());
-	console.log("arDiff:"+arDiff);
-	
-	
-	for (i = 0; i < applications.length; i++) {
-		if(applications[i].tag == speechResult) {
-			applicationsTag[i] = applications[i];
-			numWindows = applicationsTag.length;
-			// 전체화면 다 써서 가장 맨위로 올라오도록 Tile 모드
-			console.log("priority tag: "+applications[i].tag);
-		}
-	}
+   console.log("----double array----");
+   
+   var displayTag = new Array();
+   var tagcount = 0;
+   var datacount = new Array();
+   datacount[0] = 0;
+   
+    for(var i=0; i<applength; i++) {
+      var value = results[i].tag;
+      // 첫번째 값이면..
+      if(i==0) {
+         displayTag[tagcount] = new Array();
+         displayTag[tagcount][0] = results[i];
+         datacount[0] = datacount[0]+1;
+       }
+      // 첫번째 값이 아닌데
+      else {
+       var displayTagLength = displayTag.length;
+       var arrayCheck = 0;
+         for(var test=0; test<displayTagLength; test++)
+         {
+            var check = displayTag[test][0].tag;
+            // 배열이 만들어져있는 태그 라면...
+            if(value==check) {
+            var j = datacount[test];
+               displayTag[test][j] = results[i];
+               datacount[test] = datacount[test] + 1;
+            arrayCheck=0;
+            break;
+         }
+         // 배열이 만들어져 있지 않은 태그 라면... 확인 값을 바꿔줌
+         else {
+            arrayCheck = 1;            
+         }     
+         }
+       
+       // 배열이 만들어져 있지 않은 태그 라면... 배열을 만듬
+       if (arrayCheck==1)
+       {
+          tagcount = tagcount + 1;
+          displayTag[tagcount] = new Array();
+             displayTag[tagcount][0] = results[i];
+          datacount[tagcount] = 0;
+             datacount[tagcount] = datacount[tagcount]+1;
+      } else {
+      }
+      }
+   }
 
-    // 3 scenarios... windows are on average the same aspect ratio as the display
+   var displayTagLength = displayTag.length;
+   for ( var m = 0; m < displayTagLength; m++) {
+      for ( var n = 0; n < displayTag[m].length; n++) {
+         console.log(m+" "+" "+n+" : "+displayTag[m][n].tag);
+      }
+   }
+   console.log("--------------------");
+   //console.log("config.totalWidth // "+config.totalWidth);
+   //console.log("config.totalHeight // "+config.totalHeight);
+   
+   
+   //////////////////////////////////////////////////////////////////
+   // (행기준 : Tile모드안에 + 열기준 : Tile모드)
+   // displayTagLength 개의 공간으로 Tile 모드
+   // 그 안에 displayTag[m].length 개의 공간으로 Tile 모드
+   console.log("---priority grid----");
+   /************** [1] **************/
+   /***** numCols, numRows 정하기 *****/
+   // 나뉘어질 공간들의 정보들이 들어가 있는 배열 생성
+   var app;
+   var i, c, r;
+   var numCols, numRows; // cols : 행, rows : 열
+   var displayAr = config.totalWidth / config.totalHeight;
+   var numWindows = displayTagLength;
+   // averageWindowAspectRatio 메소드 수정
+   var arDiff = displayAr;
+   // 전체 dispaly : 세로 1920 가로 5400
+   // 하나의 태그가 차지하는 공간 : 세로 960 가로 1350
+   if (numWindows === 0) {
+   } else {
+      var totAr = 0.0;
+      var i;
+      for (i=0; i<numWindows; i++) {
+          totAr += (1350 / 960);
+         }
+         arDiff = displayAr / (totAr / numWindows);
+      }
+    // 디스플레이 비율 = 가로 세로 비율
     if (arDiff >= 0.7 && arDiff <= 1.3) {
-		console.log("1");
         numCols = Math.ceil(Math.sqrt(numWindows));
         numRows = Math.ceil(numWindows / numCols);
     }
+   // 디스플레이 비율의 넓이가 더 큼
     else if (arDiff < 0.7) {
-        // windows are much wider than display
-		console.log("2");
         c = Math.round(1 / (arDiff / 2.0));
         if (numWindows <= c) {
             numRows = numWindows;
@@ -1624,65 +1662,170 @@ function priorityGridApplications() {
             numRows = Math.round(Math.ceil(numWindows / numCols));
         }
     }
+   // 디스플레이 비율의 길이가 더 큼
     else {
-        // windows are much taller than display
-		console.log("3");
-		console.log("arDiff:"+arDiff);
         c = Math.round(arDiff * 2);
         if (numWindows <= c) {
-			console.log("4");
             numCols = numWindows;
             numRows = 1;
         }
         else {
-			console.log("5");
             numRows = Math.max(2, Math.round(numWindows / c));
             numCols = Math.round(Math.ceil(numWindows / numRows));
         }
     }
+   console.log("priorityGrid // numCols : "+numCols+" & numRows : "+ numRows);
 
-    // determine the bounds of the tiling area
+   /********** [2] **********/
+   /***** 타일될 공간 결정하기 *****/
     var titleBar = config.ui.titleBarHeight;
     if (config.ui.auto_hide_ui === true) titleBar = 0;
     var areaX = 0;
     var areaY = Math.round(1.5 * titleBar); // keep 0.5 height as margin
     if (config.ui.auto_hide_ui === true) areaY = -config.ui.titleBarHeight;
 
-    var areaW = config.totalWidth;
+   // 전체 display 화면의 크기
+    var areaW = config.totalWidth; 
     var areaH = config.totalHeight - (1.0 * titleBar);
 
+   // 타일되는 공간의 크기
     var tileW = Math.floor(areaW / numCols);
     var tileH = Math.floor(areaH / numRows);
-
-    // go through them in sorted order
-    // applications.sort()
-
-    var padding = 4;
+   console.log("-------------------------------------------------------------------------");
+   console.log("areaW : "+areaW+" / areaH : "+areaH+" / tileW : "+tileW+" / tileH : "+tileH);
+    console.log("-------------------------------------------------------------------------");
+   var padding = 4;
     // if only one application, no padding, i.e maximize
-    if (applicationsTag.length === 1) padding = 0;
+    if (displayTagLength === 1) padding = 0;
     r = numRows - 1;
     c = 0;
-    for (i = 0; i < applicationsTag.length; i++) {
-        // get the application
-        app = applicationsTag[i]; // 이거를 못 읽음 왜...? ㅠㅠ
-        // calculate new dimensions
-        var newdims = fitWithin(app, c * tileW + areaX, r * tileH + areaY, tileW, tileH, padding);
+    for (i = 0; i < displayTagLength; i++) {
+      console.log(i+" 번째 Grid 공간에");
+        app = displayTag[i][0];
+      // calculate new dimensions
+        var newdims = [c * tileW + areaX, r * tileH + areaY];
         // update the data structure
         app.left = newdims[0];
         app.top = newdims[1] - titleBar;
-        app.width = newdims[2];
-        app.height = newdims[3];
-		
-		console.log(app + " " + app.left + " " +  app.top + " " + app.width + " " + app.height);
-        // build the object to be sent
-        var updateItem = {
-            elemId: app.id,
-            elemLeft: app.left, elemTop: app.top,
-            elemWidth: app.width, elemHeight: app.height,
-            force: true, date: new Date()
-        };
-        // send the order
-        broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
+      //console.log("-------------------------------------------------------------------------");
+      //console.log("app.left : "+app.left+" / app.top : "+app.top+" / app.width : "+app.width+" / app.height : "+app.height);
+      //console.log("-------------------------------------------------------------------------");
+      // 한개의 태그에 관한 부분 임
+
+         /************** [2] - [1] **************/
+         /******* numCols2, numRows2 정하기 *******/
+         var app2;
+         var c2, r2;
+         var numCols2, numRows2;
+         var displayAr2 = tileW / tileH;
+         var numWindows2 = displayTag[i].length;
+         // averageWindowAspectRatio 메소드 수정
+         var arDiff2 = displayAr2;
+         if (numWindows2 === 0) {
+            // console.log(arDiff2+" 는 그대로 displayAr2");
+         } else {
+            var totAr = 0.0;
+            for (var j=0; j <displayTag[i].length; j++) {
+               var app2 =  displayTag[i][j];
+               totAr += (app2.width / app2.height);
+             }
+            arDiff2 = displayAr2 / (totAr / displayTag[i].length);
+         }
+         
+         // 디스플레이 비율 = 가로 세로 비율
+         if (arDiff2 >= 0.7 && arDiff2 <= 1.3) {
+            // console.log("1");
+            numCols2 = Math.ceil(Math.sqrt(numWindows2));
+            numRows2 = Math.ceil(numWindows2 / numCols2);
+         }
+         // 디스플레이 비율의 넓이가 더 큼
+         else if (arDiff2 < 0.7) {
+            // console.log("2");
+            c2 = Math.round(1 / (arDiff2 / 2.0));
+            if (numWindows2 <= c2) {
+               numRows2 = numWindows2;
+               numCols2 = 1;
+            }
+            else {
+               numCols2 = Math.max(2, Math.round(numWindows2 / c2));
+               numRows2 = Math.round(Math.ceil(numWindows2 / numCols2));
+            }
+         }
+         // 디스플레이 비율의 길이가 더 큼
+         else {
+            // console.log("3");
+            // console.log("arDiff2:"+arDiff2);
+            c2 = Math.round(arDiff2 * 2);
+            if (numWindows2 <= c2) {
+               // console.log("4");
+               numCols2 = numWindows2;
+               numRows2 = 1;
+            }
+            else {
+               // console.log("5");
+               numRows2 = Math.max(2, Math.round(numWindows2 / c2));
+               numCols2 = Math.round(Math.ceil(numWindows2 / numRows2));
+            }
+         }
+         console.log("priorityGrid 2 // numCols2 : "+numCols2+" & numRows2 : "+ numRows2);
+      
+         /********** [2] - [2] **********/
+         /******** 타일될 공간 결정하기 ********/
+         // [1], [2]-[1] 까지는 잘 돌아가서 맞는 값 나오는 것 같은데... 여기부터 이상해지는듯함!★
+         var titleBar = config.ui.titleBarHeight;
+         if (config.ui.auto_hide_ui === true) titleBar = 0;
+         var areaX2 = app.left;
+          var areaY2 = app.top; // keep 0.5 height as margin
+          if (config.ui.auto_hide_ui === true) areaY2 = -config.ui.titleBarHeight;
+
+            // 전체 display 화면의 크기
+          var areaW2 = tileW;
+          var areaH2 = tileH - (1.0 * titleBar);
+
+         // 타일되는 공간의 크기
+          var tileW2 = Math.floor(areaW2 / numCols2);
+          var tileH2 = Math.floor(areaH2 / numRows2);
+         console.log("-------------------------------------------------------------------------");
+         console.log("areaW2 : "+areaW2+" / areaH2 : "+areaH2+" / tileW2 : "+tileW2+" / tileH2 : "+tileH2);
+         console.log("-------------------------------------------------------------------------");
+         
+         var padding = 4;
+         // if only one application, no padding, i.e maximize
+         if (displayTag[i].length === 1) padding = 0;
+         r2 = numRows2 - 1;
+         c2 = 0;
+         for ( var n = 0; n < displayTag[i].length; n++) {
+            console.log(i+" "+" "+n+" : "+displayTag[i][n].tag+" 배치하기");
+            var app2 =  displayTag[i][n];
+            
+            // var newdims = fitWithin(app, c * tileW + areaX, r * tileH + areaY, tileW, tileH, padding);
+            var newdims2 = fitWithin(app2,c2 * tileW2 + areaX2,r2 * tileH2 + areaY2, tileW2, tileH2, padding);
+            // update the data structure
+            app2.left = newdims2[0];
+            app2.top = newdims2[1] - titleBar;
+            app2.width = newdims2[2];
+            app2.height = newdims2[3];
+            // app2 = displayTag[i][n];
+            // build the object to be sent
+            var updateItem = {
+               elemId: app2.id,
+               elemLeft: app2.left, elemTop: app2.top,
+               elemWidth: app2.width, elemHeight: app2.height,
+               force: true, date: new Date()
+            };
+            // send the order
+            broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
+            console.log("-------------------------------------------------------------------------");
+            console.log("app2.left : "+app2.left+" / app2.top : "+app2.top+" / app2.width : "+app2.width+" / app2.height : "+app2.height);
+            console.log("-------------------------------------------------------------------------");
+            c2 += 1;
+            if (c2 === numCols2) {
+               c2 = 0;
+               r2 -= 1;
+            }
+         }
+      
+      // console.log(app + " " + app.left + " " +  app.top + " " + app.width + " " + app.height);
 
         c += 1;
         if (c === numCols) {
@@ -1690,140 +1833,28 @@ function priorityGridApplications() {
             r -= 1;
         }
     }
+   console.log("--------------------");
+   /////////////////////////////////////////////////////////////////
+   // speechResult 값 없으면...
+   if(speechResult == null || speechResult == ""){
+      // 아무일도 안 일어남
+      // 나중에 태그의 수로 우선순위줄까..?
+      console.log("no speechResult");
+   } 
+   // speechResult 값 있으면...
+   else { 
+   for (var i = 0; i < applications.length; i++) {
+      if(applications[i].tag == speechResult.toLowerCase()) {
+         console.log("priority tag: "+applications[i].tag);
+         console.log("equal with speechResult"); 
+         // 메소드 써서 전체 화면 위에 Tile 모드로 배치
+         } else{
+            console.log("not equal with speechResult");
+            }
+      }
+   }
 }
 
-//  ******************** Dynamic Mode Part ******************** //
-function DynamicForPrioritySpace(spaceManager,app){
-	// Dynamic Mode (or Tile Mode..??)
-	var appData = {
-		id: app.id,
-		left: app.left,
-		right: app.left + app.width,
-		bottom: app.top + app.height,
-		up: app.top,
-		width: app.width,
-		height: app.height
-	}
-	
-	var item = spaceManager.createFullRectangle(appData);
-	
-	app.left = item.left;
-	app.top = item.up;
-	app.height = item.height;
-	app.width = item.width;
-
-	var updateItem = {
-		elemId: app.id,
-		elemLeft: app.left, elemTop: app.top,
-		elemWidth: app.width, elemHeight: app.height,
-		force: true, date: new Date()
-	};
-	 // send the order
-	broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');	
-
-}
-
-// ******************** Tile Mode Part ********************//
-function TileForPrioritySpace(app, newdims){
-
-	// update the data structure
-	app.left = newdims[0];
-	app.top = newdims[1];
-	app.width = newdims[2];
-	app.height = newdims[3];
-	
-	// build the object to be sent
-	var updateItem = {
-		elemId: app.id,
-		elemLeft: app.left, elemTop: app.top,
-		elemWidth: app.width, elemHeight: app.height,
-		force: true, date: new Date()
-	};
-	
-	// send the order
-	broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
-
-}
-
-// count the number of each tag
-function countEachTags(applications){
-	var i, j, app;
-	var count =  new Array();
-	var countIndex = 0;
-	count[countIndex] = 1; // first tag
-	for (i = 0; i < applications.length; i++) { // count the number of tags
-		app = applications[i];
-		
-		for(j = 0 ; j < i ; j++){
-			if(app.tag == applications[j].tag){
-				count[applications[j].index] += 1;
-				app.index = applications[j].index;
-				break;
-			}
-		}
-		if(j==i){
-			countIndex += 1;
-			count[countIndex] = 1;
-			app.index = countIndex;
-		}
-	}
-	return count;
-}
-
-// count tags equal to speechResult
-function countTag(applications){
-	var i;
-	var count = 0;
-	for (i = 0; i < applications.length; i++) {
-		if(applications[i].tag == speechResult.toLowerCase()){
-			count++;
-		}
-	}
-	
-	return count;
-}
-
-// what is priority tag of index and count when web speech result is not existed
-function defualtPriorityTag(count){
-	var i;
-	var priorityTag = 0;
-	var max = 0;
-	for (i = 0; i < count.length; i++) {
-		//console.log("count"+count[i]);
-		if(max < count[i]){
-			max = count[i];
-			priorityTag = i;
-		}
-	}
-	return [priorityTag, max];
-}
-
-// applications not priority tag
-function applicationsNotPriority(){
-	var i;
-	var app;
-	var priorityTag = [0,0];
-	var count = countEachTags(applications);
-	priorityTag = defualtPriorityTag(count);
-	
-	// new arraylist : collect applications not priority tag
-	var apps = new Array();
-	
-	for (i = 0; i < applications.length; i++) {
-		app = applications[i];
-		if(speechResult == null || speechResult == ""){
-			if(app.index != priorityTag[0]){
-				apps.push(app);
-			}
-		}else{
-			if(app.tag != speechResult.toLowerCase()){
-				apps.push(app);
-			}
-		}
-	}
-	
-	return apps;
-}
 
 // ******************** Thumbnail ******************** //
 // 음성인식된 태그를 가진 데이터들이 가장 크게 띄워짐
@@ -2032,129 +2063,381 @@ function priorityStaticApplications() {
 	}
 }
 
-// ******************** Ratio ********************
-// 일정 비율을 설정해 두어 그 안에 음성인식된 태그를 가진 데이터들이 크게 띄워짐
-// 나머지 데이터들은 좌측, 우측에 타일모드로 띄워짐
-function priorityRatioApplications() {
+// ******************** Google Image Layout ******************** //
+var getHeight = function(apps, width, margin) {
+
+	width -= apps.length * margin;
+
+	var r = 0, app;
+	var h;
 	
-	arrangementMode = 'priority_ratio';
-	
-    var app;
-    var i, j, c, r, n;
-    var numCols, numRows;
-	var averageWindowAspectRatio;
-	
-	var otherApplications = new Array();
-	otherApplications = applicationsNotPriority();
-	
-	var numWindows = Math.ceil(otherApplications.length / 2);
-	var totAr = 0.0;
-	var i;
-	if( numWindows === 0 ) averageWindowAspectRatio = 1.0;
-	else{
-		for (i = 0; i < numWindows; i++) {
-			var app =  otherApplications[i];
-			totAr += (app.width / app.height);
-		}
-		averageWindowAspectRatio = totAr / numWindows;
+	for (var i = 0 ; i < apps.length; i++) {
+			app = apps[i];
+			r += app.width / app.height;
 	}
 	
-	console.log("otherApplications : "+otherApplications.length);
+	h = width / r;
 	
-    var displayAr = config.resolution.width / config.resolution.height;
-    var arDiff = displayAr / averageWindowAspectRatio;
-	var layoutRows  = config.layout.rows;
-	var layoutCols  = config.layout.columns;
+	return h;
 
-	// ********** side is tile mode ********** //
-    if (arDiff >= 0.7 && arDiff <= 1.3) {
-        numCols = Math.ceil(Math.sqrt(numWindows));
-        numRows = Math.ceil(numWindows / numCols);
-    }
-    else if (arDiff < 0.7) {
-        // windows are much wider than display
-        c = Math.round(1 / (arDiff / 2.0));
-        if (numWindows <= c) {
-            numRows = numWindows;
-            numCols = 1;
-        }
-        else {
-            numCols = Math.max(2, Math.round(numWindows / c));
-            numRows = Math.round(Math.ceil(numWindows / numCols));
-        }
-    }
-    else {
-        // windows are much taller than display
-        c = Math.round(arDiff * 2);
-        if (numWindows <= c) {
-            numCols = numWindows;
-            numRows = 1;
-        }
-        else {
-            numRows = Math.max(2, Math.round(numWindows / c));
-            numCols = Math.round(Math.ceil(numWindows / numRows));
-        }
-    }
-     
-	// determine the bounds of the tiling area
-	var areaX1 = 0;
-	var areaX2 = config.resolution.width*(layoutCols-1);
-	var areaY = Math.round(1.5); 
-	
-	if (config.ui.auto_hide_ui === true) areaY = -config.ui.titleBarHeight;
-	var areaW = config.resolution.width;
-	var areaH = config.totalHeight - (1.0);  // thumbnail space is fixed
+};
 
+function setPosition(apps, height){
+   var app;
+   var padding = 4, rows = 2;
+   
+   for (var i = 0 ; i < apps.length; i++) {
+      app = apps[i];
+      app.width = height * app.width / app.height;
+      app.height = height;
+      
+      if(i==0) app.left = apps[i].left;
+      else app.left = apps[i-1].width + apps[i-1].left + padding;
+
+      
+        var updateItem = {
+            elemId: app.id,
+            elemLeft: app.left, elemTop: app.top,
+            elemWidth: app.width, elemHeight: app.height,
+            force: true, date: new Date()
+        };
+        // send the order
+        broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
+   }
+
+} 
+function googleImageLayoutApplications(){
+	arrangementMode = 'google_image_layout';
+   
+    var i;
+    var containerWidth = config.totalWidth,
+      maxHeight = config.totalHeight;
+
+    var h = getHeight(applications, containerWidth, 20);
+
+    setPosition(applications, Math.min(maxHeight, h));
+   
+}
+
+
+// ******************** Bin Packing Problem ******************** //
+function Packer(w,h) {
+	this.init(w,h)
+}
+
+Packer.prototype.init = function(w,h){
+	this.root = { 
+		used : false, 
+		x: 0, 
+		y: 0, 
+		w: w, 
+		h: h,
+		down: {x: 0, y: h, w: w, h: h - h}, 
+		right:{x: w, y: 0, w: w - w, h: h}
+	};
+}
+
+Packer.prototype.fit = function(blocks){
+    var n, block;
+	var node = {used:false, x:0,y:0,w:0,h:0, down: {x:0,y:0,w:0,h:0}, right:{x:0,y:0,w:0,h:0}};
 	
-	var padding = 4;
-	// if only one application, no padding, i.e maximize
-	if (applications.length === 1) padding = 0;
-	r = numRows - 1;
-	c = 0;
-	n = 0;
-	// ********** If priority is first, then that is largest size and dynamic mode ********** //
-	// ***** Part1 : First, the value of priority is the number of applications
-	var priorityTag = [0,0]; // initialize
-	if(speechResult == null || speechResult == ""){
-		// ***** Part1-1 : count the number of each tag
-		var count = countEachTags(applications);
-		priorityTag = defualtPriorityTag(count);
-	} 
+    for (n = 0; n < blocks.length; n++) {
+		block = blocks[n];
+		if (node = this.findNode(this.root, block.width, block.height))
+			block.fit = this.splitNode(node, block.width, block.height);
+    }
+}
+
+Packer.prototype.findNode = function(root, w, h){
+    if (root.used)
+		return this.findNode(root.right, w, h) || this.findNode(root.down, w, h);
+    else if ((w <= root.w) && (h <= root.h))
+		return root;
+    else
+		return null;
 	
-	var tileW = Math.floor(areaW / numCols);
-	var tileH = Math.floor(areaH / numRows);
+}
+
+Packer.prototype.splitNode = function(node, w, h){
+    node.used = true;
+    node.down  = { x: node.x,     y: node.y + h, w: node.w,     h: node.h - h };
+    node.right = { x: node.x + w, y: node.y,     w: node.w - w, h: h          };
+    return node;
+}
+
+function binPackingApplications() {
+
+	arrangementMode = 'bin_packing';
 	
-	// ***** Part3 : the largest number of tag is largest size and dynamic mode
-	var spaceManager = new DynamicSpaceManager();
-	spaceManager.initializeEmptySpace(config.resolution.width, config.resolution.width*(layoutCols-1), 0, config.totalHeight);
-	for (i = 0; i < applications.length; i++) { // compare speechResult to each application's tag
-		app = applications[i];
-		if(app.index == priorityTag[0] || app.tag == speechResult.toLowerCase()){ // ***** Part3-1 : tag that is same speechResult..
-			// Dynamic Mode (or Tile Mode..??)
-			DynamicForPrioritySpace(spaceManager,app);
+	var binWidth   = config.totalWidth;
+	var binHeight  = config.totalHeight;
+
+	var maxHeight  = binHeight;
+	var maxWidth   = binWidth;
+	  
+	var packer = new Packer(maxWidth,maxHeight); 
+	var blocks = applications;
+
+	packer.fit(blocks);
+
+	for(var n = 0 ; n < blocks.length ; n++) {
+		var block = blocks[n];
+		if (block.fit) {
+			var borderWidth = 2;
+			var h = block.height;
+			var w = block.width;
+	  
+			block.left = block.fit.x;
+			block.top = block.fit.y;
+			block.height = h;
+			block.width = w;
+
+			var updateItem = {
+				elemId: block.id,
+				elemLeft: block.left, elemTop: block.top,
+				elemWidth: block.width, elemHeight: block.height,
+				force: true, date: new Date()
+			};
 			
-		}else{  // ***** Part3-2 : others is shown in thumbnail
-			var newdims;
-			if(n == Math.ceil(otherApplications.length / 2)){ 
-				c = 0;
-				r = numRows - 1;
-			}
-			if(n < Math.ceil(otherApplications.length / 2))
-				newdims = fitWithin(app, c * tileW + areaX1, r * tileH + areaY, tileW, tileH, padding);
-			else 
-				newdims = fitWithin(app, c * tileW + areaX2, r * tileH + areaY, tileW, tileH, padding);	
-
-			TileForPrioritySpace(app, newdims);
-
-			n += 1;
-			c += 1;
-			if (c === numCols) {
-				c = 0;
-				r -= 1;
-			}	
+			// send the order
+			broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');	
 		}
 	}
 }
+
+// ******************** Improved Dynamic Mode ******************** //
+function priorityRatioApplications(){
+	arrangementMode = 'priority_ratio';
+	var w = 0, h = 0;
+	var e = 0;
+	var apps = new Array();
+	var app;
+	var newdims;
+	var app_width,app_height;
+
+	
+	for(var i = 0 ; i < applications.length ; i++){
+		app = applications[i];
+		
+		var ratio = app.width / app.height;
+		app_width = 1;
+		app_height = app_width / ratio;
+			
+		if(app_height > 1){
+			app_height = 1;
+			app_width = app_height * ratio;
+		}	
+					
+		app.width = app_width;
+		app.height = app_height;
+	}
+	
+	// 1. add all applications width and height
+	for(var i = 0 ; i < applications.length ; i++){
+		w += applications[i].width;
+	}
+	// 2. estimate alpha
+	e = config.totalWidth / w;
+	
+	apps.push(applications[0]);	
+	for(var i = 0 ; i < applications.length ; i++){
+		app = applications[i];
+		
+		// 1. add all applications width and height
+		for(var j = 0 ; j < i ; j++){
+			if(applications[j].top == 0)
+				w += applications[j].width;
+		}
+		// 2. estimate alpha
+		e = config.totalWidth / w;
+		
+		var ratio = app.width / app.height;
+			
+		// set size
+		app_width = e * app.width;
+		app_height = app_width / ratio;
+			
+		if(app_height > config.totalHeight){
+			app_height = config.totalHeight;
+			app_width = app_height * ratio;
+					
+			e = (config.totalWidth-app_width) / (w-app.width);
+		}
+
+	if(i==0){		
+			// set position and size
+			app.left = 0;
+			app.top = 0;	
+			app.width = app_width;
+			app.height = app_height;
+			app.down = {x: app.left, y: app.top+app.height, w: app.width, h: config.totalHeight-app.top-app.height};
+			var updateItem = {
+					elemId: app.id,
+					elemLeft: app.left, elemTop: app.top,
+					elemWidth: app.width, elemHeight: app.height,
+					force: true, date: new Date()
+			};
+			
+			// send the order
+			broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
+	}
+	if((i+1) == applications.length) break;
+	check(applications[i+1],i+1);
+	
+	}
+}
+
+function check(app,index){
+        var app_width,app_height;
+        var j = 0;
+        var c = 0;
+        var emptySpace = config.totalWidth * config.totalHeight;
+        var space = 0;
+        var smallestEmptySpace = new Array();
+        var ratio = app.width / app.height;
+
+        for(var i = 0 ; i < index ; i++){
+                emptySpace -= applications[i].width * applications[i].height;
+        }
+        
+        for(var i = 0 ; i < index ; i++){
+                
+                // set size
+                app_width = applications[i].down.w;
+                app_height = app_width / ratio;
+                
+                if(app_height > applications[i].down.h){
+                        app_height = applications[i].down.h;
+                        app_width = app_height * ratio;
+                }
+                
+                space = emptySpace - app_width * app_height;
+                smallestEmptySpace.push(space);
+                
+        }
+        
+        space = emptySpace - app.width * app.height;
+        for(var i = 0 ; i < index ; i++){
+                if(space > smallestEmptySpace[i]){
+                
+                        // set size
+                        app_width = applications[i].down.w;
+                        app_height = app_width / ratio;
+                        
+                        if(app_height > applications[i].down.h){
+                                app_height = applications[i].down.h;
+                                app_width = app_height * ratio;
+                        }
+                        
+                        app.width = app_width;
+                        app.height = app_height;
+                        app.left = applications[i].down.x;
+                        app.top = applications[i].down.y;
+                        app.down = {x: app.left, y: app.top + app.height, w: app.width, h: applications[i].down.h-app.top-app.height};			
+
+        j = i;
+        c = 1;
+        }
+        }
+        
+        if(c == 1){
+                if(app_height == applications[j].down.h){
+                        applications[j].down.w = applications[j].down.w - app.width;	
+                        applications[j].down.x = applications[j].down.x + app.width;
+                }else{		
+                        applications[j].down.h = applications[j].down.h - app.height;
+                        applications[j].down.y = applications[j].down.y + app.height;
+                }
+                var updateItem = {
+                        elemId: app.id,
+                        elemLeft: app.left, elemTop: app.top,
+                        elemWidth: app.width, elemHeight: app.height,
+                        force: true, date: new Date()
+                };
+                        
+                // send the order
+                broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');				
+        }else{
+                reArrange(index+1);
+        }
+        
+        
+}
+
+function reArrange(index){
+        var app_width,app_height;
+        var app;
+        var w=0;
+        var e=0;
+        var c=0;
+  
+        for(var i = 0 ; i < index ; i++){
+                app = applications[i];
+                var ratio = app.width / app.height;
+                app_width = 1;
+                app_height = app_width / ratio;
+                
+                if(app_height > 1){
+                        app_height = 1;
+                        app_width = app_height * ratio;
+                }	
+                        
+                app.width = app_width;
+                app.height = app_height;
+        }
+        
+   for(var i = 0 ; i < index ; i++){
+      if(applications[i].top == 0)
+         w += applications[i].width;
+   }
+   // 2. estimate alpha
+   e = config.totalWidth / w;
+    
+   for(var i = 0 ; i < index; i++){
+      app = applications[i];
+      
+      app_width = app.width;
+      app_height = app.height;
+      
+      var ratio = app.width / app.height;
+      
+      if(app.top == 0){
+         app_width = e * app.width;
+         app_height = app_width / ratio;
+      
+      
+         if(app_height >  config.totalHeight){
+            app_height =  config.totalHeight;
+            app_width = app_height * ratio;
+         
+            e = (config.totalWidth-app_width) / (w-app.width);
+         }   
+         
+         
+         if(c==0) app.left = 0;
+         else app.left = applications[c-1].left + applications[c-1].width;
+         
+         c+=1;
+      
+      }
+      
+      // set position
+      app.top = app.top;   
+      app.width = app_width;
+      app.height = app_height;
+      
+      var updateItem = {
+         elemId: app.id,
+         elemLeft: app.left, elemTop: app.top,
+         elemWidth: app.width, elemHeight:app.height,
+         force: true, date: new Date()
+      };
+      
+      // send the order
+      broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');                  
+   }
+}
+
 
 
 
@@ -2170,7 +2453,6 @@ function clearDisplay() {
 
 
 // handlers for messages from UI
-
 function wsClearDisplay(wsio, data) {
 	clearDisplay();
 }
@@ -2206,6 +2488,12 @@ function wsPriorityRatioApplications(wsio, data) {
 
 function wsDynamicApplications(wsio, data) {
     dynamicApplications();
+}
+function wsGoogleImageLayoutApplications(wsio, data) {
+    googleImageLayoutApplications();
+}
+function wsBinPackingApplications(wsio, data) {
+    binPackingApplications();
 }
 
 function wsArrangementModeCheck(wsio, data) {
@@ -4171,6 +4459,10 @@ function deleteApplication( elem ) {
 		priorityStaticApplications();
 	} else if(arrangementMode == "priority_ratio"){
 		priorityRatioApplications();
+	} else if(arrangementMode == "google_image_layout"){
+		googleImageLayoutApplications();
+	} else if(arrangementMode == "bin_packing"){
+		binPackingApplications();
 	}
 }
 
@@ -4322,5 +4614,7 @@ exports.priorityGridApplications = priorityGridApplications;
 exports.priorityThumbnailApplications = priorityThumbnailApplications;
 exports.priorityStaticApplications = priorityStaticApplications;
 exports.priorityRatioApplications = priorityRatioApplications;
+exports.googleImageLayoutApplications = googleImageLayoutApplications;
+exports.binPackingApplications = binPackingApplications;
 exports.arrangementModeCheck = arrangementModeCheck; // ���� ���?üũ 
 exports.loadConfiguration = loadConfiguration;

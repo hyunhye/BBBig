@@ -49,6 +49,7 @@
     "fluent-ffmpeg": "latest",
     "formidable": "latest",
     "gm": "latest",
+    "image-layout": "^0.4.0",
     "imageinfo": "latest",
     "jshint": "latest",
     "json5": "latest",

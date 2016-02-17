@@ -45,6 +45,7 @@ function interaction(config) {
  */
 
 interaction.prototype.selectMoveItem = function(moveItem, pointerX, pointerY) {
+
 	if(this.interactionMode != MODE.WINDOW_MANAGEMENT) return;
 	this.selectedMoveItem = moveItem;
 	this.selectedMoveControl = null;
@@ -186,6 +187,7 @@ interaction.prototype.dropControl = function() {
  */
 
 interaction.prototype.scrollSelectedItem = function(scale) {
+
 	if(this.interactionMode != MODE.WINDOW_MANAGEMENT) return null;
 	if(this.selectedScrollItem === null) return null;
 	

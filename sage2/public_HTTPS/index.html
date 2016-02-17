@@ -848,6 +848,20 @@ new gweb.analytics.AutoTrack({
                 wsio.emit('dynamicApplications');
                 hideDialog('arrangementDialog');
             }
+            else if (element.id === "googleImageLayout") {
+				var mode = document.getElementById('mode');
+				mode.innerHTML = "Google Image Layout Mode";
+				
+                wsio.emit('googleImageLayoutApplications');
+                hideDialog('arrangementDialog');
+            }
+            else if (element.id === "binPacking") {
+				var mode = document.getElementById('mode');
+				mode.innerHTML = "Bin Packing Mode";
+				
+                wsio.emit('binPackingApplications');
+                hideDialog('arrangementDialog');
+            }			
             else if (element.id === "prioritycontent") {
 				var mode = document.getElementById('mode');
 				mode.innerHTML = "Priority Mode";
@@ -1434,7 +1448,18 @@ new gweb.analytics.AutoTrack({
 					<img alt="prioritycontent" id="prioritycontent" src="images/ui/[graycircle]-tilecontent.svg" width="64" height="64" />
 					<p>Priority Content</p>
 				</div>
-        </div>
+			</div>
+			<div id="arrangementItems4">
+				<div id="googleImageLayoutContainer">
+					<img alt="googleImageLayout" id="googleImageLayout" src="images/ui/[graycircle]-tilecontent.svg" width="64" height="64" />
+					<p>Google Image Layout</p>
+				</div>
+				<div id="binPackingContainer">
+					<img alt="binPacking" id="binPacking" src="images/ui/[graycircle]-tilecontent.svg" width="64" height="64" />
+					<p>Bin Packing</p>
+				</div>
+			</div>
+			
 		
         <div id="arrangementButtons">
             <span id="arrangementCloseBtn" class="button">Close</span>

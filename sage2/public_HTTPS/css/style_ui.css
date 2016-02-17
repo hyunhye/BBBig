@@ -272,6 +272,10 @@ span {
 }
 
 #arrangementItems2 {
+	margin: 10px 10px 10px 10px;
+	overflow: auto;
+}
+#arrangementItems4 {
 	margin: 10px 10px 66px 10px;
 	overflow: auto;
 }
@@ -304,13 +308,21 @@ span {
 	float: left;
 	text-align: center;
 }
-
 #prioritycontentContainer {
 	width: 100px;
 	float: left;
 	text-align: center;
 }
-
+#googleImageLayoutContainer {
+	width: 100px;
+	float: left;
+	text-align: center;
+}
+#binPackingContainer {
+	width: 100px;
+	float: left;
+	text-align: center;
+}
 #Priority_gridContainer {
 	width: 100px;
 	float: left;

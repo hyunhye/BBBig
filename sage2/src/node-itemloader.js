@@ -31,6 +31,8 @@ var priorityGridApplications = require('../server');
 var priorityThumbnailApplications = require('../server');
 var priorityStaticApplications = require('../server');
 var priorityRatioApplications = require('../server');
+var googleImageLayoutApplications = require('../server');
+var binPackingApplications = require('../server');
 
 
 var imageMagick;
@@ -261,7 +263,9 @@ appLoader.prototype.loadImageFromDataBuffer = function(buffer, width, height, mi
 		metadata: metadata,
 		date: new Date(),
 		tag: tag,
-		index: 0
+		index: 0,
+		down: {x: 0, y: 0, w: width, h: height},
+		up: {id:0, x: 0, y: 0, w: width, h: height}
 	};
 	this.scaleAppToFitDisplay(appInstance);
 	callback(appInstance);
@@ -740,6 +744,12 @@ appLoader.prototype.loadApplication = function(appData, callback) {
 			    }
 				else if (arrangementMode == 'priority_ratio') {
 			        priorityRatioApplications.priorityRatioApplications();
+			    }
+				else if (arrangementMode == 'google_image_layout') {
+			        googleImageLayoutApplications.googleImageLayoutApplications();
+			    }
+				else if (arrangementMode == 'bin_packing') {
+			        binPackingApplications.binPackingApplications();
 			    }
 			});
 		}
