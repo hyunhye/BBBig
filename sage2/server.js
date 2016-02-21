@@ -590,7 +590,7 @@ function wsPointerRelease(wsio, data) {
 	var pointerY = sagePointers[uniqueID].top;
 	
 	/*
-	if (data.button === 'left')
+	if (data.but ton === 'left')
 		pointerRelease(uniqueID, pointerX, pointerY);
 	else
 		pointerReleaseRight(uniqueID, pointerX, pointerY);
@@ -598,6 +598,7 @@ function wsPointerRelease(wsio, data) {
 	pointerRelease(uniqueID, pointerX, pointerY ,data);
 }
 
+// 더블클릭해서 이미지 커지는 부분 이용해서 Tile모드시 가장 맨 앞에 오게
 function wsPointerDblClick(wsio, data) {
 	var uniqueID = wsio.remoteAddress.address + ":" + wsio.remoteAddress.port;
 	
@@ -1549,13 +1550,11 @@ function priorityApplications() {
 }
 
 // seojin : priority grid 
-// - 태그별로 섹션이 바둑판 모양으로 나뉘어 짐
-// - 음성인식된 태그를 가진 데이터들이 가장 크게 배경에 겹쳐서 띄워짐
 function priorityGridApplications() {
    
    arrangementMode = 'priority_grid';
+   
    /** displayTag[tagcount][datacount[]] **/
-   /** 태그값을 기반으로 2차원 배열 생성 **/
    var results = applications.slice(0);
    var applength = applications.length;
 
@@ -1573,84 +1572,74 @@ function priorityGridApplications() {
          displayTag[tagcount] = new Array();
          displayTag[tagcount][0] = results[i];
          datacount[0] = datacount[0]+1;
-       }
+		 }
       // 첫번째 값이 아닌데
       else {
-       var displayTagLength = displayTag.length;
-       var arrayCheck = 0;
+		 var displayTagLength = displayTag.length;
+		 var arrayCheck = 0;
          for(var test=0; test<displayTagLength; test++)
          {
             var check = displayTag[test][0].tag;
             // 배열이 만들어져있는 태그 라면...
             if(value==check) {
-            var j = datacount[test];
+				var j = datacount[test];
                displayTag[test][j] = results[i];
                datacount[test] = datacount[test] + 1;
-            arrayCheck=0;
-            break;
+			   arrayCheck=0;
+			   break;
+			}
+			// 배열이 만들어져 있지 않은 태그 라면... 확인 값을 바꿔줌
+			else {
+				arrayCheck = 1;				
+			}     
          }
-         // 배열이 만들어져 있지 않은 태그 라면... 확인 값을 바꿔줌
-         else {
-            arrayCheck = 1;            
-         }     
-         }
-       
-       // 배열이 만들어져 있지 않은 태그 라면... 배열을 만듬
-       if (arrayCheck==1)
-       {
-          tagcount = tagcount + 1;
-          displayTag[tagcount] = new Array();
+		 
+		 // 배열이 만들어져 있지 않은 태그 라면... 배열을 만듬
+		 if (arrayCheck==1)
+		 {
+			 tagcount = tagcount + 1;
+			 displayTag[tagcount] = new Array();
              displayTag[tagcount][0] = results[i];
-          datacount[tagcount] = 0;
+			 datacount[tagcount] = 0;
              datacount[tagcount] = datacount[tagcount]+1;
-      } else {
-      }
+		} else {
+		}
       }
    }
 
    var displayTagLength = displayTag.length;
    for ( var m = 0; m < displayTagLength; m++) {
-      for ( var n = 0; n < displayTag[m].length; n++) {
-         console.log(m+" "+" "+n+" : "+displayTag[m][n].tag);
-      }
-   }
-   console.log("--------------------");
-   //console.log("config.totalWidth // "+config.totalWidth);
-   //console.log("config.totalHeight // "+config.totalHeight);
+	   for ( var n = 0; n < displayTag[m].length; n++) {
+		   console.log(m+" "+" "+n+" : "+displayTag[m][n].tag);
+		}
+	}
+	console.log("--------------------");
    
-   
-   //////////////////////////////////////////////////////////////////
-   // (행기준 : Tile모드안에 + 열기준 : Tile모드)
-   // displayTagLength 개의 공간으로 Tile 모드
-   // 그 안에 displayTag[m].length 개의 공간으로 Tile 모드
    console.log("---priority grid----");
    /************** [1] **************/
    /***** numCols, numRows 정하기 *****/
-   // 나뉘어질 공간들의 정보들이 들어가 있는 배열 생성
    var app;
    var i, c, r;
    var numCols, numRows; // cols : 행, rows : 열
    var displayAr = config.totalWidth / config.totalHeight;
    var numWindows = displayTagLength;
-   // averageWindowAspectRatio 메소드 수정
+   // averageWindowAspectRatio()
    var arDiff = displayAr;
-   // 전체 dispaly : 세로 1920 가로 5400
-   // 하나의 태그가 차지하는 공간 : 세로 960 가로 1350
    if (numWindows === 0) {
-   } else {
-      var totAr = 0.0;
-      var i;
-      for (i=0; i<numWindows; i++) {
-          totAr += (1350 / 960);
-         }
-         arDiff = displayAr / (totAr / numWindows);
-      }
+	} else {
+		var totAr = 0.0;
+		var i;
+		for (i=0; i<numWindows; i++) {
+		    totAr += (1350 / 960);
+			}
+			arDiff = displayAr / (totAr / numWindows);
+		}
     // 디스플레이 비율 = 가로 세로 비율
     if (arDiff >= 0.7 && arDiff <= 1.3) {
         numCols = Math.ceil(Math.sqrt(numWindows));
         numRows = Math.ceil(numWindows / numCols);
     }
-   // 디스플레이 비율의 넓이가 더 큼
+	// 디스플레이 비율의 넓이가 더 큼
     else if (arDiff < 0.7) {
         c = Math.round(1 / (arDiff / 2.0));
         if (numWindows <= c) {
@@ -1662,7 +1651,7 @@ function priorityGridApplications() {
             numRows = Math.round(Math.ceil(numWindows / numCols));
         }
     }
-   // 디스플레이 비율의 길이가 더 큼
+	// 디스플레이 비율의 길이가 더 큼
     else {
         c = Math.round(arDiff * 2);
         if (numWindows <= c) {
@@ -1674,185 +1663,240 @@ function priorityGridApplications() {
             numCols = Math.round(Math.ceil(numWindows / numRows));
         }
     }
-   console.log("priorityGrid // numCols : "+numCols+" & numRows : "+ numRows);
+	console.log("priorityGrid // numCols : "+numCols+" & numRows : "+ numRows);
 
-   /********** [2] **********/
-   /***** 타일될 공간 결정하기 *****/
+	/********** [2] **********/
+	/***** 타일될 공간 결정하기 *****/
     var titleBar = config.ui.titleBarHeight;
     if (config.ui.auto_hide_ui === true) titleBar = 0;
     var areaX = 0;
     var areaY = Math.round(1.5 * titleBar); // keep 0.5 height as margin
     if (config.ui.auto_hide_ui === true) areaY = -config.ui.titleBarHeight;
 
-   // 전체 display 화면의 크기
+	// 전체 display 화면의 크기
     var areaW = config.totalWidth; 
     var areaH = config.totalHeight - (1.0 * titleBar);
 
-   // 타일되는 공간의 크기
+	// 타일되는 공간의 크기
     var tileW = Math.floor(areaW / numCols);
     var tileH = Math.floor(areaH / numRows);
-   console.log("-------------------------------------------------------------------------");
-   console.log("areaW : "+areaW+" / areaH : "+areaH+" / tileW : "+tileW+" / tileH : "+tileH);
+	console.log("-------------------------------------------------------------------------");
+	console.log("areaW : "+areaW+" / areaH : "+areaH+" / tileW : "+tileW+" / tileH : "+tileH);
     console.log("-------------------------------------------------------------------------");
-   var padding = 4;
-    // if only one application, no padding, i.e maximize
+	var padding = 4;
     if (displayTagLength === 1) padding = 0;
     r = numRows - 1;
     c = 0;
     for (i = 0; i < displayTagLength; i++) {
-      console.log(i+" 번째 Grid 공간에");
+		console.log(i+" 번째 Grid 공간에");
         app = displayTag[i][0];
-      // calculate new dimensions
         var newdims = [c * tileW + areaX, r * tileH + areaY];
-        // update the data structure
         app.left = newdims[0];
         app.top = newdims[1] - titleBar;
-      //console.log("-------------------------------------------------------------------------");
-      //console.log("app.left : "+app.left+" / app.top : "+app.top+" / app.width : "+app.width+" / app.height : "+app.height);
-      //console.log("-------------------------------------------------------------------------");
-      // 한개의 태그에 관한 부분 임
 
-         /************** [2] - [1] **************/
-         /******* numCols2, numRows2 정하기 *******/
-         var app2;
-         var c2, r2;
-         var numCols2, numRows2;
-         var displayAr2 = tileW / tileH;
-         var numWindows2 = displayTag[i].length;
-         // averageWindowAspectRatio 메소드 수정
-         var arDiff2 = displayAr2;
-         if (numWindows2 === 0) {
-            // console.log(arDiff2+" 는 그대로 displayAr2");
-         } else {
-            var totAr = 0.0;
-            for (var j=0; j <displayTag[i].length; j++) {
-               var app2 =  displayTag[i][j];
-               totAr += (app2.width / app2.height);
-             }
-            arDiff2 = displayAr2 / (totAr / displayTag[i].length);
-         }
-         
-         // 디스플레이 비율 = 가로 세로 비율
-         if (arDiff2 >= 0.7 && arDiff2 <= 1.3) {
-            // console.log("1");
-            numCols2 = Math.ceil(Math.sqrt(numWindows2));
-            numRows2 = Math.ceil(numWindows2 / numCols2);
-         }
-         // 디스플레이 비율의 넓이가 더 큼
-         else if (arDiff2 < 0.7) {
-            // console.log("2");
-            c2 = Math.round(1 / (arDiff2 / 2.0));
-            if (numWindows2 <= c2) {
-               numRows2 = numWindows2;
-               numCols2 = 1;
-            }
-            else {
-               numCols2 = Math.max(2, Math.round(numWindows2 / c2));
-               numRows2 = Math.round(Math.ceil(numWindows2 / numCols2));
-            }
-         }
-         // 디스플레이 비율의 길이가 더 큼
-         else {
-            // console.log("3");
-            // console.log("arDiff2:"+arDiff2);
-            c2 = Math.round(arDiff2 * 2);
-            if (numWindows2 <= c2) {
-               // console.log("4");
-               numCols2 = numWindows2;
-               numRows2 = 1;
-            }
-            else {
-               // console.log("5");
-               numRows2 = Math.max(2, Math.round(numWindows2 / c2));
-               numCols2 = Math.round(Math.ceil(numWindows2 / numRows2));
-            }
-         }
-         console.log("priorityGrid 2 // numCols2 : "+numCols2+" & numRows2 : "+ numRows2);
-      
-         /********** [2] - [2] **********/
-         /******** 타일될 공간 결정하기 ********/
-         // [1], [2]-[1] 까지는 잘 돌아가서 맞는 값 나오는 것 같은데... 여기부터 이상해지는듯함!★
-         var titleBar = config.ui.titleBarHeight;
-         if (config.ui.auto_hide_ui === true) titleBar = 0;
-         var areaX2 = app.left;
-          var areaY2 = app.top; // keep 0.5 height as margin
-          if (config.ui.auto_hide_ui === true) areaY2 = -config.ui.titleBarHeight;
+		   /************** [2] - [1] **************/
+		   /******* numCols2, numRows2 정하기 *******/
+		   var app2;
+		   var c2, r2;
+		   var numCols2, numRows2;
+		   var displayAr2 = tileW / tileH;
+		   var numWindows2 = displayTag[i].length;
+		   // averageWindowAspectRatio()
+		   var arDiff2 = displayAr2;
+		   if (numWindows2 === 0) {
+			} else {
+				var totAr = 0.0;
+				for (var j=0; j <displayTag[i].length; j++) {
+					var app2 =  displayTag[i][j];
+					totAr += (app2.width / app2.height);
+			    }
+				arDiff2 = displayAr2 / (totAr / displayTag[i].length);
+			}
+			
+			// 디스플레이 비율 = 가로 세로 비율
+			if (arDiff2 >= 0.7 && arDiff2 <= 1.3) {
+				numCols2 = Math.ceil(Math.sqrt(numWindows2));
+				numRows2 = Math.ceil(numWindows2 / numCols2);
+			}
+			// 디스플레이 비율의 넓이가 더 큼
+			else if (arDiff2 < 0.7) {
+				c2 = Math.round(1 / (arDiff2 / 2.0));
+				if (numWindows2 <= c2) {
+					numRows2 = numWindows2;
+					numCols2 = 1;
+				}
+				else {
+					numCols2 = Math.max(2, Math.round(numWindows2 / c2));
+					numRows2 = Math.round(Math.ceil(numWindows2 / numCols2));
+				}
+			}
+			// 디스플레이 비율의 길이가 더 큼
+			else {
+				c2 = Math.round(arDiff2 * 2);
+				if (numWindows2 <= c2) {
+					numCols2 = numWindows2;
+					numRows2 = 1;
+				}
+				else {
+					numRows2 = Math.max(2, Math.round(numWindows2 / c2));
+					numCols2 = Math.round(Math.ceil(numWindows2 / numRows2));
+				}
+			}
+			console.log("priorityGrid 2 // numCols2 : "+numCols2+" & numRows2 : "+ numRows2);
+	   
+		   /********** [2] - [2] **********/
+		   /******** 타일될 공간 결정하기 ********/
+		   var titleBar = config.ui.titleBarHeight;
+		   if (config.ui.auto_hide_ui === true) titleBar = 0;
+		   var areaX2 = app.left;
+    	   var areaY2 = app.top; // keep 0.5 height as margin
+    	   if (config.ui.auto_hide_ui === true) areaY2 = -config.ui.titleBarHeight;
 
-            // 전체 display 화면의 크기
-          var areaW2 = tileW;
-          var areaH2 = tileH - (1.0 * titleBar);
+	   	   // 전체 display 화면의 크기
+    	   var areaW2 = tileW;
+    	   var areaH2 = tileH - (1.0 * titleBar);
 
-         // 타일되는 공간의 크기
-          var tileW2 = Math.floor(areaW2 / numCols2);
-          var tileH2 = Math.floor(areaH2 / numRows2);
-         console.log("-------------------------------------------------------------------------");
-         console.log("areaW2 : "+areaW2+" / areaH2 : "+areaH2+" / tileW2 : "+tileW2+" / tileH2 : "+tileH2);
-         console.log("-------------------------------------------------------------------------");
-         
-         var padding = 4;
-         // if only one application, no padding, i.e maximize
-         if (displayTag[i].length === 1) padding = 0;
-         r2 = numRows2 - 1;
-         c2 = 0;
-         for ( var n = 0; n < displayTag[i].length; n++) {
-            console.log(i+" "+" "+n+" : "+displayTag[i][n].tag+" 배치하기");
-            var app2 =  displayTag[i][n];
-            
-            // var newdims = fitWithin(app, c * tileW + areaX, r * tileH + areaY, tileW, tileH, padding);
-            var newdims2 = fitWithin(app2,c2 * tileW2 + areaX2,r2 * tileH2 + areaY2, tileW2, tileH2, padding);
-            // update the data structure
-            app2.left = newdims2[0];
-            app2.top = newdims2[1] - titleBar;
-            app2.width = newdims2[2];
-            app2.height = newdims2[3];
-            // app2 = displayTag[i][n];
-            // build the object to be sent
-            var updateItem = {
-               elemId: app2.id,
-               elemLeft: app2.left, elemTop: app2.top,
-               elemWidth: app2.width, elemHeight: app2.height,
-               force: true, date: new Date()
-            };
-            // send the order
-            broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
-            console.log("-------------------------------------------------------------------------");
-            console.log("app2.left : "+app2.left+" / app2.top : "+app2.top+" / app2.width : "+app2.width+" / app2.height : "+app2.height);
-            console.log("-------------------------------------------------------------------------");
-            c2 += 1;
-            if (c2 === numCols2) {
-               c2 = 0;
-               r2 -= 1;
-            }
-         }
-      
-      // console.log(app + " " + app.left + " " +  app.top + " " + app.width + " " + app.height);
+		   // 타일되는 공간의 크기
+    	   var tileW2 = Math.floor(areaW2 / numCols2);
+    	   var tileH2 = Math.floor(areaH2 / numRows2);
 
+		   var padding = 4;
+		   if (displayTag[i].length === 1) padding = 0;
+		   r2 = numRows2 - 1;
+		   c2 = 0;
+		   for ( var n = 0; n < displayTag[i].length; n++) {
+			   console.log(i+" "+" "+n+" : "+displayTag[i][n].tag+" 배치하기");
+			   var app2 =  displayTag[i][n];
+				
+			   var newdims2 = fitWithin(app2,c2 * tileW2 + areaX2,r2 * tileH2 + areaY2, tileW2, tileH2, padding);
+			   
+			   app2.left = newdims2[0];
+			   app2.top = newdims2[1] - titleBar;
+			   app2.width = newdims2[2];
+			   app2.height = newdims2[3];
+			   var updateItem = {
+				   elemId: app2.id,
+				   elemLeft: app2.left, elemTop: app2.top,
+				   elemWidth: app2.width, elemHeight: app2.height,
+				   force: true, date: new Date()
+				};
+				broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
+				c2 += 1;
+			   if (c2 === numCols2) {
+				   c2 = 0;
+				   r2 -= 1;
+				}
+			}
         c += 1;
         if (c === numCols) {
             c = 0;
             r -= 1;
         }
     }
-   console.log("--------------------");
-   /////////////////////////////////////////////////////////////////
+	console.log("--------------------");
    // speechResult 값 없으면...
    if(speechResult == null || speechResult == ""){
-      // 아무일도 안 일어남
-      // 나중에 태그의 수로 우선순위줄까..?
-      console.log("no speechResult");
-   } 
-   // speechResult 값 있으면...
-   else { 
-   for (var i = 0; i < applications.length; i++) {
-      if(applications[i].tag == speechResult.toLowerCase()) {
-         console.log("priority tag: "+applications[i].tag);
-         console.log("equal with speechResult"); 
-         // 메소드 써서 전체 화면 위에 Tile 모드로 배치
-         } else{
-            console.log("not equal with speechResult");
-            }
-      }
+		console.log("no speechResult");
    }
+	// speechResult 값 있으면...
+	else { 
+	for (var i = 0; i < displayTag.length; i++) {
+		if(displayTag[i][0].tag == speechResult.toLowerCase()) {
+			console.log("priority tag: "+applications[i].tag);
+			console.log("equal with speechResult"); 
+
+	var app;
+    var i, c, r;
+    var numCols, numRows;
+
+    var displayAr = config.totalWidth / config.totalHeight;
+    var arDiff = displayAr / averageWindowAspectRatio();
+    var numWindows = displayTag[i].length;
+
+    if (arDiff >= 0.7 && arDiff <= 1.3) {
+		console.log("1");
+        numCols = Math.ceil(Math.sqrt(numWindows));
+        numRows = Math.ceil(numWindows / numCols);
+    }
+    else if (arDiff < 0.7) {
+		console.log("2");
+        c = Math.round(1 / (arDiff / 2.0));
+        if (numWindows <= c) {
+            numRows = numWindows;
+            numCols = 1;
+        }
+        else {
+            numCols = Math.max(2, Math.round(numWindows / c));
+            numRows = Math.round(Math.ceil(numWindows / numCols));
+        }
+    }
+    else {
+		console.log("3");
+		console.log("arDiff:"+arDiff);
+        c = Math.round(arDiff * 2);
+        if (numWindows <= c) {
+			console.log("4");
+            numCols = numWindows;
+            numRows = 1;
+        }
+        else {
+			console.log("5");
+            numRows = Math.max(2, Math.round(numWindows / c));
+        }
+    }
+	console.log("tile // numCols : "+numCols +" & numRows : "+numRows);
+
+    var titleBar = config.ui.titleBarHeight;
+    if (config.ui.auto_hide_ui === true) titleBar = 0;
+    var areaX = 0;
+    var areaY = Math.round(1.5 * titleBar);
+    if (config.ui.auto_hide_ui === true) areaY = -config.ui.titleBarHeight;
+
+    var areaW = config.totalWidth;
+    var areaH = config.totalHeight - (1.0 * titleBar);
+
+    var tileW = Math.floor(areaW / numCols);
+    var tileH = Math.floor(areaH / numRows);
+
+    var padding = 4;
+    if (applications.length === 1) padding = 0;
+    r = numRows - 1;
+    c = 0;
+    for (var j = 0; j < displayTag[i].length; j++) {
+        app = displayTag[i][j];
+        var newdims = fitWithin(app, c * tileW + areaX, r * tileH + areaY, tileW, tileH, padding);
+
+        app.left = newdims[0];
+        app.top = newdims[1] - titleBar;
+        app.width = newdims[2];
+        app.height = newdims[3];
+		
+		console.log(app + " " + app.left + " " +  app.top + " " + app.width + " " + app.height);
+
+        var updateItem = {
+            elemId: app.id,
+            elemLeft: app.left, elemTop: app.top,
+            elemWidth: app.width, elemHeight: app.height,
+            force: true, date: new Date()
+        };
+		
+        broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
+		
+		// ☆
+		var elem = app;
+		var newOrder = moveAppToFront(elem.id);
+		broadcast('updateItemOrder', {idList: newOrder}, 'receivesWindowModification');
+	
+        c += 1;
+        if (c === numCols) {
+            c = 0;
+            r -= 1;
+        }
+    }
+			} else{
+				}
+		}
+	}
 }
 
 
@@ -4152,6 +4196,7 @@ function pointerDraw(uniqueID, data) {
 		}
 	}
 }
+
 
 function pointerDblClick(uniqueID, pointerX, pointerY) {
 	if( sagePointers[uniqueID] === undefined )
