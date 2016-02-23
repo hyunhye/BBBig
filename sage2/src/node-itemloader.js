@@ -262,10 +262,11 @@ appLoader.prototype.loadImageFromDataBuffer = function(buffer, width, height, mi
 		animation: false,
 		metadata: metadata,
 		date: new Date(),
+		text: exif_data.Text,
 		tag: tag,
 		index: 0,
 		down: {x: 0, y: 0, w: width, h: height},
-		up: {id:0, x: 0, y: 0, w: width, h: height}
+		down_app: null,
 	};
 	this.scaleAppToFitDisplay(appInstance);
 	callback(appInstance);
@@ -274,7 +275,7 @@ appLoader.prototype.loadImageFromDataBuffer = function(buffer, width, height, mi
 appLoader.prototype.loadImageFromFile = function(file, mime_type, url, external_url, name, callback) {
 	var _this = this;
 	
-	if(mime_type === "image/jpeg" || mime_type === "image/png" || mime_type === "image/webp"){
+	if(mime_type === "image/jpeg" || mime_type === "image/png" || mime_type === "image/webp" || mime_type === "image/gif"){
 		fs.readFile(file, function (err, data) {
 			if(err) {
 				console.log("Error> opening file", file);
@@ -289,10 +290,9 @@ appLoader.prototype.loadImageFromFile = function(file, mime_type, url, external_
 				_this.loadImageFromDataBuffer(data, dims.width, dims.height, mime_type, url, external_url, name, exif, exif.Tag, function(appInstance) {
 					callback(appInstance);
 				});
-				// seojin
-				// console.log(exif.FileSize);
-				// console.log("find image file-loadImageFromFile-1");
+
 				console.log("Tag : "+ exif.Tag);
+				//console.log("ScanningResult : "+ exif.ScanningResult);
 			} else {
 				console.log("File not recognized:", file, mime_type, url);
 			}
@@ -305,16 +305,6 @@ appLoader.prototype.loadImageFromFile = function(file, mime_type, url, external_
 				return; // throw err;
 			}
 
-			// imageMagick(buffer).size(function (err, size) {
-			// 	if(err) {
-			// 		console.log("Error> getting buffer size for file", file);
-			// 		return; // throw err;
-			// 	}
-			// 	_this.loadImageFromDataBuffer(buffer, size.width, size.height, "image/png", url, external_url, name, function(appInstance) {
-			// 		callback(appInstance);
-			// 	});
-			// });
-
 			// Query the exif data
 			var dims = assets.getDimensions(file);
 			var exif = assets.getExifData(file);
@@ -323,9 +313,7 @@ appLoader.prototype.loadImageFromFile = function(file, mime_type, url, external_
 				_this.loadImageFromDataBuffer(buffer, dims.width, dims.height, "image/png", url, external_url, name, exif, exif.Tag,function(appInstance) {
 					callback(appInstance);
 				});
-			    // seojin
-			    // console.log(exif.Tag);
-				// console.log("find image file-loadImageFromFile-2");
+
 			} else {
 				console.log("File not recognized:", file, mime_type, url);
 			}

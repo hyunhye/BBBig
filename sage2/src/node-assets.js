@@ -17,17 +17,37 @@ var fs        = require('fs');
 var json5     = require('json5');
 var path      = require('path');
 var url       = require('url');
+var async     = require('async');
 var color     = require('color');
 var gm        = require('gm');                   // imagesmagick
 var ffmpeg    = require('fluent-ffmpeg');        // ffmpeg
 var exiftool  = require('../src/node-exiftool'); // gets exif tags for images
-var ImageScanning = require('../server/routes');
+var ImageScanning = require('../src/image-scanning');
+
 
 // Global variable to handle iamgeMagick configuration
 var imageMagick = null;
 var ffmpegPath = null;
 
-//////////////////////////////////////////////////////////////////////////////////////////
+var dt = require('../src/decision-tree');
+
+// ******************************* Decision Tree ******************************** //
+// Training set
+var data = 
+    [{id: 'text', includeText: true, contents: 'text'},
+     {id: 'image', includeText: false, contents: 'image'}];
+
+// Configuration
+var config = {
+    trainingSet: data, 
+    categoryAttr: 'contents', 
+    ignoredAttributes: ['id']
+};
+
+// Building Decision Tree
+var decisionTree = new dt.DecisionTree(config);
+// *************************************************************** //   
+
 // seojin
 var mysql = require('mysql');
 var dbConnection = mysql.createConnection({   
@@ -58,52 +78,60 @@ Asset.prototype.setFilename = function(aFilename) {
 
 // 이미지 스캐닝을 통한 자동 태깅
 Asset.prototype.setEXIF = function(exifdata) {
-   // console.log("seojin - setEXIF");
-   var imageScanning;
-   var scanningResult;
-    this.exif = exifdata;
+   this.exif = exifdata;
+
    // seojin 태그 추가 (태그의 값을 파일 명으로)
-   
-   // ***** if file is image, then excute image scanning
-   var imagefile = this.exif.FileName.split('.');
-   if(imagefile[1] == "png" || imagefile[1] == "jpg" || imagefile[1] == "gif" || imagefile[1] == "jpeg"){
-		var uploadsFolder = "public_HTTPS/uploads/scanning";
-		var originFolder = "public_HTTPS/uploads/images/";
-		var imageScanningimage = path.join(uploadsFolder, this.exif.FileName);
-	   
-		var file = fs.createReadStream(originFolder+this.exif.FileName, {flags: 'r'} ); // 파일 읽기
-		var out = fs.createWriteStream(imageScanningimage, {flags: 'w'}); // 파일 쓰기
-		file.pipe(out);
-
-		imageScanning = new ImageScanning();
-		imageScanning.process(this);
-   }
-   
    // 지금 상태 : 일단 파일명으로 가져와서 태그 달리는데 맨 뒤에 한글자 짤림
-   var tag = this.exif.FileName.split('.');
-   var tag2 = tag[0].substring(0, String(tag[0]).length-1);
-   
-   
-   // uploads로 pc에 있는 파일 올릴때에 여기 거침
-   // seojin
-   // 태그값이 없을 때만 파일명으로 태그 추가
-   /*
-   console.log("setEXIF");
-   if(!this.exif.Tag) {
-	   console.log("tag no");
-	 this.exif.Tag = tag[0];
-   } else {
-	   console.log("tag yes");
-	     
-   }*/
-   
-   this.exif.Tag = tag2;
-
-   //this.exif.Text = scanningResult;    
+   //var tag = this.exif.FileName.split('.');
+   //var tag2 = tag[0].substring(0, String(tag[0]).length-1);
+   //this.exif.Tag = tag2;
    
    // DB 접속해서 그결과 로그 찍음
    //dbConnection.query('select * from keyword where keyword=?', 'crime' , function (err, rows, fields) { console.log(rows); });
    // dbConnection.query('select * from keyword', function (err, rows, fields) { console.log(rows); });
+};
+
+
+Asset.prototype.imageScanning = function(){
+   var text;
+   var imageScanning;
+
+   var imagefile = this.exif.FileName.split('.');
+   if(imagefile[1] == "png" || imagefile[1] == "jpg" || imagefile[1] == "gif" || imagefile[1] == "jpeg"){
+      var uploadsFolder = "public_HTTPS/uploads/scanning";
+      var originFolder = "public_HTTPS/uploads/images/";
+      var imageScanningimage = path.join(uploadsFolder, this.exif.FileName);
+      
+      var file = fs.createReadStream(originFolder+this.exif.FileName, {flags: 'r'} ); // 파일 읽기
+      var out = fs.createWriteStream(imageScanningimage, {flags: 'w'}); // 파일 쓰기
+      file.pipe(out);
+
+      imageScanning = new ImageScanning();
+      imageScanning.process(this);
+
+      // set Tag using Decision Tree 
+      var obj = this;
+      setTimeout(function(){
+         text = obj.exif.ScanningResult;
+         obj.setTag(text);
+      },2000);
+   }  
+};
+
+Asset.prototype.setTag = function(text){
+   var isText = true;
+
+   // Testing Decision Tree and Random Forest
+   if(text == "" || text == undefined || text == null)
+      isText = false;
+   else
+      isText = true;
+
+   var tag = {id: this.exif.FileName, includeText: isText};
+   var decisionTreePrediction = decisionTree.predict(tag);
+   
+   this.exif.Tag = decisionTreePrediction;
+
 };
 
 Asset.prototype.width = function() {
@@ -112,6 +140,7 @@ Asset.prototype.width = function() {
 Asset.prototype.height = function() {
     return this.exif.ImageHeight;
 };
+
 
 var AllAssets = null;
 
@@ -166,6 +195,7 @@ addFile = function(filename,exif) {
    var anAsset = new Asset();
    anAsset.setFilename(filename);
    anAsset.setEXIF(exif);
+   anAsset.imageScanning();
 
    AllAssets.list[anAsset.id] = anAsset;
 
