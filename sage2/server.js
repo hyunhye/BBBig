@@ -2379,7 +2379,6 @@ function check(app,index){
 			c = 1;
 		}
 	}
-        
 	if(c == 1){
 		applications[j].down_app = app;
 
