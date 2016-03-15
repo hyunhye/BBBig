@@ -21,6 +21,10 @@ var mime      = require('mime');
 var request   = require('request');
 var ytdl      = require('ytdl-core');
 
+// async
+var async = require('async');
+var step = require('step');
+
 var exiftool  = require('../src/node-exiftool');      // gets exif tags for images
 var assets    = require('../src/node-assets');        // asset management
 var tileApplications = require('../server');
@@ -274,6 +278,8 @@ appLoader.prototype.loadImageFromDataBuffer = function(buffer, width, height, mi
 
 appLoader.prototype.loadImageFromFile = function(file, mime_type, url, external_url, name, callback) {
 	var _this = this;
+
+	// assets.addFile(data.SourceFile, data);
 	
 	if(mime_type === "image/jpeg" || mime_type === "image/png" || mime_type === "image/webp" || mime_type === "image/gif"){
 		fs.readFile(file, function (err, data) {
@@ -290,14 +296,15 @@ appLoader.prototype.loadImageFromFile = function(file, mime_type, url, external_
 				_this.loadImageFromDataBuffer(data, dims.width, dims.height, mime_type, url, external_url, name, exif, exif.Tag, function(appInstance) {
 					callback(appInstance);
 				});
-
-				console.log("Tag : "+ exif.Tag);
-				//console.log("ScanningResult : "+ exif.ScanningResult);
+				// console.log("ScanningResult : "+ exif.ScanningResult);
 			} else {
 				console.log("File not recognized:", file, mime_type, url);
 			}
+			console.log("loadImageFromFile / Tag : "+ exif.Tag);
 		});
+		
 	}
+	
 	else{
 		imageMagick(file+"[0]").noProfile().bitdepth(8).flatten().setFormat("PNG").toBuffer(function (err, buffer) {
 			if(err) {
@@ -320,6 +327,7 @@ appLoader.prototype.loadImageFromFile = function(file, mime_type, url, external_
 		});
 		
 	}
+	
 };
 
 // seojin video
@@ -651,46 +659,48 @@ appLoader.prototype.manageAndLoadUploadedFile = function(file, callback) {
 	var external_url = this.hostOrigin + encodeReservedURL(url);
 	var localPath    = path.join(this.publicDir, url);
 
-	// hyunhye 
-	// Filename exists, then add date
-	/*if (fs.existsSync(localPath)) {
-		// Add the date to filename
-		var filen  = file.name;
-		var splits = filen.split('.');
-		var extension   = splits.pop();
-		var newfilename = splits.join('_') + "_" + Date.now() + '.' + extension;
-		// Regenerate path and url
-		url = path.join("uploads", dir, newfilename);
-		external_url = this.hostOrigin + encodeReservedURL(url);
-		localPath    = path.join(this.publicDir, url);
-	}*/
-
 	fs.rename(file.path, localPath, function(err) {
 		if(err) throw err;
 		
 		var	app = _this.mime2app[mime_type];
 		if (app === "image_viewer" || app === "movie_player" || app === "pdf_viewer") {
+			// ☆
+			// addFile 다끝나고 loadApplication 함수 실행 시키기...
 			exiftool.file(localPath, function(err,data) {
 				if (err) {
 					console.log("internal error");
 				} else {
-					// console.log("EXIF> Adding", data.FileName);
 					assets.addFile(data.SourceFile, data);
-					// window에 이미지들 띄우는 함수임
-					_this.loadApplication({location: "file", path: localPath, url: url, external_url: external_url, type: mime_type, name: file.name, compressed: true}, function(appInstance) {
-					    callback(appInstance); 
-					});
-				}
+					 _this.loadApplication({location: "file", path: localPath, url: url, external_url: external_url, type: mime_type, name: file.name, compressed: true}, function(appInstance) {
+											callback(appInstance); });
+					/*
+					assets.addFile(data.SourceFile, data, function(err, _this) {
+						console.log("여기 안들어옴");
+						if(err) {
+							console.log("error");
+						} else {
+							console.log("test");
+							_this.loadApplication({location: "file", path: localPath, url: url, external_url: external_url, type: mime_type, name: file.name, compressed: true}, function(appInstance) {
+											callback(appInstance); });
+					    }
+					});	*/							
+				} 
 			});
 		}
 		else {
 			_this.loadApplication({location: "file", path: localPath, url: url, external_url: external_url, type: mime_type, name: file.name, compressed: true}, function(appInstance) {
-				callback(appInstance);
-			});
+				callback(appInstance); });
 		}
 	});
 	
 };
+// addFile -> loadApplication -> loadImageFromFile
+					
+					/*
+					assets.addFile(data.SourceFile, data);
+					 _this.loadApplication({location: "file", path: localPath, url: url, external_url: external_url, type: mime_type, name: file.name, compressed: true}, function(appInstance) {
+											callback(appInstance); });
+					*/
 
 // window에 띄워질때 마지막으로 여기를 거침 seojin
 appLoader.prototype.loadApplication = function(appData, callback) {

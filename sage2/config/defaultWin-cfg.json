@@ -2,7 +2,7 @@
    default configuration of the server - Windows
 */
 {
-   host: "192.168.186.1",
+   host: "192.168.123.142",
    port: 9090,
    index_port: 9292,
    background: {
@@ -53,33 +53,34 @@
    remote_sites: [
    {
 	name: "sage1",
-	host: "192.168.186.1",
+	host: "192.168.123.142",
 	port: 9090
    },
    {
 	name: "sage2",
-	host: "192.168.186.1",
+	host: "192.168.123.142",
 	port: 9090
    },
    {
 	name: "sage3",
-	host: "192.168.186.1",
+	host: "192.168.123.142",
 	port: 9090
    },
    {
 	name: "sage4",
-	host: "192.168.186.1",
+	host: "192.168.123.142",
 	port: 9090
    },
    {
 	name: "sage5",
-	host: "192.168.186.1",
+	host: "192.168.123.142",
 	port: 9090
    },
    ],
    dependencies: {
-      ImageMagick: "F:\\SAGE2\\ImageMagick-6.9.2-Q16\\",
-      FFMpeg: "F:\\SAGE2\\Dev\\ffmpeg-win64-shared\\bin\\"
+      ImageMagick: "C:\\Program Files\\ImageMagick-6.9.2-Q16\\",
+      FFMpeg: "C:\\sage2\\Dev\\ffmpeg-win64-shared\\bin\\"
+	  
     },
     apis: {
       twitter: {

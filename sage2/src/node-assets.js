@@ -23,8 +23,7 @@ var gm        = require('gm');                   // imagesmagick
 var ffmpeg    = require('fluent-ffmpeg');        // ffmpeg
 var exiftool  = require('../src/node-exiftool'); // gets exif tags for images
 var ImageScanning = require('../src/image-scanning');
-
-
+var step = require('step');
 // Global variable to handle iamgeMagick configuration
 var imageMagick = null;
 var ffmpegPath = null;
@@ -34,14 +33,62 @@ var dt = require('../src/decision-tree');
 // ******************************* Decision Tree ******************************** //
 // Training set
 var data = 
-    [{id: 'text', includeText: true, contents: 'text'},
-     {id: 'image', includeText: false, contents: 'image'}];
+    [{CaseNumber:'HY174903', Date:'AM', PrimaryType:'CRIMINAL DAMAGE', Location:'RESIDENCE'},
+{CaseNumber:'HY191701', Date:'AM', PrimaryType:'NARCOTICS', Location:'STREET'},
+{CaseNumber:'HY115288', Date:'PM', PrimaryType:'ASSUALT', Location:'STREET'},
+{CaseNumber:'HY237041', Date:'PM', PrimaryType:'GAMBLING', Location:'RESIDENCE PORCH/HALLWAY'},
+{CaseNumber:'HY169142', Date:'AM', PrimaryType:'BATTERY', Location:'RESIDENCE'},
+{CaseNumber:'HY217319', Date:'PM', PrimaryType:'BATTERY', Location:'STREET'},
+{CaseNumber:'HY446645', Date:'AM', PrimaryType:'INTERFERENCE WITH PUBLIC OFFICER', Location:'STREET'},
+{CaseNumber:'HY229733', Date:'PM', PrimaryType:'NARCOTICS', Location:'RESIDENCE'},
+{CaseNumber:'HY527226', Date:'PM', PrimaryType:'NARCOTICS', Location:'ALLEY'},
+{CaseNumber:'HY269337', Date:'PM', PrimaryType:'OTHER OFFENSE', Location:'RESIDENCE'},
+{CaseNumber:'HY443433', Date:'PM', PrimaryType:'OTHER OFFENSE', Location:'STREET'},
+{CaseNumber:'HY218347', Date:'PM', PrimaryType:'ASSUALT', Location:'RESIDENTIAL YARD (FRONT/BACK)'},
+{CaseNumber:'HY535709', Date:'PM', PrimaryType:'CRIMINAL DAMAGE', Location:'STREET'},
+{CaseNumber:'HY276860', Date:'PM', PrimaryType:'BATTERY', Location:'STREET'},
+{CaseNumber:'HY485976', Date:'PM', PrimaryType:'THEFT', Location:'RESIDENCE'},
+{CaseNumber:'HY380690', Date:'PM', PrimaryType:'BURGLARY', Location:'RESIDENCE'},
+{CaseNumber:'HY545918', Date:'PM', PrimaryType:'BATTERY', Location:'SIDEWALK'},
+{CaseNumber:'HY311320', Date:'AM', PrimaryType:'NARCOTICS', Location:'STREET'},
+{CaseNumber:'HY410900', Date:'PM', PrimaryType:'INTERFERENCE WITH PUBLIC OFFICER', Location:'STREET'},
+{CaseNumber:'HY334354', Date:'PM', PrimaryType:'BATTERY', Location:'SIDEWALK'},
+{CaseNumber:'HY414053', Date:'PM', PrimaryType:'NARCOTICS', Location:'STREET'},
+{CaseNumber:'HY375529', Date:'PM', PrimaryType:'ASSUALT', Location:'APARTMENT'},
+{CaseNumber:'HY367877', Date:'PM', PrimaryType:'INTERFERENCE WITH PUBLIC OFFICER', Location:'STREET'},
+{CaseNumber:'HY349956', Date:'PM', PrimaryType:'ASSUALT', Location:'RESIDENCE'},
+{CaseNumber:'HY324001', Date:'PM', PrimaryType:'BATTERY', Location:'SIDEWALK'},
+{CaseNumber:'HY335011', Date:'PM', PrimaryType:'NARCOTICS', Location:'ABANDONED BUILDING'},
+{CaseNumber:'HY360355', Date:'AM', PrimaryType:'OTHER OFFENSE', Location:'SIDEWALK'},
+{CaseNumber:'HY355332', Date:'PM', PrimaryType:'ASSUALT', Location:'APARTMENT'},
+{CaseNumber:'HY347243', Date:'PM', PrimaryType:'ASSUALT', Location:'RESIDENCE'},
+{CaseNumber:'HY127042', Date:'PM', PrimaryType:'CRIMINAL DAMAGE', Location:'RESIDENCE'},
+{CaseNumber:'HY439641', Date:'PM', PrimaryType:'CRIMINAL DAMAGE', Location:'RESIDENCE'},
+{CaseNumber:'HY141739', Date:'AM', PrimaryType:'OTHER OFFENSE', Location:'APARTMENT'},
+{CaseNumber:'HY350348', Date:'AM', PrimaryType:'BULGLARY', Location:'APARTMENT'},
+{CaseNumber:'HY140152', Date:'AM', PrimaryType:'BATTERY', Location:'RESIDENCE'},
+{CaseNumber:'HY402443', Date:'AM', PrimaryType:'OTHER OFFENSE', Location:'RESIDENCE'},
+{CaseNumber:'HY132691', Date:'AM', PrimaryType:'BATTERY', Location:'RESIDENCE'},
+{CaseNumber:'HY392925', Date:'PM', PrimaryType:'CRIMINAL DAMAGE', Location:'APARTMENT'},
+{CaseNumber:'HY502976', Date:'PM', PrimaryType:'BATTERY', Location:'ALLEY'},
+{CaseNumber:'HY433101', Date:'AM', PrimaryType:'PROSTITUTION', Location:'STREET'},
+{CaseNumber:'HY545253', Date:'PM', PrimaryType:'WEAPONS VIOLATION', Location:'STREET'},
+{CaseNumber:'HY300048', Date:'PM', PrimaryType:'NARCOTICS', Location:'STREET'},
+{CaseNumber:'HY477923', Date:'PM', PrimaryType:'ASSUALT', Location:'APARTMENT'},
+{CaseNumber:'HY385261', Date:'PM', PrimaryType:'WEAPONS VIOLATION', Location:'STREET'},
+{CaseNumber:'HY456455', Date:'PM', PrimaryType:'CRIMINAL DAMAGE', Location:'STREET'},
+{CaseNumber:'HY393175', Date:'PM', PrimaryType:'BATTERY', Location:'SIDEWALK'},
+{CaseNumber:'HY547465', Date:'AM', PrimaryType:'THEFT', Location:'APARTMENT'},
+{CaseNumber:'HY417174', Date:'PM', PrimaryType:'NARCOTICS', Location:'SIDEWALK'},
+{CaseNumber:'HY518109', Date:'AM', PrimaryType:'ASSUALT', Location:'RESIDENCE'},
+{CaseNumber:'HY398908', Date:'PM', PrimaryType:'BULGLARY', Location:'APARTMENT'},
+{CaseNumber:'HY461211', Date:'PM', PrimaryType:'BATTERY', Location:'RESIDENCE'}];
 
 // Configuration
 var config = {
     trainingSet: data, 
-    categoryAttr: 'contents', 
-    ignoredAttributes: ['id']
+    categoryAttr: 'Location', 
+    ignoredAttributes: ['CaseNumber']
 };
 
 // Building Decision Tree
@@ -107,18 +154,16 @@ Asset.prototype.imageScanning = function(){
       file.pipe(out);
 
       imageScanning = new ImageScanning();
-      imageScanning.process(this);
-
-      // set Tag using Decision Tree 
       var obj = this;
-      setTimeout(function(){
-         text = obj.exif.ScanningResult;
-         obj.setTag(text);
-      },2000);
+	  
+	  imageScanning.process(this);
+	  imageScanning.setResult(this);
+      obj.setTag(obj.exif.ScanningResult);
    }  
 };
 
 Asset.prototype.setTag = function(text){
+   // console.log("setTag");
    var isText = true;
 
    // Testing Decision Tree and Random Forest
@@ -127,7 +172,7 @@ Asset.prototype.setTag = function(text){
    else
       isText = true;
 
-   var tag = {id: this.exif.FileName, includeText: isText};
+   var tag = {CaseNumber:'HY263396', Date:'AM', PrimaryType:'BATTERY', Location:'APARTMENT'};
    var decisionTreePrediction = decisionTree.predict(tag);
    
    this.exif.Tag = decisionTreePrediction;
@@ -189,14 +234,13 @@ saveAssets = function(filename) {
    console.log("Assets> saved to " + fullpath);
 };
 
-addFile = function(filename,exif) {
+addFile = function(filename,exif,callback) {
    // Add the asset in the array
    // console.log("addFile seojin"); // pc에있는 파일을 추가 시킬때만 이 함수 거쳐 감
    var anAsset = new Asset();
    anAsset.setFilename(filename);
-   anAsset.setEXIF(exif);
+   anAsset.setEXIF(exif); 
    anAsset.imageScanning();
-
    AllAssets.list[anAsset.id] = anAsset;
 
    // Path for the file system
