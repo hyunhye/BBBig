@@ -2963,6 +2963,7 @@ function getApplications() {
 }
 
 function getSavedFilesList() {
+	// Media Browser 아이콘 클릭하면
 	// Build lists of assets
 	// hyunhye
 	var uploadedImages = assets.listImages(); 
