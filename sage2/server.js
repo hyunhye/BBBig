@@ -2212,10 +2212,8 @@ function priorityRatioApplications(){
 	var e = 0;
 	var app;
 	var app_width,app_height;
-
 	for(var i = 0 ; i < applications.length ; i++){
 		app = applications[i];
-
 		var ratio = app.width / app.height;
 		app_width = config.totalWidth;
 		app_height = app_width / ratio;
@@ -2224,9 +2222,7 @@ function priorityRatioApplications(){
 			app_height = config.totalHeight;
 			app_width = app_height * ratio;
 		}
-		
 		if(i==0){		
-			// set position and size
 			app.left = 0;
 			app.top = 0;	
 			app.width = app_width;
@@ -2235,7 +2231,6 @@ function priorityRatioApplications(){
 						y: app.top+app.height, 
 						w: app.width, 
 						h: config.totalHeight-app.height};
-						
 			var updateItem = {
 				elemId: app.id,
 				elemLeft: app.left, 
@@ -2244,13 +2239,9 @@ function priorityRatioApplications(){
 				elemHeight: app.height,
 				force: true, date: new Date()
 			};
-			
-			// send the order
 			broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
 		}
-			
 		if((i+1) == applications.length) break; 
-		console.log("*****************************************");
 		check(applications[i+1],i+1);
 		
 	}
@@ -2259,7 +2250,6 @@ function priorityRatioApplications(){
 function check(app,index){
     var app_width,app_height;
     var j = 0;
-    var c = 0;
 	var w = 0;
 	var e = 0;
 	var n = 0;
@@ -2268,39 +2258,26 @@ function check(app,index){
     var space = 0;
     var smallestEmptySpace = new Array();
     var ratio = app.width / app.height;
-
 	for(var i = 0 ; i < index ; i++){
 		emptySpace -= applications[i].width * applications[i].height;
 	}
-     
-      
-    for(var i = 0 ; i < index ; i++){                
-	
-		// set size
+    for(var i = 0 ; i < index ; i++){
 		app_width = applications[i].down.w;
 		app_height = app_width / ratio;
-		
 		if(app_height > applications[i].down.h){
 			app_height = applications[i].down.h;
 			app_width = app_height * ratio;
 		}
-		
-		if(app_height*app_width <= 0){
-			space =  config.totalWidth * config.totalHeight;
-			smallestEmptySpace.push(space);
-		}else {
-			space = emptySpace - (app_width * app_height);
-			smallestEmptySpace.push(space);
-		}    
+		if(app_height <=100 || app_width <= 100) space = config.totalWidth * config.totalHeight;
+		else space = emptySpace - (app_width * app_height);
+		smallestEmptySpace.push(space);
     }
-      
-	// 1. add all applications width and height
-	for(var i = 0 ; i < (index+1) ; i++){
-		if(applications[i].index == 0){
+    for(var i = 0 ; i < (index+1) ; i++){
+		if(!applications[i].is_down_app){
+			console.log(applications[i].id);
 			var r = applications[i].width / applications[i].height;
 			app_width = 1;
-			app_height = app_width / r;
-				
+			app_height = app_width / r;			
 			if(app_height > 1){
 				app_height = 1;
 				app_width = app_height * r;
@@ -2308,60 +2285,37 @@ function check(app,index){
 			w += app_width;
 		}
 	}
-
-	// 2. estimate alpha
 	e = config.totalWidth / w;
-	
-	// set size
 	app_width = e * app_width;
 	app_height = app_width / ratio;	
-
 	emptySpace = config.totalWidth * config.totalHeight;
 	for(var i = 0 ; i < index ; i++){
 		var tmp_w, tmp_h;
-
 		var r = applications[i].width / applications[i].height;
-		if(applications[i].index == 0){
+		if(!applications[i].is_down_app){
 			tmp_w = 1;
 			tmp_h = tmp_w / r;
-				
 			if(tmp_h > 1){
 				tmp_h = 1;
 				tmp_w = tmp_h * r;
 			}	
-			
-			// set size
 			tmp_w = e * tmp_w;
 			tmp_h = tmp_w / r;
 		} 
-
 		emptySpace -= tmp_w * tmp_h;
 	}	
-
 	space = emptySpace - (app_width * app_height);
-
-	console.log("index: "+index);
-	console.log("emptySpace: "+emptySpace);
-	console.log("app_width * app_height: "+app_width * app_height);
-	console.log("space: "+space);
-	for(var i = 0 ; i < index ; i++){
-		console.log("smallestEmptySpace["+i+"]: "+smallestEmptySpace[i]);
-			//+", applications["+i+"].down.x: "+applications[i].down.x+", applications["+i+"].down.y"+applications[i].down.y);
-	}
-	// **************************************************** //
 	min = space;
 	var n = 0;
 	for(var i = 0 ; i < index ; i++){
+		if(applications[i].down_app_exist == true) continue;
 		if(min > smallestEmptySpace[i]){		
-			// set size
 			app_width = applications[i].down.w;
 			app_height = app_width / ratio;
-			
 			if(app_height > applications[i].down.h){
 				app_height = applications[i].down.h;
 				app_width = app_height * ratio;
 			}
-			
 			app.width = app_width;
 			app.height = app_height;
 			app.left = applications[i].down.x;
@@ -2369,19 +2323,17 @@ function check(app,index){
 			app.down = {x: app.left, 
 						y: app.top + app.height, 
 						w: app.width, 
-						h: applications[i].down.h-app.height};		
-			
-			app.index = -1;
-			
+						h: applications[i].down.h-app.height};			
 			min = smallestEmptySpace[i];
-
 			j = i;
-			c = 1;
+			app.is_down_app = true;
+			app.up_app = applications[i];
+			console.log("up_app:"+app.up_app.id);
 		}
 	}
-	if(c == 1){
+	if(app.is_down_app){
 		applications[j].down_app = app;
-
+		applications[j].down_app_exist = true;
 		if(applications[j].down.h == app.height){
 			applications[j].down.w = applications[j].down.w - app.width;	
 			applications[j].down.x = applications[j].down.x + app.width;
@@ -2389,56 +2341,40 @@ function check(app,index){
 			applications[j].down.h = 0;
 			applications[j].down.y = applications[j].down.y + app.height;
 		}
-		
 		var updateItem = {
 			elemId: app.id,
 			elemLeft: app.left, elemTop: app.top,
 			elemWidth: app.width, elemHeight: app.height,
 			force: true, date: new Date()
 		};
-				
-		// send the order
-		broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');				
+		broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');	
 	} else {
 	    n = 0;
 		for(var i = 0 ; i < (index+1) ; i++){
 			var r = applications[i].width / applications[i].height;
-			if(applications[i].index == 0){
-				
+			if(!applications[i].is_down_app){	
 				applications[i].width = 1;
-				applications[i].height = applications[i].width / r;
-					
+				applications[i].height = applications[i].width / r;	
 				if(applications[i].height > 1){
 					applications[i].height = 1;
 					applications[i].width = applications[i].height * r;
 				}	
-				
-				// set size
 				app_width = e * applications[i].width;
 				app_height = app_width / r;
-					
 				if(app_height > config.totalHeight){
 					app_height = config.totalHeight;
 					app_width = app_height * r;
 				}
-
-				// set position and size
 				if(i==0) applications[i].left = 0;
 				else applications[i].left = applications[n].left + applications[n].width;	
 				n = i;
-				
 				applications[i].top = 0;
 				applications[i].width = app_width;
 				applications[i].height = app_height;
 				applications[i].down = {x: applications[i].left, 
-											y: applications[i].top+applications[i].height, 
-											w: applications[i].width, 
-											h: config.totalHeight-applications[i].height };
-											
-				if(applications[i].down_app != null){
-					rearrange(applications[i]);
-				}
-				
+										y: applications[i].top+applications[i].height, 
+										w: applications[i].width, 
+										h: config.totalHeight-applications[i].height};
 				var updateItem = {
 					elemId: applications[i].id,
 					elemLeft: applications[i].left, 
@@ -2447,65 +2383,40 @@ function check(app,index){
 					elemHeight: applications[i].height,
 					force: true, date: new Date()
 				};
-				
-				// send the order
+				broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
+			}
+		}
+		for(var i = 0 ; i < (index+1) ; i++){
+			var r = applications[i].width / applications[i].height;
+			if(applications[i].is_down_app){	
+				var app_width, app_height;
+				applications[i].left = applications[i].up_app.left;
+				applications[i].top = applications[i].up_app.top + applications[i].up_app.height;	
+				app_width = applications[i].up_app.width;
+				app_height = app_width / r;
+				if(app_height > applications[i].up_app.down.h){
+					app_height = applications[i].up_app.down.h;
+					app_width = app_height * r;
+				}	
+				applications[i].width = app_width;
+				applications[i].height = app_height;
+				applications[i].down = { x: applications[i].up_app.left, 
+									  	 y: applications[i].up_app.top+applications[i].up_app.height+applications[i].height, 
+									  	 w: applications[i].up_app.width, 
+									  	 h: applications[i].up_app.down.h - applications[i].height};
+				var updateItem = {
+					elemId: applications[i].id,
+					elemLeft: applications[i].left, 
+					elemTop: applications[i].top,
+					elemWidth: applications[i].width, 
+					elemHeight: applications[i].height,
+					force: true, date: new Date()
+				};		
 				broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
 			}
 		}
 	} 
 }
-
-function rearrange(app, callback){
-	var app_width, app_height;
-
-	var down_r = app.down_app.width / app.down_app.height;
-
-	app.down_app.left = app.left;
-
-	app.down_app.top = app.top + app.height;
-	
-	app_width = app.down.w;
-	app_height = app_width / down_r;
-
-	if(app_height > app.down.h){
-		app_height = app.down.h;
-		app_width = app_height * down_r;
-	}
-	
-	app.down_app.width = app_width;
-	app.down_app.height = app_height;
-	
-	app.down_app.down = { x: app.down_app.left, 
-						  y: app.down_app.top+app.down_app.height, 
-						  w: app.down_app.width, 
-						  h: app.down.h - app.down_app.height};
-					
-	var updateItem = {
-		elemId: app.down_app.id,
-		elemLeft: app.down_app.left, 
-		elemTop: app.down_app.top,
-		elemWidth: app.down_app.width, 
-		elemHeight: app.down_app.height,
-		force: true, date: new Date()
-	};		
-	
-	// send the order
-	broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
-
-	app.down = {x: app.down.x + app.down_app.width, 
-            	y: app.down.y + app.down_app.height, 
-            	w: app.down.w - app.down_app.width, 
-            	h: app.down.h - app.down_app.height};
-
-	
-	if(app.down_app.down_app != null)
-		rearrange(app.down_app, callback);
-
-}
-
-
-
-
 
 // Remove all applications
 function clearDisplay() {
