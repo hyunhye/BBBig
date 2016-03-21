@@ -279,11 +279,10 @@ appLoader.prototype.loadImageFromDataBuffer = function(buffer, width, height, mi
 	callback(appInstance);
 };
 
+// hyunhye
 appLoader.prototype.loadImageFromFile = function(file, mime_type, url, external_url, name, callback) {
 	var _this = this;
 
-	// assets.addFile(data.SourceFile, data);
-	
 	if(mime_type === "image/jpeg" || mime_type === "image/png" || mime_type === "image/webp" || mime_type === "image/gif"){
 		fs.readFile(file, function (err, data) {
 			if(err) {
@@ -292,18 +291,16 @@ appLoader.prototype.loadImageFromFile = function(file, mime_type, url, external_
 			}
 
 			// Query the exif data
-			var dims = assets.getDimensions(file); // getDimensions : width, height return µÊ
-			var exif = assets.getExifData(file); // getExifData : exif return µÊ
+			var dims = assets.getDimensions(file); // getDimensions : width, height return ÂµÃŠ
+			var exif = assets.getExifData(file); // getExifData : exif return ÂµÃŠ
 
 			if (dims) {
 				_this.loadImageFromDataBuffer(data, dims.width, dims.height, mime_type, url, external_url, name, exif, exif.Tag, function(appInstance) {
 					callback(appInstance);
 				});
-				// console.log("ScanningResult : "+ exif.ScanningResult);
 			} else {
 				console.log("File not recognized:", file, mime_type, url);
 			}
-			console.log("loadImageFromFile / Tag : "+ exif.Tag);
 		});
 		
 	}
@@ -649,9 +646,27 @@ appLoader.prototype.loadFileFromLocalStorage = function(file, callback) {
 		callback(appInstance);
 	});
 };
+var ImageScanning = require('../src/image-scanning');
+function imageScanning(exif){
+   var text;
+   var imageScanning;
+
+   var imagefile = exif.FileName.split('.');
+   if(imagefile[1] == "png" || imagefile[1] == "jpg" || imagefile[1] == "gif" || imagefile[1] == "jpeg"){
+      var uploadsFolder = "public_HTTPS/uploads/scanning";
+      var originFolder = "public_HTTPS/uploads/images/";
+      var imageScanningimage = path.join(uploadsFolder, exif.FileName);
+   
+      var file = fs.createReadStream(originFolder+exif.FileName, {flags: 'r'} ); // íŒŒì¼ ì½ê¸°
+      var out = fs.createWriteStream(imageScanningimage, {flags: 'w'}); // íŒŒì¼ ì“°ê¸°
+      file.pipe(out);
+
+      imageScanning = new ImageScanning(exif);
+   }  
+};
 
 appLoader.prototype.manageAndLoadUploadedFile = function(file, callback) {
-
+	console.log("manageAndLoadUploadedFile");
 	var mime_type = file.type;
 	var app = this.mime2app[mime_type];
 	if (app === undefined) { callback(null); return; }
@@ -667,26 +682,17 @@ appLoader.prototype.manageAndLoadUploadedFile = function(file, callback) {
 		
 		var	app = _this.mime2app[mime_type];
 		if (app === "image_viewer" || app === "movie_player" || app === "pdf_viewer") {
-			// ¡Ù
-			// addFile ´Ù³¡³ª°í loadApplication ÇÔ¼ö ½ÇÇà ½ÃÅ°±â...
+
 			exiftool.file(localPath, function(err,data) {
 				if (err) {
 					console.log("internal error");
 				} else {
-					assets.addFile(data.SourceFile, data);
-					 _this.loadApplication({location: "file", path: localPath, url: url, external_url: external_url, type: mime_type, name: file.name, compressed: true}, function(appInstance) {
-											callback(appInstance); });
-					/*
-					assets.addFile(data.SourceFile, data, function(err, _this) {
-						console.log("¿©±â ¾Èµé¾î¿È");
-						if(err) {
-							console.log("error");
-						} else {
-							console.log("test");
-							_this.loadApplication({location: "file", path: localPath, url: url, external_url: external_url, type: mime_type, name: file.name, compressed: true}, function(appInstance) {
-											callback(appInstance); });
-					    }
-					});	*/							
+					imageScanning(data);
+					setTimeout(function(){
+						assets.addFile(data.SourceFile, data);
+						_this.loadApplication({location: "file", path: localPath, url: url, external_url: external_url, type: mime_type, name: file.name, compressed: true}, function(appInstance) {
+												callback(appInstance); });
+					},2000);
 				} 
 			});
 		}
@@ -697,28 +703,20 @@ appLoader.prototype.manageAndLoadUploadedFile = function(file, callback) {
 	});
 	
 };
-// addFile -> loadApplication -> loadImageFromFile
-					
-					/*
-					assets.addFile(data.SourceFile, data);
-					 _this.loadApplication({location: "file", path: localPath, url: url, external_url: external_url, type: mime_type, name: file.name, compressed: true}, function(appInstance) {
-											callback(appInstance); });
-					*/
 
-// window¿¡ ¶ç¿öÁú¶§ ¸¶Áö¸·À¸·Î ¿©±â¸¦ °ÅÄ§ seojin
 appLoader.prototype.loadApplication = function(appData, callback) {
 	var app = null;
 	if(appData.location === "file") {
 		app = this.mime2app[appData.type];
 		var dir = this.app2dir[app];
-	    // arrangementModeCheckÀÇ return °ª Á¢±Ù
+	    // arrangementModeCheckÃ€Ã‡ return Â°Âª ÃÂ¢Â±Ã™
 		var arrangementMode = arrangementModeCheck.arrangementModeCheck();
 
 		if (app === "image_viewer") {
 			this.loadImageFromFile(appData.path, appData.type, appData.url, appData.external_url, appData.name, function(appInstance) {
 			    callback(appInstance);
 			 // seojin
-			   // tile¸ğµåÀÏ¶§, free¸ğµåÀÏ¶§, Dynamic¸ğµåÀÏ¶§ °¢°¢ÀÇ ¸ğµå¿¡ ¸Â°Ô Á¤·ÄÇÏ±â
+			   // tileÂ¸Ã°ÂµÃ¥Ã€ÃÂ¶Â§, freeÂ¸Ã°ÂµÃ¥Ã€ÃÂ¶Â§, DynamicÂ¸Ã°ÂµÃ¥Ã€ÃÂ¶Â§ Â°Â¢Â°Â¢Ã€Ã‡ Â¸Ã°ÂµÃ¥Â¿Â¡ Â¸Ã‚Â°Ã” ÃÂ¤Â·Ã„Ã‡ÃÂ±Ã¢
 			    if (arrangementMode == 'tile')
 			    {
 			        tileApplications.tileApplications();
@@ -758,7 +756,7 @@ appLoader.prototype.loadApplication = function(appData, callback) {
 			this.loadVideoFromFile(appData.path, appData.type, appData.url, appData.external_url, appData.name, function(appInstance) {
 			    callback(appInstance);
 			    // seojin
-			   // tile¸ğµåÀÏ¶§, free¸ğµåÀÏ¶§, Dynamic¸ğµåÀÏ¶§ °¢°¢ÀÇ ¸ğµå¿¡ ¸Â°Ô Á¤·ÄÇÏ±â
+			   // tileÂ¸Ã°ÂµÃ¥Ã€ÃÂ¶Â§, freeÂ¸Ã°ÂµÃ¥Ã€ÃÂ¶Â§, DynamicÂ¸Ã°ÂµÃ¥Ã€ÃÂ¶Â§ Â°Â¢Â°Â¢Ã€Ã‡ Â¸Ã°ÂµÃ¥Â¿Â¡ Â¸Ã‚Â°Ã” ÃÂ¤Â·Ã„Ã‡ÃÂ±Ã¢
 			    if (arrangementMode == 'tile') {
 			        tileApplications.tileApplications();
 			    }
@@ -790,7 +788,7 @@ appLoader.prototype.loadApplication = function(appData, callback) {
 			this.loadPdfFromFile(appData.path, appData.type, appData.url, appData.external_url, appData.name, function(appInstance) {
 			    callback(appInstance);
 			    // seojin
-			   // tile¸ğµåÀÏ¶§, free¸ğµåÀÏ¶§, Dynamic¸ğµåÀÏ¶§ °¢°¢ÀÇ ¸ğµå¿¡ ¸Â°Ô Á¤·ÄÇÏ±â
+			   // tileÂ¸Ã°ÂµÃ¥Ã€ÃÂ¶Â§, freeÂ¸Ã°ÂµÃ¥Ã€ÃÂ¶Â§, DynamicÂ¸Ã°ÂµÃ¥Ã€ÃÂ¶Â§ Â°Â¢Â°Â¢Ã€Ã‡ Â¸Ã°ÂµÃ¥Â¿Â¡ Â¸Ã‚Â°Ã” ÃÂ¤Â·Ã„Ã‡ÃÂ±Ã¢
 			    if (arrangementMode == 'tile') {
 			        tileApplications.tileApplications();
 			    }

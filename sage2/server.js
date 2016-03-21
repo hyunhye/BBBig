@@ -2274,7 +2274,6 @@ function check(app,index){
     }
     for(var i = 0 ; i < (index+1) ; i++){
 		if(!applications[i].is_down_app){
-			console.log(applications[i].id);
 			var r = applications[i].width / applications[i].height;
 			app_width = 1;
 			app_height = app_width / r;			

@@ -93,7 +93,28 @@ var config = {
 
 // Building Decision Tree
 var decisionTree = new dt.DecisionTree(config);
-// *************************************************************** //   
+/**************************************************************
+function imageScanning(exif){
+   console.log("imageScanning");
+   var text;
+   var imageScanning;
+
+   var imagefile = exif.FileName.split('.');
+   if(imagefile[1] == "png" || imagefile[1] == "jpg" || imagefile[1] == "gif" || imagefile[1] == "jpeg"){
+      var uploadsFolder = "public_HTTPS/uploads/scanning";
+      var originFolder = "public_HTTPS/uploads/images/";
+      var imageScanningimage = path.join(uploadsFolder, exif.FileName);
+   
+      var file = fs.createReadStream(originFolder+exif.FileName, {flags: 'r'} ); // 파일 읽기
+      var out = fs.createWriteStream(imageScanningimage, {flags: 'w'}); // 파일 쓰기
+      file.pipe(out);
+
+      imageScanning = new ImageScanning();
+
+      imageScanning.process(exif);
+   }  
+};*/
+
 
 // seojin
 var mysql = require('mysql');
@@ -132,45 +153,13 @@ Asset.prototype.setEXIF = function(exifdata) {
    //var tag = this.exif.FileName.split('.');
    //var tag2 = tag[0].substring(0, String(tag[0]).length-1);
    //this.exif.Tag = tag2;
-   
    // DB 접속해서 그결과 로그 찍음
    //dbConnection.query('select * from keyword where keyword=?', 'crime' , function (err, rows, fields) { console.log(rows); });
    // dbConnection.query('select * from keyword', function (err, rows, fields) { console.log(rows); });
 };
 
-
-Asset.prototype.imageScanning = function(){
-   var text;
-   var imageScanning;
-
-   var imagefile = this.exif.FileName.split('.');
-   if(imagefile[1] == "png" || imagefile[1] == "jpg" || imagefile[1] == "gif" || imagefile[1] == "jpeg"){
-      var uploadsFolder = "public_HTTPS/uploads/scanning";
-      var originFolder = "public_HTTPS/uploads/images/";
-      var imageScanningimage = path.join(uploadsFolder, this.exif.FileName);
-      
-      var file = fs.createReadStream(originFolder+this.exif.FileName, {flags: 'r'} ); // 파일 읽기
-      var out = fs.createWriteStream(imageScanningimage, {flags: 'w'}); // 파일 쓰기
-      file.pipe(out);
-
-      imageScanning = new ImageScanning();
-      var obj = this;
-	  
-	  imageScanning.process(this);
-	  imageScanning.setResult(this);
-      obj.setTag(obj.exif.ScanningResult);
-   }  
-};
-
 Asset.prototype.setTag = function(text){
-   // console.log("setTag");
-   var isText = true;
-
-   // Testing Decision Tree and Random Forest
-   if(text == "" || text == undefined || text == null)
-      isText = false;
-   else
-      isText = true;
+   console.log(this.exif.Text);
 
    var tag = {CaseNumber:'HY263396', Date:'AM', PrimaryType:'BATTERY', Location:'APARTMENT'};
    var decisionTreePrediction = decisionTree.predict(tag);
@@ -235,13 +224,11 @@ saveAssets = function(filename) {
 };
 
 addFile = function(filename,exif,callback) {
-   // Add the asset in the array
-   // console.log("addFile seojin"); // pc에있는 파일을 추가 시킬때만 이 함수 거쳐 감
    var anAsset = new Asset();
    anAsset.setFilename(filename);
-   anAsset.setEXIF(exif); 
-   anAsset.imageScanning();
+   anAsset.setEXIF(exif);
    AllAssets.list[anAsset.id] = anAsset;
+   anAsset.setTag();
 
    // Path for the file system
    var thumb  = path.join(AllAssets.root, 'assets', exif.FileName);
