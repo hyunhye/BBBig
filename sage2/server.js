@@ -2327,7 +2327,6 @@ function check(app,index){
 			j = i;
 			app.is_down_app = true;
 			app.up_app = applications[i];
-			console.log("up_app:"+app.up_app.id);
 		}
 	}
 	if(app.is_down_app){

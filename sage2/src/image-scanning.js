@@ -32,10 +32,10 @@ function process(exif) {
             console.error(err);
         } else {
             // extract text from image using tessearct image scanner
-         fs.unlink(path, function (err) {});
-         this.scanningResult = text;
-         this.scanningResult = this.scanningResult.replace(/(^\s*)|(\s*$)/gi, ""); 
-         exif.Text = this.scanningResult; // this.scanningResult를 못가져옴
+            fs.unlink(path, function (err) {});
+            this.scanningResult = text;
+            this.scanningResult = this.scanningResult.replace(/(^\s*)|(\s*$)/gi, ""); 
+            exif.text = this.scanningResult; // this.scanningResult를 못가져옴
         }
     });
 }

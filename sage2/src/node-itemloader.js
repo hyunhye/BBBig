@@ -23,6 +23,7 @@ var ytdl      = require('ytdl-core');
 
 // async
 var async = require('async');
+var flow = require('nimble');
 var step = require('step');
 
 var exiftool  = require('../src/node-exiftool');      // gets exif tags for images
@@ -266,7 +267,7 @@ appLoader.prototype.loadImageFromDataBuffer = function(buffer, width, height, mi
 		animation: false,
 		metadata: metadata,
 		date: new Date(),
-		text: exif_data.Text,
+		text: exif_data.text,
 		tag: tag,
 		index: 0,
 		down: {x: 0, y: 0, w: width, h: height},
@@ -646,27 +647,45 @@ appLoader.prototype.loadFileFromLocalStorage = function(file, callback) {
 		callback(appInstance);
 	});
 };
+
 var ImageScanning = require('../src/image-scanning');
+var tesseract = require('node-tesseract');
+var multer  = require('multer');
+var fs = require('fs');
+var path = path = require('path');
+// var imageDir = 'C:/Users/Administrator/Documents/BBBig/sage2/public_HTTPS/uploads/scanning/';
 function imageScanning(exif){
    var text;
-   var imageScanning;
 
    var imagefile = exif.FileName.split('.');
    if(imagefile[1] == "png" || imagefile[1] == "jpg" || imagefile[1] == "gif" || imagefile[1] == "jpeg"){
-      var uploadsFolder = "public_HTTPS/uploads/scanning";
-      var originFolder = "public_HTTPS/uploads/images/";
-      var imageScanningimage = path.join(uploadsFolder, exif.FileName);
+    	var uploadsFolder = "public_HTTPS/uploads/scanning";
+      	var originFolder = "public_HTTPS/uploads/images/";
+      	var imageScanningimage = path.join(uploadsFolder, exif.FileName);
    
-      var file = fs.createReadStream(originFolder+exif.FileName, {flags: 'r'} ); // 파일 읽기
-      var out = fs.createWriteStream(imageScanningimage, {flags: 'w'}); // 파일 쓰기
-      file.pipe(out);
-
-      imageScanning = new ImageScanning(exif);
+      	var file = fs.createReadStream(originFolder+exif.FileName, {flags: 'r'} ); // 파일 읽기
+      	var out = fs.createWriteStream(imageScanningimage, {flags: 'w'}); // 파일 쓰기
+      	file.pipe(out);
    }  
 };
-
+function process(exif,callback){
+   	var imageDir = 'C:/Users/Administrator/Documents/BBBig/sage2/public_HTTPS/uploads/scanning/';
+   	var path = imageDir+exif.FileName;
+    // Recognize text of any language in any format
+    tesseract.process(path,function(err, text) {
+        if(err) {
+            console.error(err);
+        } else {
+            // extract text from image using tessearct image scanner
+            fs.unlink(path, function (err) {});
+            scanningResult = text;
+            scanningResult = scanningResult.replace(/(^\s*)|(\s*$)/gi, ""); 
+            exif.text = scanningResult; // this.scanningResult를 못가져옴
+        }
+        callback(null,err,true);
+    });
+};
 appLoader.prototype.manageAndLoadUploadedFile = function(file, callback) {
-	console.log("manageAndLoadUploadedFile");
 	var mime_type = file.type;
 	var app = this.mime2app[mime_type];
 	if (app === undefined) { callback(null); return; }
@@ -687,12 +706,18 @@ appLoader.prototype.manageAndLoadUploadedFile = function(file, callback) {
 				if (err) {
 					console.log("internal error");
 				} else {
-					imageScanning(data);
-					setTimeout(function(){
-						assets.addFile(data.SourceFile, data);
-						_this.loadApplication({location: "file", path: localPath, url: url, external_url: external_url, type: mime_type, name: file.name, compressed: true}, function(appInstance) {
-												callback(appInstance); });
-					},2000);
+					imageScanning(data); 
+
+					async.waterfall([
+		                function (callback) {
+		                    process(data,callback);
+		                },
+		                function (err, result) {
+		                    assets.addFile(data.SourceFile, data);
+		                    _this.loadApplication({location: "file", path: localPath, url: url, external_url: external_url, type: mime_type, name: file.name, compressed: true}, function(appInstance) {
+		                                       callback(appInstance); });
+		                }
+                    ]);
 				} 
 			});
 		}

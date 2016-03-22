@@ -159,7 +159,7 @@ Asset.prototype.setEXIF = function(exifdata) {
 };
 
 Asset.prototype.setTag = function(text){
-   console.log(this.exif.Text);
+   console.log(this.exif.text);
 
    var tag = {CaseNumber:'HY263396', Date:'AM', PrimaryType:'BATTERY', Location:'APARTMENT'};
    var decisionTreePrediction = decisionTree.predict(tag);
