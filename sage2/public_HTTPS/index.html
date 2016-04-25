@@ -1296,10 +1296,15 @@ new gweb.analytics.AutoTrack({
 		<div>
 			<p id="mode">Default Mode</p>
 		</div>
+        <div id="file">
+            <form name="localForm">
+                <input type="file" id="filenameForUpload" name='myfile[]' multiple accept="image/*">
+                <span id="localfileUploadBtn" class="file-button">Upload</span>
+            </form>
+        </div>
         <div id="displayUI">
             <canvas id="sage2UI"></canvas>
         </div>
-
         <div id="menuUI">
             <div id="sage2pointerContainer" class="uiButton">
                 <img id="sage2pointer" alt="pointer" src="images/ui/[graycircle]-sage2pointer.svg" width="48" height="48" />
