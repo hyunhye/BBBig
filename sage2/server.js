@@ -431,6 +431,7 @@ function initializeWSClient(wsio) {
 		wsio.on('dynamicApplications', wsDynamicApplications);
 		wsio.on('googleImageLayoutApplications', wsGoogleImageLayoutApplications);
 		wsio.on('binPackingApplications', wsBinPackingApplications);
+		wsio.on('analysisApplications', wsAnalysisApplications);
 		wsio.on('arrangementModeCheck', wsArrangementModeCheck); // seojin ���ĸ��?üũ
 
 	}
@@ -2122,7 +2123,8 @@ function googleImageLayoutApplications(){
 
 // ******************** Bin Packing Problem ******************** //
 function Packer(w,h) {
-	this.init(w,h)
+	this.init(w,h);
+	this.root;
 }
 
 Packer.prototype.init = function(w,h){
@@ -2139,13 +2141,33 @@ Packer.prototype.init = function(w,h){
 
 Packer.prototype.fit = function(blocks){
     var n, block;
-	var node = {used:false, x:0,y:0,w:0,h:0, down: {x:0,y:0,w:0,h:0}, right:{x:0,y:0,w:0,h:0}};
-	
+	var node;p
     for (n = 0; n < blocks.length; n++) {
 		block = blocks[n];
-		if (node = this.findNode(this.root, block.width, block.height))
-			block.fit = this.splitNode(node, block.width, block.height);
+
+		node = this.findNode(this.root, block.width, block.height);
+
+		if(node==null)
+			node = this.setSize(block,this.root.right);
+		
+
+		block.fit = this.splitNode(node, block.width, block.height);
     }
+}
+
+Packer.prototype.setSize = function(block, root){
+	var node;
+	var r = block.width / block.height;
+	/* set size */
+	block.height = root.right.h;
+	block.width = block.height * r;
+
+	node = this.findNode(this.root, block.width, block.height);
+
+	if(node==null)
+		this.setSize(root.right);
+
+	return node;
 }
 
 Packer.prototype.findNode = function(root, w, h){
@@ -2154,12 +2176,12 @@ Packer.prototype.findNode = function(root, w, h){
     else if ((w <= root.w) && (h <= root.h))
 		return root;
     else
-		return null;
-	
+    	return null;
 }
 
 Packer.prototype.splitNode = function(node, w, h){
     node.used = true;
+
     node.down  = { x: node.x,     y: node.y + h, w: node.w,     h: node.h - h };
     node.right = { x: node.x + w, y: node.y,     w: node.w - w, h: h          };
     return node;
@@ -2174,28 +2196,27 @@ function binPackingApplications() {
 
 	var maxHeight  = binHeight;
 	var maxWidth   = binWidth;
-	  
+
 	var packer = new Packer(maxWidth,maxHeight); 
-	var blocks = applications;
 
-	packer.fit(blocks);
+	packer.fit(applications);
 
-	for(var n = 0 ; n < blocks.length ; n++) {
-		var block = blocks[n];
-		if (block.fit) {
+	for(var n = 0 ; n < applications.length ; n++) {
+		var app = applications[n];
+		if (app.fit) {
 			var borderWidth = 2;
-			var h = block.height;
-			var w = block.width;
-	  
-			block.left = block.fit.x;
-			block.top = block.fit.y;
-			block.height = h;
-			block.width = w;
+			var h = app.height;
+			var w = app.width;
+	   
+			app.left = app.fit.x;
+			app.top = app.fit.y;
+			app.height = h;
+			app.width = w;
 
 			var updateItem = {
-				elemId: block.id,
-				elemLeft: block.left, elemTop: block.top,
-				elemWidth: block.width, elemHeight: block.height,
+				elemId: app.id,
+				elemLeft: app.left, elemTop: app.top,
+				elemWidth: app.width, elemHeight: app.height,
 				force: true, date: new Date()
 			};
 			
@@ -2416,6 +2437,10 @@ function check(app,index){
 	} 
 }
 
+function analysisApplications(){
+	arrangementMode = 'analysis';
+	console.log('test');
+}
 // Remove all applications
 function clearDisplay() {
 	var all = applications.length;
@@ -2475,7 +2500,9 @@ function wsArrangementModeCheck(wsio, data) {
     arrangementModeCheck();
 }
 
-
+function wsAnalysisApplications(wsio, data) {
+    analysisApplications();
+}
 // **************  Server File Functions *****************
 
 function wsRequestAvailableApplications(wsio, data) {
@@ -4439,6 +4466,8 @@ function deleteApplication( elem ) {
 		googleImageLayoutApplications();
 	} else if(arrangementMode == "bin_packing"){
 		binPackingApplications();
+	} else if(arrangementMode == "analysis"){
+		analysisApplications();
 	}
 }
 
@@ -4592,5 +4621,6 @@ exports.priorityStaticApplications = priorityStaticApplications;
 exports.priorityRatioApplications = priorityRatioApplications;
 exports.googleImageLayoutApplications = googleImageLayoutApplications;
 exports.binPackingApplications = binPackingApplications;
+exports.analysisApplications = analysisApplications;
 exports.arrangementModeCheck = arrangementModeCheck; // ���� ���?üũ 
 exports.loadConfiguration = loadConfiguration;

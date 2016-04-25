@@ -93,28 +93,6 @@ var config = {
 
 // Building Decision Tree
 var decisionTree = new dt.DecisionTree(config);
-/**************************************************************
-function imageScanning(exif){
-   console.log("imageScanning");
-   var text;
-   var imageScanning;
-
-   var imagefile = exif.FileName.split('.');
-   if(imagefile[1] == "png" || imagefile[1] == "jpg" || imagefile[1] == "gif" || imagefile[1] == "jpeg"){
-      var uploadsFolder = "public_HTTPS/uploads/scanning";
-      var originFolder = "public_HTTPS/uploads/images/";
-      var imageScanningimage = path.join(uploadsFolder, exif.FileName);
-   
-      var file = fs.createReadStream(originFolder+exif.FileName, {flags: 'r'} ); // 파일 읽기
-      var out = fs.createWriteStream(imageScanningimage, {flags: 'w'}); // 파일 쓰기
-      file.pipe(out);
-
-      imageScanning = new ImageScanning();
-
-      imageScanning.process(exif);
-   }  
-};*/
-
 
 // seojin
 var mysql = require('mysql');
@@ -159,13 +137,12 @@ Asset.prototype.setEXIF = function(exifdata) {
 };
 
 Asset.prototype.setTag = function(text){
-   console.log(this.exif.text);
-
-   var tag = {CaseNumber:'HY263396', Date:'AM', PrimaryType:'BATTERY', Location:'APARTMENT'};
-   var decisionTreePrediction = decisionTree.predict(tag);
-   
-   this.exif.Tag = decisionTreePrediction;
-
+   var tag = this.exif.text.split(', ');
+   this.exif.Tag = [];
+   for(var i in tag){
+      var t = tag[i].split('\n',1);
+      this.exif.Tag.push(t[0].replace(/(^\s*)|(\s*$)/gi, ""));
+   }
 };
 
 Asset.prototype.width = function() {

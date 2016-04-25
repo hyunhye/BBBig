@@ -363,6 +363,9 @@ new gweb.analytics.AutoTrack({
             var arrangement = document.getElementById('arrangement');
             arrangement.width = Math.floor(48 * menuScale);
             arrangement.height = Math.floor(48 * menuScale);
+            var analysis = document.getElementById('analysis');
+            analysis.width = Math.floor(48 * menuScale);
+            analysis.height = Math.floor(48 * menuScale);
             var settings = document.getElementById('settings');
             settings.width = Math.floor(48 * menuScale);
             settings.height = Math.floor(48 * menuScale);
@@ -649,7 +652,7 @@ new gweb.analytics.AutoTrack({
             }
 			else if (element.id === "prioritycontentContainer" || element.id === "prioritycontent") {
                 showDialog('PriorityDialog');
-            }
+            } 
             else if (element.id === "settings" || element.id === "settingsContainer" || element.id === "settingsLabel") {
                 showDialog('settingsDialog');
             }
@@ -900,6 +903,9 @@ new gweb.analytics.AutoTrack({
                 wsio.emit('priorityRatioApplications');
                 hideDialog('arrangementDialog');
 				hideDialog('PriorityDialog');
+            }
+            else if (element.id === "analysis") {
+                wsio.emit('analysisApplications');
             }
             else if (element.id === "savesession") {
                 var template = "Session " + dateToYYYYMMDDHHMMSS(new Date());
@@ -1320,6 +1326,10 @@ new gweb.analytics.AutoTrack({
             <div id="arrangementContainer" class="uiButton">
                 <img id="arrangement" alt="arrangement" src="images/ui/[graycircle]-arrangement.svg" width="48" height="48" />
                 <p id="arrangementLabel">Arrangement</p>
+            </div>
+            <div id="analysisContainer" class="uiButton">
+                <img id="analysis" alt="analysis" src="images/ui/[graycircle]-arrangement.svg" width="48" height="48" />
+                <p id="settingsLabel">Analysis</p>
             </div>
             <div id="settingsContainer" class="uiButton">
                 <img id="settings" alt="settings" src="images/ui/[graycircle]-settings.svg" width="48" height="48" />
