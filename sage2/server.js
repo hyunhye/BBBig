@@ -2431,15 +2431,16 @@ function check(app,index){
 }
 
 // ☆
+// 3. 받아온 텍스트 값이 우선순위태그값으로 썸네일로 첫번째 분류 해주기 - 현혜
+// 4. 단계별로 계속 가능하게 - 현혜
+// 5. 단계별로 뒤로가기 가능하게 - 서진
+var check = false;
 function analysisApplications(){
 	arrangementMode = 'analysis';
-	
-	// 3. 받아온 텍스트 값이 우선순위태그값으로 썸네일로 첫번째 분류 해주기 - 현혜
-	// 4. 단계별로 계속 가능하게 - 현혜
-	// 5. 단계별로 뒤로가기 가능하게 - 서진
+
 	if(insertTagResult == "" || insertTagResult == null || insertTagResult == undefined){
 		gridmode();
-	} else{
+	} else {
 		prioritymode();
 	}
 }
@@ -2627,7 +2628,7 @@ function gridmode(){
         var titleBar = config.ui.titleBarHeight;
         if (config.ui.auto_hide_ui === true) titleBar = 0;
         var areaX2 = app.left;
-        var areaY2 = app.top; // keep 0.5 height as margin
+        var areaY2 = app.top + Math.round(1.5 * titleBar); // keep 0.5 height as margin
         if (config.ui.auto_hide_ui === true) areaY2 = -config.ui.titleBarHeight;
 
         // 전체 display 화면의 크기
@@ -2676,16 +2677,17 @@ function gridmode(){
 }
 
 function prioritymode(){
-	// ***** Part0 : Prepare(initialize)
-    var app;
-    var apps_priority = [];
-    var apps_thumbnail = [];
+	var app;
+	var apps_priority = [];
+	var apps_thumbnail = [];
     var i, j = 0;
+
 	for (i = 0; i < applications.length; i++) {
 		app = applications[i];
 		
 		for(j = 0 ; j < app.tag.length ; j++){
 			if(app.tag[j] == insertTagResult.toUpperCase()){
+				check = true;
 				apps_priority.push(app);
 				break;
 			} 
@@ -2693,7 +2695,7 @@ function prioritymode(){
 		if(j == app.tag.length){
 			apps_thumbnail.push(app);
 		}
-	}
+	}	
 	var ratio = 0;
 	var y = 0;
 	if(apps_thumbnail.length == 0) {
@@ -2705,12 +2707,12 @@ function prioritymode(){
 
 	if(apps_priority.length == 0) {
 		ratio = 1;
-		y = 1;
 	} else { 
 		ratio = 1/5;
 		y = 1-ratio;
 	}
 	tilemode(apps_thumbnail, ratio, config.totalHeight * y);
+
 }
 
 function tilemode(apps, ratio, y){
@@ -2753,7 +2755,8 @@ function tilemode(apps, ratio, y){
     var titleBar = config.ui.titleBarHeight;
     if (config.ui.auto_hide_ui === true) titleBar = 0;
     var areaX = 0;
-    var areaY = y;
+    var areaY = y + Math.round(1.5 * titleBar);
+    if (config.ui.auto_hide_ui === true) areaY = -config.ui.titleBarHeight;
 
     var areaW = config.totalWidth;
     var areaH = config.totalHeight * ratio - (1.0 * titleBar);
