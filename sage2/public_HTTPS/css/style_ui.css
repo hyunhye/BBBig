@@ -51,13 +51,14 @@ span {
 	margin-top: 18px;
 }
 
-.file-button {
+.custom-button {
 	padding: 6px 9px 6px 9px;
 	border-radius: 10px;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	color: #FFFFFF;
 	background-color: #787878;
+	margin-bottom: -10px;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	user-select: none;

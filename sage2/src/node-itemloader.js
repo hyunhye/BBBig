@@ -38,7 +38,7 @@ var priorityStaticApplications = require('../server');
 var priorityRatioApplications = require('../server');
 var googleImageLayoutApplications = require('../server');
 var binPackingApplications = require('../server');
-
+var analysisApplications = require('../server');
 
 var imageMagick;
 mime.default_type = "application/custom";
@@ -318,7 +318,7 @@ appLoader.prototype.loadImageFromFile = function(file, mime_type, url, external_
 			var exif = assets.getExifData(file);
 
 			if (dims) {
-				_this.loadImageFromDataBuffer(buffer, dims.width, dims.height, "image/png", url, external_url, name, exif, exif.Tag,function(appInstance) {
+				_this.loadImageFromDataBuffer(buffer, dims.width, dims.height, "image/png", url, external_url, name, exif, exif.Tag, function(appInstance) {
 					callback(appInstance);
 				});
 
@@ -669,7 +669,7 @@ function imageScanning(exif){
    }  
 };
 function process(exif,callback){
-   	var imageDir = 'C:/sage2/sage2/sage2/public_HTTPS/uploads/scanning/';
+   	var imageDir = 'C:/Users/Administrator/Documents/BBBig/sage2/public_HTTPS/uploads/scanning/';
    	var path = imageDir+exif.FileName;
     // Recognize text of any language in any format
     tesseract.process(path,function(err, text) {
@@ -775,6 +775,9 @@ appLoader.prototype.loadApplication = function(appData, callback) {
 				else if (arrangementMode == 'bin_packing') {
 			        binPackingApplications.binPackingApplications();
 			    }
+			    else if (arrangementMode == 'analysis') {
+			        analysisApplications.analysisApplications();
+			    }
 			});
 		}
 		else if(app === "movie_player"){
@@ -807,6 +810,9 @@ appLoader.prototype.loadApplication = function(appData, callback) {
 				else if (arrangementMode == 'priority_ratio') {
 			        priorityApplications.priorityApplications();
 			    }
+			    else if (arrangementMode == 'analysis') {
+			        analysisApplications.analysisApplications();
+			    }
 			});
 		}
 		else if(app === "pdf_viewer"){
@@ -838,6 +844,9 @@ appLoader.prototype.loadApplication = function(appData, callback) {
 			    }
 				else if (arrangementMode == 'priority_ratio') {
 			        priorityApplications.priorityApplications();
+			    }
+				else if (arrangementMode == 'analysis') {
+			        analysisApplications.analysisApplications();
 			    }
 			});
 		}
