@@ -292,8 +292,8 @@ appLoader.prototype.loadImageFromFile = function(file, mime_type, url, external_
 			}
 
 			// Query the exif data
-			var dims = assets.getDimensions(file); // getDimensions : width, height return µÊ
-			var exif = assets.getExifData(file); // getExifData : exif return µÊ
+			var dims = assets.getDimensions(file); // getDimensions : width, height return µ?
+			var exif = assets.getExifData(file); // getExifData : exif return µ?
 
 			if (dims) {
 				_this.loadImageFromDataBuffer(data, dims.width, dims.height, mime_type, url, external_url, name, exif, exif.Tag, function(appInstance) {
@@ -663,13 +663,13 @@ function imageScanning(exif){
       	var originFolder = "public_HTTPS/uploads/images/";
       	var imageScanningimage = path.join(uploadsFolder, exif.FileName);
    
-      	var file = fs.createReadStream(originFolder+exif.FileName, {flags: 'r'} ); // 파일 읽기
-      	var out = fs.createWriteStream(imageScanningimage, {flags: 'w'}); // 파일 쓰기
+      	var file = fs.createReadStream(originFolder+exif.FileName, {flags: 'r'} ); // ?�???�기
+      	var out = fs.createWriteStream(imageScanningimage, {flags: 'w'}); // ?�???�기
       	file.pipe(out);
    }  
 };
 function process(exif,callback){
-   	var imageDir = 'C:/Users/Administrator/Documents/BBBig/sage2/public_HTTPS/uploads/scanning/';
+   	var imageDir = 'C:/sage2/sage2/sage2/public_HTTPS/uploads/scanning/';
    	var path = imageDir+exif.FileName;
     // Recognize text of any language in any format
     tesseract.process(path,function(err, text) {
@@ -680,7 +680,7 @@ function process(exif,callback){
             fs.unlink(path, function (err) {});
             scanningResult = text;
             scanningResult = scanningResult.replace(/(^\s*)|(\s*$)/gi, ""); 
-            exif.text = scanningResult; // this.scanningResult를 못가져옴
+            exif.text = scanningResult; // this.scanningResult�?못�??��?
         }
         callback(null,err,true);
     });
@@ -734,14 +734,14 @@ appLoader.prototype.loadApplication = function(appData, callback) {
 	if(appData.location === "file") {
 		app = this.mime2app[appData.type];
 		var dir = this.app2dir[app];
-	    // arrangementModeCheckÀÇ return °ª Á¢±Ù
+	    // arrangementModeCheck?? return °ª ?¢±?
 		var arrangementMode = arrangementModeCheck.arrangementModeCheck();
 
 		if (app === "image_viewer") {
 			this.loadImageFromFile(appData.path, appData.type, appData.url, appData.external_url, appData.name, function(appInstance) {
 			    callback(appInstance);
 			 // seojin
-			   // tile¸ðµåÀÏ¶§, free¸ðµåÀÏ¶§, Dynamic¸ðµåÀÏ¶§ °¢°¢ÀÇ ¸ðµå¿¡ ¸Â°Ô Á¤·ÄÇÏ±â
+			   // tile¸ðµå??¶§, free¸ðµå??¶§, Dynamic¸ðµå??¶§ °¢°¢?? ¸ðµå¿¡ ¸?°? ?¤·???±â
 			    if (arrangementMode == 'tile')
 			    {
 			        tileApplications.tileApplications();
@@ -781,7 +781,7 @@ appLoader.prototype.loadApplication = function(appData, callback) {
 			this.loadVideoFromFile(appData.path, appData.type, appData.url, appData.external_url, appData.name, function(appInstance) {
 			    callback(appInstance);
 			    // seojin
-			   // tile¸ðµåÀÏ¶§, free¸ðµåÀÏ¶§, Dynamic¸ðµåÀÏ¶§ °¢°¢ÀÇ ¸ðµå¿¡ ¸Â°Ô Á¤·ÄÇÏ±â
+			   // tile¸ðµå??¶§, free¸ðµå??¶§, Dynamic¸ðµå??¶§ °¢°¢?? ¸ðµå¿¡ ¸?°? ?¤·???±â
 			    if (arrangementMode == 'tile') {
 			        tileApplications.tileApplications();
 			    }
@@ -813,7 +813,7 @@ appLoader.prototype.loadApplication = function(appData, callback) {
 			this.loadPdfFromFile(appData.path, appData.type, appData.url, appData.external_url, appData.name, function(appInstance) {
 			    callback(appInstance);
 			    // seojin
-			   // tile¸ðµåÀÏ¶§, free¸ðµåÀÏ¶§, Dynamic¸ðµåÀÏ¶§ °¢°¢ÀÇ ¸ðµå¿¡ ¸Â°Ô Á¤·ÄÇÏ±â
+			   // tile¸ðµå??¶§, free¸ðµå??¶§, Dynamic¸ðµå??¶§ °¢°¢?? ¸ðµå¿¡ ¸?°? ?¤·???±â
 			    if (arrangementMode == 'tile') {
 			        tileApplications.tileApplications();
 			    }

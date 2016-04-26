@@ -905,6 +905,8 @@ new gweb.analytics.AutoTrack({
 				hideDialog('PriorityDialog');
             }
             else if (element.id === "analysis") {
+			   var mode = document.getElementById('mode');
+				mode.innerHTML = "Analysis Mode";
                 wsio.emit('analysisApplications');
             }
             else if (element.id === "savesession") {
@@ -926,12 +928,19 @@ new gweb.analytics.AutoTrack({
                 hideDialog('ffShareScreenDialog');
             }
 
+			/**insertTag**/
+			else if (element.id === "insertTagBtn") {
+                // trigger the upload function
+				var result = document.getElementById('tagForPriority').value;
+				wsio.emit('insertTagResult', { result });
+            }
+
                 // Other
             else {
                 //console.log("clicked on: ", element);
             }
         }
-
+		
         function pointerDblClick(event) {
             handleDblClick(event.target);
         }
@@ -1350,6 +1359,13 @@ new gweb.analytics.AutoTrack({
                 <p id="speechLabel">Speech</p>
             </div>
         </div>
+    </div>
+	<!--insertTag -->
+	<div id="insertTag">
+		<form name="tagForm" action="">
+			<input type="text" id="tagForPriority">
+			<span id="insertTagBtn" class="button">Search</span>
+		</form>
     </div>
     <div class="clear"></div>
 
