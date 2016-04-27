@@ -435,6 +435,7 @@ function initializeWSClient(wsio) {
 		wsio.on('binPackingApplications', wsBinPackingApplications);
 		wsio.on('analysisApplications', wsAnalysisApplications);
 		wsio.on('analysisBackApplications',wsAnalysisBackApplications);
+		wsio.on('analysisResetApplications',wsAnalysisResetApplications);
 		wsio.on('arrangementModeCheck', wsArrangementModeCheck); // seojin ���ĸ��?üũ
 
 	}
@@ -2439,6 +2440,7 @@ var check = false;
 var insertTagResults = [];
 function analysisApplications(){
 	arrangementMode = 'analysis';
+	
 	if(insertTagResult == "" || insertTagResult == null || insertTagResult == undefined){
 		gridmode();
 	} else {
@@ -2451,12 +2453,53 @@ function analysisApplications(){
 	}
 }
 
+function analysisResetApplications(){
+	insertTagResults = [];
+	insertTagResult = "";
+	analysisApplications();
+}
+
 function analysisBackApplications(){
 	insertTagResults.splice(insertTagResults.length-1,1);
 
 	insertTagResult = insertTagResults[insertTagResults.length-1];
 	analysisApplications();
 }
+
+// Compute the edit distance between the two given strings
+function getEditDistance(a, b) {
+  if(a.length === 0) return b.length; 
+  if(b.length === 0) return a.length; 
+
+  var matrix = [];
+
+  // increment along the first column of each row
+  var i;
+  for(i = 0; i <= b.length; i++){
+    matrix[i] = [i];
+  }
+
+  // increment each column in the first row
+  var j;
+  for(j = 0; j <= a.length; j++){
+    matrix[0][j] = j;
+  }
+
+  // Fill in the rest of the matrix
+  for(i = 1; i <= b.length; i++){
+    for(j = 1; j <= a.length; j++){
+      if(b.charAt(i-1) == a.charAt(j-1)){
+        matrix[i][j] = matrix[i-1][j-1];
+      } else {
+        matrix[i][j] = Math.min(matrix[i-1][j-1] + 1, // substitution
+                                Math.min(matrix[i][j-1] + 1, // insertion
+                                         matrix[i-1][j] + 1)); // deletion
+      }
+    }
+  }
+
+  return matrix[b.length][a.length];
+};
 
 function gridmode(){
     /** 태그값을 기반으로 2차원 배열 생성 **/
@@ -2696,6 +2739,7 @@ function prioritymode(){
 	var apps_thumbnail = new Array();
     var i, j = 0, k;
     var totalHeight = 0;
+    var dist = 2;
 
     apps_priority[0] = new Array();
     for (i = 0; i < applications.length; i++) {
@@ -2712,12 +2756,13 @@ function prioritymode(){
 			app = apps_priority[k][i];
 		
 			for(j = 0 ; j < app.tag.length ; j++){
-				if(app.tag[j] == insertTagResults[k].toUpperCase()){
+				console.log(insertTagResults[k]+" , "+app.tag[j]+" , "+getEditDistance(insertTagResults[k].toUpperCase(), app.tag[j]));
+				if(dist > getEditDistance(insertTagResults[k].toUpperCase(), app.tag[j])) {
 					apps_priority[k+1].push(app);
 					break;
-				} 
+				}
 			}
-			if(j == app.tag.length){
+			if(j == app.tag.length) {
 				apps_thumbnail.push(app);
 			}
 		}	
@@ -2893,6 +2938,9 @@ function wsAnalysisApplications(wsio, data) {
 
 function wsAnalysisBackApplications(wsio, data) {
 	analysisBackApplications();
+}
+function wsAnalysisResetApplications(wsio, data) {
+	analysisResetApplications();
 }
 // **************  Server File Functions *****************
 
@@ -5021,5 +5069,6 @@ exports.googleImageLayoutApplications = googleImageLayoutApplications;
 exports.binPackingApplications = binPackingApplications;
 exports.analysisApplications = analysisApplications;
 exports.analysisBackApplications = analysisBackApplications;
+exports.analysisResetApplications = analysisResetApplications;
 exports.arrangementModeCheck = arrangementModeCheck; 
 exports.loadConfiguration = loadConfiguration;
