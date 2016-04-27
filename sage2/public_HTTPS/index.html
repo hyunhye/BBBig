@@ -748,7 +748,7 @@ new gweb.analytics.AutoTrack({
                 tag.value = "";
                 var result = "";
                 wsio.emit('insertTagResult', { result });
-                wsio.emit('analysisApplications');
+                wsio.emit('analysisResetApplications');
             }
             else if (element.id === "backBtn") {
                 wsio.emit('analysisBackApplications');
@@ -952,7 +952,7 @@ new gweb.analytics.AutoTrack({
                 
                 var result = "";
                 wsio.emit('insertTagResult', { result });
-                wsio.emit('analysisApplications');
+                wsio.emit('analysisResetApplications');
             }
             else if (element.id === "backBtn") {
                 wsio.emit('analysisBackApplications');
