@@ -743,6 +743,16 @@ new gweb.analytics.AutoTrack({
                 wsio.emit('insertTagResult', { result });
                 wsio.emit('analysisApplications');
             }
+            else if (element.id === "resetBtn") {
+                var tag = document.getElementById('tagForPriority');
+                tag.value = "";
+                var result = "";
+                wsio.emit('insertTagResult', { result });
+                wsio.emit('analysisApplications');
+            }
+            else if (element.id === "backBtn") {
+                wsio.emit('analysisBackApplications');
+            }
             else if (element.id === "fileDeleteBtn") {
                 if (selectedFileEntry !== null && confirm("Are you sure you want to delete this file?")) {
                     var application = selectedFileEntry.getAttribute("application");
@@ -936,7 +946,17 @@ new gweb.analytics.AutoTrack({
 				wsio.emit('insertTagResult', { result });
                 wsio.emit('analysisApplications');
             }
-
+            else if (element.id === "resetBtn") {
+                var tag = document.getElementById('tagForPriority');
+                tag.value = "";
+                
+                var result = "";
+                wsio.emit('insertTagResult', { result });
+                wsio.emit('analysisApplications');
+            }
+            else if (element.id === "backBtn") {
+                wsio.emit('analysisBackApplications');
+            }
                 // Other
             else {
                 //console.log("clicked on: ", element);
@@ -1319,6 +1339,8 @@ new gweb.analytics.AutoTrack({
             <form name="tagForm" action="">
                 <input type="text" id="tagForPriority">
                 <input type="button" id="insertTagBtn" class="custom-button" value="Search"/>
+                <input type="button" id="resetBtn" class="custom-button" value="Reset"/>
+                <input type="button" id="backBtn" class="custom-button" value="Back"/>
             </form>
         </div>
         <div id="displayUI">

@@ -434,6 +434,7 @@ function initializeWSClient(wsio) {
 		wsio.on('googleImageLayoutApplications', wsGoogleImageLayoutApplications);
 		wsio.on('binPackingApplications', wsBinPackingApplications);
 		wsio.on('analysisApplications', wsAnalysisApplications);
+		wsio.on('analysisBackApplications',wsAnalysisBackApplications);
 		wsio.on('arrangementModeCheck', wsArrangementModeCheck); // seojin ���ĸ��?üũ
 
 	}
@@ -2435,14 +2436,28 @@ function check(app,index){
 // 4. 단계별로 계속 가능하게 - 현혜
 // 5. 단계별로 뒤로가기 가능하게 - 서진
 var check = false;
+var insertTagResults = [];
 function analysisApplications(){
 	arrangementMode = 'analysis';
-
 	if(insertTagResult == "" || insertTagResult == null || insertTagResult == undefined){
 		gridmode();
 	} else {
+		var i;
+		for(i = 0; i < insertTagResults.length ; i++){
+			if(insertTagResults[i] == insertTagResult) break;
+		}
+		if(i == insertTagResults.length) insertTagResults.push(insertTagResult);
 		prioritymode();
 	}
+}
+
+function analysisBackApplications(){
+	console.log(insertTagResults.length);
+	insertTagResults.splice(insertTagResults.length-1,1);
+	console.log(insertTagResults.length);
+
+	insertTagResult = insertTagResults[insertTagResults.length-1];
+	analysisApplications();
 }
 
 function gridmode(){
@@ -2676,51 +2691,66 @@ function gridmode(){
     }
 }
 
+
+var apps_priority = new Array();
 function prioritymode(){
 	var app;
-	var apps_priority = [];
-	var apps_thumbnail = [];
-    var i, j = 0;
+	var apps_thumbnail = new Array();
+    var i, j = 0, k;
+    var totalHeight = 0;
 
-	for (i = 0; i < applications.length; i++) {
-		app = applications[i];
+    apps_priority[0] = new Array();
+    for (i = 0; i < applications.length; i++) {
+    	apps_priority[0].push(applications[i]);
+    }
+
+    for(k = 0 ; k < insertTagResults.length ; k++) {
+    	totalHeight = config.totalHeight*Math.pow(4/5,k);
+
+    	apps_priority[k+1] = new Array();
+    	apps_thumbnail = [];
+
+    	for (i = 0; i < apps_priority[k].length; i++) {
+			app = apps_priority[k][i];
 		
-		for(j = 0 ; j < app.tag.length ; j++){
-			if(app.tag[j] == insertTagResult.toUpperCase()){
-				check = true;
-				apps_priority.push(app);
-				break;
-			} 
-		}
-		if(j == app.tag.length){
-			apps_thumbnail.push(app);
-		}
-	}	
-	var ratio = 0;
-	var y = 0;
-	if(apps_thumbnail.length == 0) {
-		ratio = 1;
-	} else { 
-		ratio = 4/5;
-	}
-	tilemode(apps_priority, ratio , y);
+			for(j = 0 ; j < app.tag.length ; j++){
+				if(app.tag[j] == insertTagResults[k].toUpperCase()){
+					apps_priority[k+1].push(app);
+					break;
+				} 
+			}
+			if(j == app.tag.length){
+				apps_thumbnail.push(app);
+			}
+		}	
 
-	if(apps_priority.length == 0) {
-		ratio = 1;
-	} else { 
-		ratio = 1/5;
-		y = 1-ratio;
-	}
-	tilemode(apps_thumbnail, ratio, config.totalHeight * y);
+		// main
+		var y = 0;
+		var h = 0;
+		if(apps_thumbnail.length == 0) {
+			h = totalHeight;
+		} else { 
+			h = totalHeight * 4/5;
+		}
+		tilemode(apps_priority[k+1], h , y);
 
+		// thumbnail
+		if(apps_priority[k].length == 0) {
+			h = totalHeight;
+		} else { 
+			y = totalHeight * 4/5;
+			h = totalHeight * 1/5;
+		}
+		tilemode(apps_thumbnail, h, y);
+	}
 }
 
-function tilemode(apps, ratio, y){
+function tilemode(apps, totalHeight, y){
  	var app;
     var i, c, r;
     var numCols, numRows;
 
-    var displayAr = config.totalWidth / (config.totalHeight * ratio);
+    var displayAr = config.totalWidth / totalHeight;
     var arDiff = displayAr / averageWindowAspectRatio();
     var numWindows = apps.length;
 
@@ -2759,7 +2789,7 @@ function tilemode(apps, ratio, y){
     if (config.ui.auto_hide_ui === true) areaY = -config.ui.titleBarHeight;
 
     var areaW = config.totalWidth;
-    var areaH = config.totalHeight * ratio - (1.0 * titleBar);
+    var areaH = totalHeight - (1.0 * titleBar);
 
     var tileW = Math.floor(areaW / numCols);
     var tileH = Math.floor(areaH / numRows);
@@ -2861,6 +2891,10 @@ function wsArrangementModeCheck(wsio, data) {
 
 function wsAnalysisApplications(wsio, data) {
     analysisApplications();
+}
+
+function wsAnalysisBackApplications(wsio, data) {
+	analysisBackApplications();
 }
 // **************  Server File Functions *****************
 
@@ -4978,9 +5012,9 @@ function arrangementModeCheck() {
 }
 
 // seojin
-exports.tileApplications = tileApplications; // tile ���?
-exports.dynamicApplications = dynamicApplications; // �� ���� ã�Ƽ� ��ġ�� 
-exports.priorityApplications = priorityApplications; // �켱���� ������ ��ġ��
+exports.tileApplications = tileApplications; 
+exports.dynamicApplications = dynamicApplications; 
+exports.priorityApplications = priorityApplications; 
 exports.priorityGridApplications = priorityGridApplications;
 exports.priorityThumbnailApplications = priorityThumbnailApplications;
 exports.priorityStaticApplications = priorityStaticApplications;
@@ -4988,5 +5022,6 @@ exports.priorityRatioApplications = priorityRatioApplications;
 exports.googleImageLayoutApplications = googleImageLayoutApplications;
 exports.binPackingApplications = binPackingApplications;
 exports.analysisApplications = analysisApplications;
-exports.arrangementModeCheck = arrangementModeCheck; // ���� ���?üũ 
+exports.analysisBackApplications = analysisBackApplications;
+exports.arrangementModeCheck = arrangementModeCheck; 
 exports.loadConfiguration = loadConfiguration;
