@@ -2452,9 +2452,7 @@ function analysisApplications(){
 }
 
 function analysisBackApplications(){
-	console.log(insertTagResults.length);
 	insertTagResults.splice(insertTagResults.length-1,1);
-	console.log(insertTagResults.length);
 
 	insertTagResult = insertTagResults[insertTagResults.length-1];
 	analysisApplications();
