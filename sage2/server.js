@@ -2781,8 +2781,9 @@ function prioritymode(){
 		if(apps_priority[k].length == 0) {
 			h = totalHeight;
 		} else { 
+			var r = 4 * insertTagResults.length;
 			y = totalHeight * 4/5;
-			h = totalHeight * 1/5;
+			h = config.totalHeight * 1/5;
 		}
 		tilemode(apps_thumbnail, h, y);
 	}
