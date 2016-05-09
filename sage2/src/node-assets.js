@@ -21,6 +21,8 @@ var async     = require('async');
 var color     = require('color');
 var gm        = require('gm');                   // imagesmagick
 var ffmpeg    = require('fluent-ffmpeg');        // ffmpeg
+var fuzzyset        = require('fuzzyset.js');  
+
 var exiftool  = require('../src/node-exiftool'); // gets exif tags for images
 var ImageScanning = require('../src/image-scanning');
 var step = require('step');
@@ -136,12 +138,27 @@ Asset.prototype.setEXIF = function(exifdata) {
    // dbConnection.query('select * from keyword', function (err, rows, fields) { console.log(rows); });
 };
 
+/* fuzzy algotithmm*/
+var fuzzy = FuzzySet();
+fuzzy.add("CRIME TYPE");
+fuzzy.add("LOCATION DESCRIPTION");
+fuzzy.add("DISTRICT HEATMAP");
+fuzzy.add("2009");
+fuzzy.add("2010");
+fuzzy.add("2011");
+fuzzy.add("2012");
+fuzzy.add("2013");
+fuzzy.add("2009");
+
 Asset.prototype.setTag = function(text){
    var tag = this.exif.text.split(', ');
    this.exif.Tag = [];
    for(var i in tag){
       var t = tag[i].split('\n',1);
-      this.exif.Tag.push(t[0].replace(/(^\s*)|(\s*$)/gi, ""));
+      var f = fuzzy.get(t[0].replace(/(^\s*)|(\s*$)/gi, ""));
+      if(f[0][0] >= 0.7){
+         this.exif.Tag.push(f[0][1]);
+      }
    }
 };
 
