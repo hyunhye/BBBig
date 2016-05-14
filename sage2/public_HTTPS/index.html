@@ -1,7 +1,22 @@
 ﻿<!DOCTYPE html>
 <html>
 <head lang="en">
+<script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-36810333-1']);
+    _gaq.push(['_trackPageview']);
 
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script>
+<!-- international support from https://github.com/sheetjs/js-codepage -->
+<script type="text/javascript" src="./cpexcel.js"></script>
+<!-- ODS support -->
+<script type="text/javascript" src="./ods.js"></script>
+<script type="text/javascript" src="./xlsx.js"></script>
 <!--Web speech API-->
 <script>
 (function(e, p){
@@ -20,9 +35,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=10.0, minimum-scale=1.0, user-scalable=1" />
     <title>SAGE2 UI - Mobile</title>
-	
-	
-	
 	
 			
 	<!--Web speech API-->
@@ -507,8 +519,6 @@ new gweb.analytics.AutoTrack({
         // Upload a file from the UI (not drag-and-drop)
         function fileUploadFromUI() {
             // Hide the dialog
-            // 내 피씨의 파일 올릴때 실행되는 함수
-
             hideDialog('localfileDialog');
             // Setup the progress bar
             var sage2UI = document.getElementById('sage2UI');
@@ -520,7 +530,143 @@ new gweb.analytics.AutoTrack({
             displayUI.fileUpload = true;
             displayUI.uploadPercent = 0;
             interactor.uploadFiles(thefile.files, 0, 0);
+        }   
+        var X = XLSX;
+        var XW = {
+            /* worker message */
+            msg: 'xlsx',
+            /* worker scripts */
+            rABS: './xlsxworker2.js',
+            norABS: './xlsxworker1.js',
+            noxfer: './xlsxworker.js'
+        };
+        var rABS = typeof FileReader !== "undefined" && typeof FileReader.prototype !== "undefined" && typeof FileReader.prototype.readAsBinaryString !== "undefined";
+        var wtf_mode = false;
+
+        function fixdata(data) {
+            var o = "", l = 0, w = 10240;
+            for(; l<data.byteLength/w; ++l) o+=String.fromCharCode.apply(null,new Uint8Array(data.slice(l*w,l*w+w)));
+            o+=String.fromCharCode.apply(null, new Uint8Array(data.slice(l*w)));
+            return o;
         }
+
+        function ab2str(data) {
+            var o = "", l = 0, w = 10240;
+            for(; l<data.byteLength/w; ++l) o+=String.fromCharCode.apply(null,new Uint16Array(data.slice(l*w,l*w+w)));
+            o+=String.fromCharCode.apply(null, new Uint16Array(data.slice(l*w)));
+            return o;
+        }
+
+        function s2ab(s) {
+            var b = new ArrayBuffer(s.length*2), v = new Uint16Array(b);
+            for (var i=0; i != s.length; ++i) v[i] = s.charCodeAt(i);
+            return [v, b];
+        }
+
+        function xw_noxfer(data, cb) {
+            var worker = new Worker(XW.noxfer);
+            worker.onmessage = function(e) {
+                switch(e.data.t) {
+                    case 'ready': break;
+                    case 'e': console.error(e.data.d); break;
+                    case XW.msg: cb(JSON.parse(e.data.d)); break;
+                }
+            };
+            var arr = rABS ? data : btoa(fixdata(data));
+            worker.postMessage({d:arr,b:rABS});
+        }
+        function xw_xfer(data, cb) {
+            var worker = new Worker(rABS ? XW.rABS : XW.norABS);
+            worker.onmessage = function(e) {
+                switch(e.data.t) {
+                    case 'ready': break;
+                    case 'e': console.error(e.data.d); break;
+                    default: xx=ab2str(e.data).replace(/\n/g,"\\n").replace(/\r/g,"\\r"); console.log("done"); cb(JSON.parse(xx)); break;
+                }
+            };
+            if(rABS) {
+                var val = s2ab(data);
+                worker.postMessage(val[1], [val[1]]);
+            } else {
+                worker.postMessage(data, [data]);
+            }
+        }
+        function xw(data, cb) {
+            xw_xfer(data, cb);
+        }       
+        function get_radio_value( radioName ) {
+            var radios = document.getElementsByName( radioName );
+            for( var i = 0; i < radios.length; i++ ) {
+                if( radios[i].checked || radios.length === 1 ) {
+                    return radios[i].value;
+                }
+            }
+        }
+        function to_json(workbook) {
+            var result = {};
+            workbook.SheetNames.forEach(function(sheetName) {
+                var roa = X.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+                if(roa.length > 0){
+                    result[sheetName] = roa;
+                }
+            });
+            return result;
+        }
+        function to_csv(workbook) {
+            var result = [];
+            workbook.SheetNames.forEach(function(sheetName) {
+                var csv = X.utils.sheet_to_csv(workbook.Sheets[sheetName]);
+                if(csv.length > 0){
+                    result.push("SHEET: " + sheetName);
+                    result.push("");
+                    result.push(csv);
+                }
+            });
+            return result.join("\n");
+        }   
+        function to_formulae(workbook) {
+            var result = [];
+            workbook.SheetNames.forEach(function(sheetName) {
+                var formulae = X.utils.get_formulae(workbook.Sheets[sheetName]);
+                if(formulae.length > 0){
+                    result.push("SHEET: " + sheetName);
+                    result.push("");
+                    result.push(formulae.join("\n"));
+                }
+            });
+            return result.join("\n");
+        }
+        function process_wb(wb) {
+            var output = "";
+            switch(get_radio_value("format")) {
+                case "json":
+                    output = JSON.stringify(to_json(wb), 2, 2);
+                    break;
+                case "form":
+                    output = to_formulae(wb);
+                    break;
+                default:
+                output = to_csv(wb);
+            }
+
+            wsio.emit('excelfileResult', { output });
+            
+            if(typeof console !== 'undefined') console.log("output", new Date());
+        }
+        function handleFile(e) {
+            var files = e.target.files || (e.dataTransfer && e.dataTransfer.files);
+            var f = files[0];
+            {
+                var reader = new FileReader();
+                var name = f.name;
+                reader.onload = function(e) {
+                    var data = e.target.result;
+                    xw(data, process_wb);
+                };
+                reader.readAsBinaryString(f);
+            }
+        }
+        
         function pointerPress(event) {
             if (event.target.id === "sage2UI") {
                 var btn = (event.button === 0) ? "left" : (event.button === 1) ? "middle" : "right";
@@ -734,6 +880,10 @@ new gweb.analytics.AutoTrack({
             else if (element.id === "cancelFilesBtn2") {
                 // close the pic uploader panel
                 hideDialog('localfileDialog');
+            }
+            else if (element.id === "xlf") {
+                var xlf = element;
+                if(xlf.addEventListener) xlf.addEventListener('change', handleFile, false);
             }
             else if (element.id === "localfileUploadBtn") {
                 fileUploadFromUI();
@@ -1328,10 +1478,15 @@ new gweb.analytics.AutoTrack({
 			<p id="mode">Default Mode</p>
 		</div>
         <!--upload file-->
+        <div id="excelfile">
+            엑셀파일
+            <input type="file" name="xlfile" id="xlf" /> 
+        </div>
         <div id="file">
             <form name="localForm">
+                데이터
                 <input type="file" id="filenameForUpload" name='myfile[]' multiple accept="image/*">
-                <input type="button" id="localfileUploadBtn" class="custom-button"value="Upload"/>
+                <input type="button" id="localfileUploadBtn" class="custom-button" value="Upload"/>
             </form>
         </div>
         <!--insertTag -->
@@ -1343,6 +1498,7 @@ new gweb.analytics.AutoTrack({
                 <input type="button" id="backBtn" class="custom-button" value="Back"/>
             </form>
         </div>
+
         <div id="displayUI">
             <canvas id="sage2UI"></canvas>
         </div>
@@ -1363,12 +1519,6 @@ new gweb.analytics.AutoTrack({
                 <img id="mediabrowser" alt="mediabrowser" src="images/ui/[graycircle]-mediabrowser.svg" width="48" height="48" />
                 <p id="mediabrowserLabel">Media Browser</p>
             </div>
-            <!-- browser commented out for now
-             <div id="browserContainer" class="uiButton">
-              <img id="browser" alt="browser" src="images/ui/[graycircle]-browser.svg" width="48" height="48"/>
-              <p id="browserLabel">Web browser</p>
-             </div>
-            -->
             <div id="arrangementContainer" class="uiButton">
                 <img id="arrangement" alt="arrangement" src="images/ui/[graycircle]-arrangement.svg" width="48" height="48" />
                 <p id="arrangementLabel">Arrangement</p>

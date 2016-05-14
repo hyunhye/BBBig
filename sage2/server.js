@@ -379,7 +379,7 @@ function initializeWSClient(wsio) {
 	// Web Speech Results
 	wsio.on('webSpeechResult', wsWebSpeechResult);
 	wsio.on('insertTagResult', wsInsertTagResult);
-	
+	wsio.on('excelfileResult', wsExcelfileResult);
 	
 	// set up listeners based on what the client sends
 	if(wsio.messages.sendsPointerData){
@@ -3018,21 +3018,19 @@ function wsDeleteElementFromStoredFiles(wsio, data) {
 }
 var speechResult = '';
 var insertTagResult = '';
-// hyunhye
-// Web Speech Result
+var excelfileResult;
 function wsWebSpeechResult(wsio, data){
-	// console.log(trim(data.final_transcript));
 	speechResult = trim(data.final_transcript);
 	console.log(speechResult);
 }
-// 나중에 Priority mode 에서 이것 가지고 가서 태그 체크 함
 function trim(str) {
 	return str.replace( /(^\s*)|(\s*$)/g, "");
 }
-
-// insertTag
+function wsExcelfileResult(wsio, data){
+	excelfileResult = data.output;
+	console.log(excelfileResult[15]);
+}
 function wsInsertTagResult(wsio, data){
-	// console.log(trim(data.final_transcript));
 	insertTagResult = data.result;
 }
 

@@ -128,39 +128,11 @@ Asset.prototype.setFilename = function(aFilename) {
 Asset.prototype.setEXIF = function(exifdata) {
    this.exif = exifdata;
 
-   // seojin 태그 추가 (태그의 값을 파일 명으로)
-   // 지금 상태 : 일단 파일명으로 가져와서 태그 달리는데 맨 뒤에 한글자 짤림
-   //var tag = this.exif.FileName.split('.');
-   //var tag2 = tag[0].substring(0, String(tag[0]).length-1);
-   //this.exif.Tag = tag2;
    // DB 접속해서 그결과 로그 찍음
    //dbConnection.query('select * from keyword where keyword=?', 'crime' , function (err, rows, fields) { console.log(rows); });
    // dbConnection.query('select * from keyword', function (err, rows, fields) { console.log(rows); });
 };
 
-/* fuzzy algotithmm*/
-var fuzzy = FuzzySet();
-fuzzy.add("CRIME TYPE");
-fuzzy.add("LOCATION DESCRIPTION");
-fuzzy.add("DISTRICT HEATMAP");
-fuzzy.add("2009");
-fuzzy.add("2010");
-fuzzy.add("2011");
-fuzzy.add("2012");
-fuzzy.add("2013");
-fuzzy.add("2009");
-
-Asset.prototype.setTag = function(text){
-   var tag = this.exif.text.split(', ');
-   this.exif.Tag = [];
-   for(var i in tag){
-      var t = tag[i].split('\n',1);
-      var f = fuzzy.get(t[0].replace(/(^\s*)|(\s*$)/gi, ""));
-      if(f[0][0] >= 0.7){
-         this.exif.Tag.push(f[0][1]);
-      }
-   }
-};
 
 Asset.prototype.width = function() {
     return this.exif.ImageWidth;
@@ -222,7 +194,7 @@ addFile = function(filename,exif,callback) {
    anAsset.setFilename(filename);
    anAsset.setEXIF(exif);
    AllAssets.list[anAsset.id] = anAsset;
-   anAsset.setTag();
+   //anAsset.setTag();
 
    // Path for the file system
    var thumb  = path.join(AllAssets.root, 'assets', exif.FileName);

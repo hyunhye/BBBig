@@ -653,6 +653,7 @@ var tesseract = require('node-tesseract');
 var multer  = require('multer');
 var fs = require('fs');
 var path = path = require('path');
+
 // var imageDir = 'C:/Users/Administrator/Documents/BBBig/sage2/public_HTTPS/uploads/scanning/';
 function imageScanning(exif){
    var text;
@@ -663,8 +664,8 @@ function imageScanning(exif){
       	var originFolder = "public_HTTPS/uploads/images/";
       	var imageScanningimage = path.join(uploadsFolder, exif.FileName);
    
-      	var file = fs.createReadStream(originFolder+exif.FileName, {flags: 'r'} ); // ?Œ???½ê¸°
-      	var out = fs.createWriteStream(imageScanningimage, {flags: 'w'}); // ?Œ???°ê¸°
+      	var file = fs.createReadStream(originFolder+exif.FileName, {flags: 'r'} ); 
+      	var out = fs.createWriteStream(imageScanningimage, {flags: 'w'}); 
       	file.pipe(out);
    }  
 };
@@ -680,11 +681,38 @@ function process(exif,callback){
             fs.unlink(path, function (err) {});
             scanningResult = text;
             scanningResult = scanningResult.replace(/(^\s*)|(\s*$)/gi, ""); 
-            exif.text = scanningResult; // this.scanningResultë¥?ëª»ê??¸ì˜?
+            exif.text = scanningResult; 
         }
         callback(null,err,true);
     });
 };
+
+var fuzzyset = require('fuzzyset.js');
+
+/* fuzzy algotithmm*/
+var fuzzy = FuzzySet();
+fuzzy.add("CRIME TYPE");
+fuzzy.add("LOCATION DESCRIPTION");
+fuzzy.add("DISTRICT HEATMAP");
+fuzzy.add("2009");
+fuzzy.add("2010");
+fuzzy.add("2011");
+fuzzy.add("2012");
+fuzzy.add("2013");
+fuzzy.add("2009");
+
+function setTag(exif){
+   var tag = exif.text.split(', ');
+   exif.Tag = [];
+   for(var i in tag){
+      var t = tag[i].split('\n',1);
+      var f = fuzzy.get(t[0].replace(/(^\s*)|(\s*$)/gi, ""));
+      if(f[0][0] >= 0.7){
+         exif.Tag.push(f[0][1]);
+      }
+   }
+};
+
 appLoader.prototype.manageAndLoadUploadedFile = function(file, callback) {
 	var mime_type = file.type;
 	var app = this.mime2app[mime_type];
@@ -707,12 +735,12 @@ appLoader.prototype.manageAndLoadUploadedFile = function(file, callback) {
 					console.log("internal error");
 				} else {
 					imageScanning(data); 
-
 					async.waterfall([
 		                function (callback) {
 		                    process(data,callback);
 		                },
 		                function (err, result) {
+		                	setTag(data);
 		                    assets.addFile(data.SourceFile, data);
 		                    _this.loadApplication({location: "file", path: localPath, url: url, external_url: external_url, type: mime_type, name: file.name, compressed: true}, function(appInstance) {
 		                                       callback(appInstance); });
