@@ -47,6 +47,8 @@ var request     = require('request');             // external http requests
 var sprint      = require('sprint');              // pretty formating (sprintf)
 var twit        = require('twit');                // twitter api
 var util        = require('util');                // node util
+var fuzzyset = require('fuzzyset.js');
+
 
 // custom node modules
 var assets      = require('./src/node-assets');         // manages the list of files
@@ -436,7 +438,8 @@ function initializeWSClient(wsio) {
 		wsio.on('analysisApplications', wsAnalysisApplications);
 		wsio.on('analysisBackApplications',wsAnalysisBackApplications);
 		wsio.on('analysisResetApplications',wsAnalysisResetApplications);
-		wsio.on('arrangementModeCheck', wsArrangementModeCheck); // seojin ���ĸ��?üũ
+		wsio.on('arrangementModeCheck', wsArrangementModeCheck); 
+		wsio.on('setFuzzyData',wsSetFuzzyData);
 
 	}
 	if(wsio.messages.sendsWebContentToLoad){
@@ -2875,6 +2878,16 @@ function tilemode(apps, totalHeight, y){
     }
 }
 
+function setFuzzyData(){
+	var fuzzy = FuzzySet();
+	var s = excelfileResult.split('\n');
+	for(var key in s){
+		var str = key + " : " + s[key] + "\n";
+		fuzzy.add(s[key]);
+	}
+	return fuzzy;
+}
+
 // Remove all applications
 function clearDisplay() {
 	var all = applications.length;
@@ -2942,6 +2955,9 @@ function wsAnalysisBackApplications(wsio, data) {
 }
 function wsAnalysisResetApplications(wsio, data) {
 	analysisResetApplications();
+}
+function wsSetFuzzyData(wsio, data) {
+	setFuzzyData();
 }
 // **************  Server File Functions *****************
 
@@ -3021,14 +3037,13 @@ var insertTagResult = '';
 var excelfileResult;
 function wsWebSpeechResult(wsio, data){
 	speechResult = trim(data.final_transcript);
-	console.log(speechResult);
 }
 function trim(str) {
 	return str.replace( /(^\s*)|(\s*$)/g, "");
 }
 function wsExcelfileResult(wsio, data){
 	excelfileResult = data.output;
-	console.log(excelfileResult[15]);
+	setFuzzyData();
 }
 function wsInsertTagResult(wsio, data){
 	insertTagResult = data.result;
@@ -5056,7 +5071,6 @@ function arrangementModeCheck() {
     return arrangementMode;
 }
 
-// seojin
 exports.tileApplications = tileApplications; 
 exports.dynamicApplications = dynamicApplications; 
 exports.priorityApplications = priorityApplications; 
@@ -5071,3 +5085,4 @@ exports.analysisBackApplications = analysisBackApplications;
 exports.analysisResetApplications = analysisResetApplications;
 exports.arrangementModeCheck = arrangementModeCheck; 
 exports.loadConfiguration = loadConfiguration;
+exports.setFuzzyData = setFuzzyData;

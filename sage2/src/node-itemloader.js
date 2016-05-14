@@ -39,6 +39,7 @@ var priorityRatioApplications = require('../server');
 var googleImageLayoutApplications = require('../server');
 var binPackingApplications = require('../server');
 var analysisApplications = require('../server');
+var setFuzzyData = require('../server');
 
 var imageMagick;
 mime.default_type = "application/custom";
@@ -688,29 +689,17 @@ function process(exif,callback){
 };
 
 var fuzzyset = require('fuzzyset.js');
-
-/* fuzzy algotithmm*/
-var fuzzy = FuzzySet();
-fuzzy.add("CRIME TYPE");
-fuzzy.add("LOCATION DESCRIPTION");
-fuzzy.add("DISTRICT HEATMAP");
-fuzzy.add("2009");
-fuzzy.add("2010");
-fuzzy.add("2011");
-fuzzy.add("2012");
-fuzzy.add("2013");
-fuzzy.add("2009");
-
 function setTag(exif){
-   var tag = exif.text.split(', ');
-   exif.Tag = [];
-   for(var i in tag){
-      var t = tag[i].split('\n',1);
-      var f = fuzzy.get(t[0].replace(/(^\s*)|(\s*$)/gi, ""));
-      if(f[0][0] >= 0.7){
-         exif.Tag.push(f[0][1]);
-      }
-   }
+	var fuzzy = setFuzzyData.setFuzzyData()
+   	var tag = exif.text.split(', ');
+   	exif.Tag = [];
+   	for(var i in tag){
+      	var t = tag[i].split('\n',1);
+      	var f = fuzzy.get(t[0].replace(/(^\s*)|(\s*$)/gi, ""));
+      	if(f[0][0] >= 0.7){
+         	exif.Tag.push(f[0][1]);
+      	}
+   	}
 };
 
 appLoader.prototype.manageAndLoadUploadedFile = function(file, callback) {

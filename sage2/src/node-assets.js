@@ -21,7 +21,7 @@ var async     = require('async');
 var color     = require('color');
 var gm        = require('gm');                   // imagesmagick
 var ffmpeg    = require('fluent-ffmpeg');        // ffmpeg
-var fuzzyset        = require('fuzzyset.js');  
+var fuzzyset  = require('fuzzyset.js');  
 
 var exiftool  = require('../src/node-exiftool'); // gets exif tags for images
 var ImageScanning = require('../src/image-scanning');
