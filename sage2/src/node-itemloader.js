@@ -688,17 +688,18 @@ function process(exif,callback){
     });
 };
 
-var fuzzyset = require('fuzzyset.js');
+//var fuzzyset = require('fuzzyset.js');
 function setTag(exif){
-	var fuzzy = setFuzzyData.setFuzzyData()
+	//var fuzzy = setFuzzyData.setFuzzyData()
    	var tag = exif.text.split(', ');
    	exif.Tag = [];
    	for(var i in tag){
       	var t = tag[i].split('\n',1);
-      	var f = fuzzy.get(t[0].replace(/(^\s*)|(\s*$)/gi, ""));
-      	if(f[0][0] >= 0.7){
-         	exif.Tag.push(f[0][1]);
-      	}
+      	exif.Tag.push(t[0]);
+      	//var f = fuzzy.get(t[0].replace(/(^\s*)|(\s*$)/gi, ""));
+      	//if(f[0][0] >= 0.7){
+        // 	exif.Tag.push(f[0][1]);
+      	//}
    	}
 };
 

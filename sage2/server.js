@@ -2882,7 +2882,6 @@ function setFuzzyData(){
 	var fuzzy = FuzzySet();
 	var s = excelfileResult.split('\n');
 	for(var key in s){
-		var str = key + " : " + s[key] + "\n";
 		fuzzy.add(s[key]);
 	}
 	return fuzzy;
