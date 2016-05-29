@@ -2759,8 +2759,8 @@ function prioritymode(){
 			app = apps_priority[k][i];
 		
 			for(j = 0 ; j < app.tag.length ; j++){
-				console.log(insertTagResults[k]+" , "+app.tag[j]+" , "+getEditDistance(insertTagResults[k].toUpperCase(), app.tag[j]));
-				if(dist > getEditDistance(insertTagResults[k].toUpperCase(), app.tag[j])) {
+				console.log(insertTagResults[k]+" , "+app.tag[j]+" , "+getEditDistance(insertTagResults[k].toLowerCase(), app.tag[j]));
+				if(dist > getEditDistance(insertTagResults[k].toLowerCase(), app.tag[j])) {
 					apps_priority[k+1].push(app);
 					break;
 				}
