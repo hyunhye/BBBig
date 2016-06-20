@@ -2436,22 +2436,24 @@ function check(app,index){
 }
 
 // ☆
-// 3. 받아온 텍스트 값이 우선순위태그값으로 썸네일로 첫번째 분류 해주기 - 현혜
-// 4. 단계별로 계속 가능하게 - 현혜
-// 5. 단계별로 뒤로가기 가능하게 - 서진
 var check = false;
 var insertTagResults = [];
 function analysisApplications(){
 	arrangementMode = 'analysis';
-	
-	if(insertTagResult == "" || insertTagResult == null || insertTagResult == undefined){
+	console.log(speechResult);
+	if(insertTagResult == "" || insertTagResult == null || insertTagResult == undefined || speechResult == null || speechResult == "" || speechResult == undefined){
 		gridmode();
 	} else {
 		var i;
 		for(i = 0; i < insertTagResults.length ; i++){
 			if(insertTagResults[i] == insertTagResult) break;
 		}
-		if(i == insertTagResults.length) insertTagResults.push(insertTagResult);
+		if(i == insertTagResults.length) {
+			if(insertTagResult != "" || insertTagResult != null || insertTagResult != undefined)
+				insertTagResults.push(insertTagResult);
+			else if (speechResult != null || speechResult != "" || speechResult != undefined)
+				insertTagResults.push(speechResult.toLowerCase());
+		}
 		prioritymode();
 	}
 }

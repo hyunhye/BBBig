@@ -670,8 +670,11 @@ function imageScanning(exif){
       	file.pipe(out);
    }  
 };
+
+
 function process(exif,callback){
-   	var imageDir = 'C:/Users/Administrator/Documents/BBBig/sage2/public_HTTPS/uploads/scanning/';
+   	// console.log('☆☆☆☆☆');
+    var imageDir = 'C:/Projects/SAGE2/SAGE2/sage2/public_HTTPS/uploads/scanning/';
    	var path = imageDir+exif.FileName;
     // Recognize text of any language in any format
     tesseract.process(path,function(err, text) {
@@ -690,17 +693,22 @@ function process(exif,callback){
 
 //var fuzzyset = require('fuzzyset.js');
 function setTag(exif){
-	//var fuzzy = setFuzzyData.setFuzzyData()
-   	var tag = exif.text.split(', ');
-   	exif.Tag = [];
-   	for(var i in tag){
-      	var t = tag[i].split('\n',1);
-      	exif.Tag.push(t[0]);
-      	//var f = fuzzy.get(t[0].replace(/(^\s*)|(\s*$)/gi, ""));
-      	//if(f[0][0] >= 0.7){
-        // 	exif.Tag.push(f[0][1]);
-      	//}
-   	}
+   
+   //var fuzzy = setFuzzyData.setFuzzyData()
+      var tag = exif.text.split(', ');
+      exif.Tag = [];
+      for(var i in tag){
+         var t = tag[i].split('\n',1);
+         exif.Tag.push(t[0]);
+         //var f = fuzzy.get(t[0].replace(/(^\s*)|(\s*$)/gi, ""));
+         //if(f[0][0] >= 0.7){
+        //    exif.Tag.push(f[0][1]);
+         //}
+      }
+   
+   // var tag = exif.text;
+   // console.log("----------------------------------"+tag+"----------------------------------");
+   
 };
 
 appLoader.prototype.manageAndLoadUploadedFile = function(file, callback) {
