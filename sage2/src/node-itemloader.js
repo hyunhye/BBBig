@@ -695,7 +695,7 @@ function setTag(exif){
    	exif.Tag = [];
    	for(var i in tag){
       	var t = tag[i].split('\n',1);
-      	exif.Tag.push(t[0]);
+      	exif.Tag.push(t[0].toLowerCase());
       	//var f = fuzzy.get(t[0].replace(/(^\s*)|(\s*$)/gi, ""));
       	//if(f[0][0] >= 0.7){
         // 	exif.Tag.push(f[0][1]);

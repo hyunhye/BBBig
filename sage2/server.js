@@ -431,7 +431,6 @@ function initializeWSClient(wsio) {
 		wsio.on('priorityGridApplications', wsPriorityGridApplications);
 		wsio.on('priorityThumbnailApplications', wsPriorityThumbnailApplications);
 		wsio.on('priorityStaticApplications', wsPriorityStaticApplications);
-		wsio.on('priorityRatioApplications', wsPriorityRatioApplications);
 		wsio.on('dynamicApplications', wsDynamicApplications);
 		wsio.on('googleImageLayoutApplications', wsGoogleImageLayoutApplications);
 		wsio.on('binPackingApplications', wsBinPackingApplications);
@@ -1497,29 +1496,213 @@ function tileApplications() {
 }
 
 function dynamicApplications() {
-    arrangementMode = 'dynamic';
-	
-    var i;
-    var app;
-    var spaceManager;
-	var sizeDesire;
-	var layoutRows  = config.layout.rows;
-	var layoutCols  = config.layout.columns;
-	//var padding = 4;
-    // if only one application, no padding, i.e maximize
-    //if (applications.length === 1) padding = 0;
-	 
-    // �����찡 �ϳ��� ���ٸ�..
-    if (applications.length === 0) return;
-
-	// ***** Part3 : the largest number of tag is largest size and dynamic mode
-	var spaceManager = new DynamicSpaceManager();
-	spaceManager.initializeEmptySpace(0,config.totalWidth,0,config.totalHeight);
-	for (i = 0; i < applications.length; i++) { // compare speechResult to each application's tag
+	arrangementMode = 'dynamic';
+	var w = 0, h = 0;
+	var e = 0;
+	var app;
+	var app_width,app_height;
+	for(var i = 0 ; i < applications.length ; i++){
 		app = applications[i];
-		DynamicForPrioritySpace(spaceManager,app);
+		var ratio = app.width / app.height;
+		app_width = config.totalWidth;
+		app_height = app_width / ratio;
+			
+		if(app_height > config.totalHeight){
+			app_height = config.totalHeight;
+			app_width = app_height * ratio;
+		}
+		if(i == 0){		
+			app.left = 0;
+			app.top = 0;	
+			app.width = app_width;
+			app.height = app_height;
+			app.down = {x: app.left, 
+						y: app.top+app.height, 
+						w: app.width, 
+						h: config.totalHeight-app.height};
+			var updateItem = {
+				elemId: app.id,
+				elemLeft: app.left, 
+				elemTop: app.top,
+				elemWidth: app.width, 
+				elemHeight: app.height,
+				force: true, date: new Date()
+			};
+			broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
+		}
+		if((i+1) == applications.length) break; 
+		checkSpace(applications[i+1],i+1, config.totalHeight);
+		
 	}
-	
+}
+
+function checkSpace(app, index, totalHeight){
+    var app_width,app_height;
+    var j = 0;
+	var w = 0;
+	var e = 0;
+	var n = 0;
+	var min = 0;
+    var emptySpace = config.totalWidth * totalHeight;
+    var space = 0;
+    var smallestEmptySpace = new Array();
+    var ratio = app.width / app.height;
+	for(var i = 0 ; i < index ; i++){
+		emptySpace -= applications[i].width * applications[i].height;
+	}
+    for(var i = 0 ; i < index ; i++){
+		app_width = applications[i].down.w;
+		app_height = app_width / ratio;
+		if(app_height > applications[i].down.h){
+			app_height = applications[i].down.h;
+			app_width = app_height * ratio;
+		}
+		if(app_height <=100 || app_width <= 100) space = config.totalWidth * totalHeight;
+		else space = emptySpace - (app_width * app_height);
+		smallestEmptySpace.push(space);
+    }
+    for(var i = 0 ; i < (index+1) ; i++){
+		if(!applications[i].is_down_app){
+			var r = applications[i].width / applications[i].height;
+			app_width = 1;
+			app_height = app_width / r;			
+			if(app_height > 1){
+				app_height = 1;
+				app_width = app_height * r;
+			}	
+			w += app_width;
+		}
+	}
+	e = config.totalWidth / w;
+	app_width = e * app_width;
+	app_height = app_width / ratio;	
+	emptySpace = config.totalWidth * totalHeight;
+	for(var i = 0 ; i < index ; i++){
+		var tmp_w, tmp_h;
+		var r = applications[i].width / applications[i].height;
+		if(!applications[i].is_down_app){
+			tmp_w = 1;
+			tmp_h = tmp_w / r;
+			if(tmp_h > 1){
+				tmp_h = 1;
+				tmp_w = tmp_h * r;
+			}	
+			tmp_w = e * tmp_w;
+			tmp_h = tmp_w / r;
+		} 
+		emptySpace -= tmp_w * tmp_h;
+	}	
+	space = emptySpace - (app_width * app_height);
+	min = space;
+	var n = 0;
+	for(var i = 0 ; i < index ; i++){
+		if(applications[i].down_app_exist == true) continue;
+		if(min > smallestEmptySpace[i]){		
+			app_width = applications[i].down.w;
+			app_height = app_width / ratio;
+			if(app_height > applications[i].down.h){
+				app_height = applications[i].down.h;
+				app_width = app_height * ratio;
+			}
+			app.width = app_width;
+			app.height = app_height;
+			app.left = applications[i].down.x;
+			app.top = applications[i].down.y;
+			app.down = {x: app.left, 
+						y: app.top + app.height, 
+						w: app.width, 
+						h: applications[i].down.h-app.height};			
+			min = smallestEmptySpace[i];
+			j = i;
+			app.is_down_app = true;
+			app.up_app = applications[i];
+		}
+	}
+	if(app.is_down_app){
+		applications[j].down_app = app;
+		applications[j].down_app_exist = true;
+		if(applications[j].down.h == app.height){
+			applications[j].down.w = applications[j].down.w - app.width;	
+			applications[j].down.x = applications[j].down.x + app.width;
+		} else {	
+			applications[j].down.h = 0;
+			applications[j].down.y = applications[j].down.y + app.height;
+		}
+		var updateItem = {
+			elemId: app.id,
+			elemLeft: app.left, elemTop: app.top,
+			elemWidth: app.width, elemHeight: app.height,
+			force: true, date: new Date()
+		};
+		broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');	
+	} else {
+	    n = 0;
+		for(var i = 0 ; i < (index+1) ; i++){
+			var r = applications[i].width / applications[i].height;
+			if(!applications[i].is_down_app){	
+				applications[i].width = 1;
+				applications[i].height = applications[i].width / r;	
+				if(applications[i].height > 1){
+					applications[i].height = 1;
+					applications[i].width = applications[i].height * r;
+				}	
+				app_width = e * applications[i].width;
+				app_height = app_width / r;
+				if(app_height > totalHeight){
+					app_height = totalHeight;
+					app_width = app_height * r;
+				}
+				if(i==0) applications[i].left = 0;
+				else applications[i].left = applications[n].left + applications[n].width;	
+				n = i;
+				applications[i].top = 0;
+				applications[i].width = app_width;
+				applications[i].height = app_height;
+				applications[i].down = {x: applications[i].left, 
+										y: applications[i].top+applications[i].height, 
+										w: applications[i].width, 
+										h: totalHeight-applications[i].height};
+				var updateItem = {
+					elemId: applications[i].id,
+					elemLeft: applications[i].left, 
+					elemTop: applications[i].top,
+					elemWidth: applications[i].width, 
+					elemHeight: applications[i].height,
+					force: true, date: new Date()
+				};
+				broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
+			}
+		}
+		for(var i = 0 ; i < (index+1) ; i++){
+			var r = applications[i].width / applications[i].height;
+			if(applications[i].is_down_app){	
+				var app_width, app_height;
+				applications[i].left = applications[i].up_app.left;
+				applications[i].top = applications[i].up_app.top + applications[i].up_app.height;	
+				app_width = applications[i].up_app.width;
+				app_height = app_width / r;
+				if(app_height > applications[i].up_app.down.h){
+					app_height = applications[i].up_app.down.h;
+					app_width = app_height * r;
+				}	
+				applications[i].width = app_width;
+				applications[i].height = app_height;
+				applications[i].down = { x: applications[i].up_app.left, 
+									  	 y: applications[i].up_app.top+applications[i].up_app.height+applications[i].height, 
+									  	 w: applications[i].up_app.width, 
+									  	 h: applications[i].up_app.down.h - applications[i].height};
+				var updateItem = {
+					elemId: applications[i].id,
+					elemLeft: applications[i].left, 
+					elemTop: applications[i].top,
+					elemWidth: applications[i].width, 
+					elemHeight: applications[i].height,
+					force: true, date: new Date()
+				};		
+				broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
+			}
+		}
+	} 
 }
 
 function priorityApplications() {
@@ -1547,9 +1730,6 @@ function priorityApplications() {
 
 }
 
-// seojin : priority grid 
-// - 태그별로 섹션이 바둑판 모양으로 나뉘어 짐
-// - 음성인식된 태그를 가진 데이터들이 가장 크게 배경에 겹쳐서 띄워짐
 function priorityGridApplications() {
    
    arrangementMode = 'priority_grid';
@@ -1854,10 +2034,6 @@ function priorityGridApplications() {
    }
 }
 
-
-// ******************** Thumbnail ******************** //
-// 음성인식된 태그를 가진 데이터들이 가장 크게 띄워짐
-// 나머지 데이터들은 하단에 썸네일 형식으로 띄워짐
 function priorityThumbnailApplications() {
 	
 	arrangementMode = 'priority_thumbnail';
@@ -1938,9 +2114,6 @@ function priorityThumbnailApplications() {
 	}
 }
 
-// ******************** Static ********************
-// Priority 누르면 client display 1,2,3 안에 음성인식된 태그를 가진 데이터들이 크게 띄워짐
-// 나머지 데이터들은 좌측, 우측에 타일모드로 띄워짐
 function priorityStaticApplications() {
 	
 	arrangementMode = 'priority_static';
@@ -2105,6 +2278,7 @@ function setPosition(apps, height){
    }
 
 } 
+
 function googleImageLayoutApplications(){
 	arrangementMode = 'google_image_layout';
    
@@ -2117,7 +2291,6 @@ function googleImageLayoutApplications(){
     setPosition(applications, Math.min(maxHeight, h));
    
 }
-
 
 // ******************** Bin Packing Problem ******************** //
 function Packer(w,h) {
@@ -2224,245 +2397,37 @@ function binPackingApplications() {
 	}
 }
 
-// ******************** Improved Dynamic Mode ******************** //
-function priorityRatioApplications(){
-	arrangementMode = 'priority_ratio';
-	var w = 0, h = 0;
-	var e = 0;
-	var app;
-	var app_width,app_height;
-	for(var i = 0 ; i < applications.length ; i++){
-		app = applications[i];
-		var ratio = app.width / app.height;
-		app_width = config.totalWidth;
-		app_height = app_width / ratio;
-			
-		if(app_height > config.totalHeight){
-			app_height = config.totalHeight;
-			app_width = app_height * ratio;
-		}
-		if(i==0){		
-			app.left = 0;
-			app.top = 0;	
-			app.width = app_width;
-			app.height = app_height;
-			app.down = {x: app.left, 
-						y: app.top+app.height, 
-						w: app.width, 
-						h: config.totalHeight-app.height};
-			var updateItem = {
-				elemId: app.id,
-				elemLeft: app.left, 
-				elemTop: app.top,
-				elemWidth: app.width, 
-				elemHeight: app.height,
-				force: true, date: new Date()
-			};
-			broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
-		}
-		if((i+1) == applications.length) break; 
-		check(applications[i+1],i+1);
-		
-	}
-}
-
-function check(app,index){
-    var app_width,app_height;
-    var j = 0;
-	var w = 0;
-	var e = 0;
-	var n = 0;
-	var min = 0;
-    var emptySpace = config.totalWidth * config.totalHeight;
-    var space = 0;
-    var smallestEmptySpace = new Array();
-    var ratio = app.width / app.height;
-	for(var i = 0 ; i < index ; i++){
-		emptySpace -= applications[i].width * applications[i].height;
-	}
-    for(var i = 0 ; i < index ; i++){
-		app_width = applications[i].down.w;
-		app_height = app_width / ratio;
-		if(app_height > applications[i].down.h){
-			app_height = applications[i].down.h;
-			app_width = app_height * ratio;
-		}
-		if(app_height <=100 || app_width <= 100) space = config.totalWidth * config.totalHeight;
-		else space = emptySpace - (app_width * app_height);
-		smallestEmptySpace.push(space);
-    }
-    for(var i = 0 ; i < (index+1) ; i++){
-		if(!applications[i].is_down_app){
-			var r = applications[i].width / applications[i].height;
-			app_width = 1;
-			app_height = app_width / r;			
-			if(app_height > 1){
-				app_height = 1;
-				app_width = app_height * r;
-			}	
-			w += app_width;
-		}
-	}
-	e = config.totalWidth / w;
-	app_width = e * app_width;
-	app_height = app_width / ratio;	
-	emptySpace = config.totalWidth * config.totalHeight;
-	for(var i = 0 ; i < index ; i++){
-		var tmp_w, tmp_h;
-		var r = applications[i].width / applications[i].height;
-		if(!applications[i].is_down_app){
-			tmp_w = 1;
-			tmp_h = tmp_w / r;
-			if(tmp_h > 1){
-				tmp_h = 1;
-				tmp_w = tmp_h * r;
-			}	
-			tmp_w = e * tmp_w;
-			tmp_h = tmp_w / r;
-		} 
-		emptySpace -= tmp_w * tmp_h;
-	}	
-	space = emptySpace - (app_width * app_height);
-	min = space;
-	var n = 0;
-	for(var i = 0 ; i < index ; i++){
-		if(applications[i].down_app_exist == true) continue;
-		if(min > smallestEmptySpace[i]){		
-			app_width = applications[i].down.w;
-			app_height = app_width / ratio;
-			if(app_height > applications[i].down.h){
-				app_height = applications[i].down.h;
-				app_width = app_height * ratio;
-			}
-			app.width = app_width;
-			app.height = app_height;
-			app.left = applications[i].down.x;
-			app.top = applications[i].down.y;
-			app.down = {x: app.left, 
-						y: app.top + app.height, 
-						w: app.width, 
-						h: applications[i].down.h-app.height};			
-			min = smallestEmptySpace[i];
-			j = i;
-			app.is_down_app = true;
-			app.up_app = applications[i];
-		}
-	}
-	if(app.is_down_app){
-		applications[j].down_app = app;
-		applications[j].down_app_exist = true;
-		if(applications[j].down.h == app.height){
-			applications[j].down.w = applications[j].down.w - app.width;	
-			applications[j].down.x = applications[j].down.x + app.width;
-		} else {	
-			applications[j].down.h = 0;
-			applications[j].down.y = applications[j].down.y + app.height;
-		}
-		var updateItem = {
-			elemId: app.id,
-			elemLeft: app.left, elemTop: app.top,
-			elemWidth: app.width, elemHeight: app.height,
-			force: true, date: new Date()
-		};
-		broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');	
-	} else {
-	    n = 0;
-		for(var i = 0 ; i < (index+1) ; i++){
-			var r = applications[i].width / applications[i].height;
-			if(!applications[i].is_down_app){	
-				applications[i].width = 1;
-				applications[i].height = applications[i].width / r;	
-				if(applications[i].height > 1){
-					applications[i].height = 1;
-					applications[i].width = applications[i].height * r;
-				}	
-				app_width = e * applications[i].width;
-				app_height = app_width / r;
-				if(app_height > config.totalHeight){
-					app_height = config.totalHeight;
-					app_width = app_height * r;
-				}
-				if(i==0) applications[i].left = 0;
-				else applications[i].left = applications[n].left + applications[n].width;	
-				n = i;
-				applications[i].top = 0;
-				applications[i].width = app_width;
-				applications[i].height = app_height;
-				applications[i].down = {x: applications[i].left, 
-										y: applications[i].top+applications[i].height, 
-										w: applications[i].width, 
-										h: config.totalHeight-applications[i].height};
-				var updateItem = {
-					elemId: applications[i].id,
-					elemLeft: applications[i].left, 
-					elemTop: applications[i].top,
-					elemWidth: applications[i].width, 
-					elemHeight: applications[i].height,
-					force: true, date: new Date()
-				};
-				broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
-			}
-		}
-		for(var i = 0 ; i < (index+1) ; i++){
-			var r = applications[i].width / applications[i].height;
-			if(applications[i].is_down_app){	
-				var app_width, app_height;
-				applications[i].left = applications[i].up_app.left;
-				applications[i].top = applications[i].up_app.top + applications[i].up_app.height;	
-				app_width = applications[i].up_app.width;
-				app_height = app_width / r;
-				if(app_height > applications[i].up_app.down.h){
-					app_height = applications[i].up_app.down.h;
-					app_width = app_height * r;
-				}	
-				applications[i].width = app_width;
-				applications[i].height = app_height;
-				applications[i].down = { x: applications[i].up_app.left, 
-									  	 y: applications[i].up_app.top+applications[i].up_app.height+applications[i].height, 
-									  	 w: applications[i].up_app.width, 
-									  	 h: applications[i].up_app.down.h - applications[i].height};
-				var updateItem = {
-					elemId: applications[i].id,
-					elemLeft: applications[i].left, 
-					elemTop: applications[i].top,
-					elemWidth: applications[i].width, 
-					elemHeight: applications[i].height,
-					force: true, date: new Date()
-				};		
-				broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
-			}
-		}
-	} 
-}
-
-// ☆
-// 3. 받아온 텍스트 값이 우선순위태그값으로 썸네일로 첫번째 분류 해주기 - 현혜
-// 4. 단계별로 계속 가능하게 - 현혜
-// 5. 단계별로 뒤로가기 가능하게 - 서진
+// ******************** Analysis ******************** //
 var check = false;
 var insertTagResults = [];
+var applications_tmp = new Array();
 function analysisApplications(){
 	arrangementMode = 'analysis';
 	
 	if(insertTagResult == "" || insertTagResult == null || insertTagResult == undefined){
-		gridmode();
+		gridModeForAnalysis();
 	} else {
 		var i;
 		for(i = 0; i < insertTagResults.length ; i++){
 			if(insertTagResults[i] == insertTagResult) break;
 		}
 		if(i == insertTagResults.length) insertTagResults.push(insertTagResult);
-		prioritymode();
+		priorityModeForAnalysis();
 	}
 }
 
 function analysisResetApplications(){
+	applications = applications_tmp;
+
 	insertTagResults = [];
 	insertTagResult = "";
+	
 	analysisApplications();
 }
 
 function analysisBackApplications(){
+	applications = applications_tmp;
+
 	insertTagResults.splice(insertTagResults.length-1,1);
 
 	insertTagResult = insertTagResults[insertTagResults.length-1];
@@ -2504,7 +2469,7 @@ function getEditDistance(a, b) {
   return matrix[b.length][a.length];
 };
 
-function gridmode(){
+function gridModeForAnalysis(){
     /** 태그값을 기반으로 2차원 배열 생성 **/
     var results = applications.slice(0);
     var applength = applications.length;
@@ -2735,9 +2700,8 @@ function gridmode(){
     }
 }
 
-
 var apps_priority = new Array();
-function prioritymode(){
+function priorityModeForAnalysis(){
 	var app;
 	var apps_thumbnail = new Array();
     var i, j = 0, k;
@@ -2759,7 +2723,6 @@ function prioritymode(){
 			app = apps_priority[k][i];
 		
 			for(j = 0 ; j < app.tag.length ; j++){
-				console.log(insertTagResults[k]+" , "+app.tag[j]+" , "+getEditDistance(insertTagResults[k].toLowerCase(), app.tag[j]));
 				if(dist > getEditDistance(insertTagResults[k].toLowerCase(), app.tag[j])) {
 					apps_priority[k+1].push(app);
 					break;
@@ -2776,23 +2739,67 @@ function prioritymode(){
 		if(apps_thumbnail.length == 0) {
 			h = totalHeight;
 		} else { 
-			h = totalHeight * 4/5;
+			h = totalHeight * 5/6;
 		}
-		tilemode(apps_priority[k+1], h , y);
+		tileModeForAnalysis(apps_priority[k+1], h , y);
 
 		// thumbnail
 		if(apps_priority[k].length == 0) {
 			h = totalHeight;
 		} else { 
-			var r = 4 * insertTagResults.length;
-			y = totalHeight * 4/5;
-			h = config.totalHeight * 1/5;
+			// var r = 4 * insertTagResults.length;
+			y = totalHeight * 5/6;
+			h = config.totalHeight * 1/6;
 		}
-		tilemode(apps_thumbnail, h, y);
+		tileModeForAnalysis(apps_thumbnail, h, y);
 	}
 }
 
-function tilemode(apps, totalHeight, y){
+
+function dynamicModeForAnalysis(apps, totalHeight, y) {
+	var w = 0, h = 0;
+	var e = 0;
+	var app;
+	var app_width,app_height;
+	applications_tmp = applications;
+	applications = apps;
+	for(var i = 0 ; i < applications.length ; i++){
+		app = applications[i];
+		var ratio = app.width / app.height;
+		app_width = config.totalWidth;
+		app_height = app_width / ratio;
+			
+		if(app_height > config.totalHeight){
+			app_height = totalHeight;
+			app_width = app_height * ratio;
+		}
+		if(i == 0){		
+			app.left = 0;
+			app.top = 0;	
+			app.width = app_width;
+			app.height = app_height;
+			app.down = {x: app.left, 
+						y: app.top+app.height, 
+						w: app.width, 
+						h: config.totalHeight-app.height};
+			var updateItem = {
+				elemId: app.id,
+				elemLeft: app.left, 
+				elemTop: app.top,
+				elemWidth: app.width, 
+				elemHeight: app.height,
+				force: true, date: new Date()
+			};
+			broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
+		}
+		if((i+1) == applications.length) break; 
+		checkSpace(applications[i+1], i+1, totalHeight);
+	}
+	applications = applications_tmp;
+}
+
+
+function tileModeForAnalysis(apps, totalHeight, y){
  	var app;
     var i, c, r;
     var numCols, numRows;
@@ -2925,10 +2932,6 @@ function wsPriorityThumbnailApplications(wsio, data) {
 
 function wsPriorityStaticApplications(wsio, data) {
     priorityStaticApplications();
-}
-
-function wsPriorityRatioApplications(wsio, data) {
-    priorityRatioApplications();
 }
 
 function wsDynamicApplications(wsio, data) {
@@ -4919,8 +4922,6 @@ function deleteApplication( elem ) {
 		priorityThumbnailApplications();
 	} else if(arrangementMode == "priority_static"){
 		priorityStaticApplications();
-	} else if(arrangementMode == "priority_ratio"){
-		priorityRatioApplications();
 	} else if(arrangementMode == "google_image_layout"){
 		googleImageLayoutApplications();
 	} else if(arrangementMode == "bin_packing"){
@@ -5076,7 +5077,6 @@ exports.priorityApplications = priorityApplications;
 exports.priorityGridApplications = priorityGridApplications;
 exports.priorityThumbnailApplications = priorityThumbnailApplications;
 exports.priorityStaticApplications = priorityStaticApplications;
-exports.priorityRatioApplications = priorityRatioApplications;
 exports.googleImageLayoutApplications = googleImageLayoutApplications;
 exports.binPackingApplications = binPackingApplications;
 exports.analysisApplications = analysisApplications;
