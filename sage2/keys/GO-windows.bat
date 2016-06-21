@@ -1,4 +1,4 @@
 REM Must be run as administrator
 pushd %~dp0
-call init_webserver.bat 192.168.174.1
+call init_webserver.bat 172.30.1.42
 call init_webserver.bat 127.0.0.1

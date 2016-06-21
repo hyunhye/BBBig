@@ -15,7 +15,7 @@ var multer  = require('multer');
 var fs = require('fs');
 var path = path = require('path');
 
-var imageDir = 'C:/Users/Administrator/Documents/BBBig/sage2/public_HTTPS/uploads/scanning/';
+var imageDir = 'C:/Projects/SAGE2/SAGE2/sage2/public_HTTPS/uploads/scanning/';
 
 function ImageScanning(exif){
     //this.decisionTree = decisionTree;

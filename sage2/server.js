@@ -2397,23 +2397,26 @@ function binPackingApplications() {
 	}
 }
 
-// ******************** Analysis ******************** //
 var check = false;
 var insertTagResults = [];
-var applications_tmp = new Array();
 function analysisApplications(){
-	arrangementMode = 'analysis';
-	
-	if(insertTagResult == "" || insertTagResult == null || insertTagResult == undefined){
-		gridModeForAnalysis();
-	} else {
-		var i;
-		for(i = 0; i < insertTagResults.length ; i++){
-			if(insertTagResults[i] == insertTagResult) break;
-		}
-		if(i == insertTagResults.length) insertTagResults.push(insertTagResult);
-		priorityModeForAnalysis();
-	}
+   arrangementMode = 'analysis';
+   console.log(speechResult);
+   if(insertTagResult == "" || insertTagResult == null || insertTagResult == undefined || speechResult == null || speechResult == "" || speechResult == undefined){
+      gridModeForAnalysis();
+   } else {
+      var i;
+      for(i = 0; i < insertTagResults.length ; i++){
+         if(insertTagResults[i] == insertTagResult) break;
+      }
+      if(i == insertTagResults.length) {
+         if(insertTagResult != "" || insertTagResult != null || insertTagResult != undefined)
+            insertTagResults.push(insertTagResult);
+         else if (speechResult != null || speechResult != "" || speechResult != undefined)
+            insertTagResults.push(speechResult.toLowerCase());
+      }
+      priorityModeForAnalysis();
+   }
 }
 
 function analysisResetApplications(){
