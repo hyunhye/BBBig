@@ -888,23 +888,7 @@ new gweb.analytics.AutoTrack({
             else if (element.id === "localfileUploadBtn") {
                 fileUploadFromUI();
             }
-            var click_count = 1;
             else if (element.id === "insertTagBtn") {
-                /* draw line */
-                var sage2UI = document.getElementById("sage2UI");
-                var ctx = sage2UI.getContext("2d");
-                /*
-                ctx.beginPath();
-                ctx.moveTo(0, ctx.canvas.height*(5/6));
-                ctx.lineTo(ctx.canvas.width, ctx.canvas.height*(5/6));
-                ctx.stroke(); 
-                */
-                click_count += 1;
-                var sage2UI = document.getElementById("sage2UI");
-                var ctx = sage2UI.getContext("2d");
-                ctx.fillStyle = "gray";
-                ctx.fillRect(0, ctx.canvas.height*(5/6), ctx.canvas.width, ctx.canvas.height);
-
                 var result = document.getElementById('tagForPriority').value;
                 wsio.emit('insertTagResult', { result });
                 wsio.emit('analysisApplications');
@@ -1074,6 +1058,14 @@ new gweb.analytics.AutoTrack({
                 hideDialog('arrangementDialog');
 				hideDialog('PriorityDialog');
             }
+			else if (element.id === "Priority_ratio") {
+				var mode = document.getElementById('mode');
+				mode.innerHTML = "Priority_ratio Mode";
+				
+                wsio.emit('priorityRatioApplications');
+                hideDialog('arrangementDialog');
+				hideDialog('PriorityDialog');
+            }
             else if (element.id === "analysis") {
 			   var mode = document.getElementById('mode');
 				mode.innerHTML = "Analysis Mode";
@@ -1097,7 +1089,25 @@ new gweb.analytics.AutoTrack({
                 interactor.captureDesktop("window");
                 hideDialog('ffShareScreenDialog');
             }
-            
+
+			/**insertTag**/
+			else if (element.id === "insertTagBtn") {
+				var result = document.getElementById('tagForPriority').value;
+				wsio.emit('insertTagResult', { result });
+                wsio.emit('analysisApplications');
+            }
+            else if (element.id === "resetBtn") {
+                var tag = document.getElementById('tagForPriority');
+                tag.value = "";
+                
+                var result = "";
+                wsio.emit('insertTagResult', { result });
+                wsio.emit('analysisResetApplications');
+            }
+            else if (element.id === "backBtn") {
+                wsio.emit('analysisBackApplications');
+            }
+                // Other
             else {
                 //console.log("clicked on: ", element);
             }
@@ -1484,8 +1494,8 @@ new gweb.analytics.AutoTrack({
             <form name="tagForm" action="">
                 <input type="text" id="tagForPriority">
                 <input type="button" id="insertTagBtn" class="custom-button" value="Search"/>
-                <input type="button" id="backBtn" class="custom-button" value="Back"/>
                 <input type="button" id="resetBtn" class="custom-button" value="Reset"/>
+                <input type="button" id="backBtn" class="custom-button" value="Back"/>
             </form>
         </div>
 
@@ -1676,6 +1686,10 @@ new gweb.analytics.AutoTrack({
 				<div id="Priority_staticContainer">
 					<img alt="Priority_static" id="Priority_static" src="images/ui/[graycircle]-tilecontent.svg" width="64" height="64" />
 					<p>Priority_static</p>
+				</div>
+				<div id="Priority_ratioContainer">
+					<img alt="Priority_ratio" id="Priority_ratio" src="images/ui/[graycircle]-tilecontent.svg" width="64" height="64" />
+					<p>Priority_ratio</p>
 				</div>
         </div>
         <div id="priorityButtons">
@@ -2065,6 +2079,8 @@ if (!('webkitSpeechRecognition' in window)) {
 		wsio.emit('priorityThumbnailApplications');
 	if(document.getElementById('mode').textContent == 'Priority_static Mode')
 		wsio.emit('priorityStaticApplications');
+	if(document.getElementById('mode').textContent == 'Priority_ratio Mode')
+		wsio.emit('priorityRatioApplications');
 		
     if (final_transcript || interim_transcript) {
 	  //alert(interim_transcript);
