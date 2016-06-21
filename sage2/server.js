@@ -63,8 +63,8 @@ var sageutils   = require('./src/node-utils');          // provides the current 
 var websocketIO = require('./src/node-websocket.io');   // creates WebSocket server and clients
 
 // hyunhye
-var DynamicSpaceManager = require('./src/spaceManager');
-var Bounds = require('./src/globals');
+// var DynamicSpaceManager = require('./src/spaceManager');
+// var Bounds = require('./src/globals');
 
 // Version calculation
 var SAGE2_version = sageutils.getShortVersion();
