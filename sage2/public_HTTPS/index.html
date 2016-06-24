@@ -996,12 +996,17 @@ new gweb.analytics.AutoTrack({
 				var mode = document.getElementById('mode');
 				mode.innerHTML = "Default Mode";
 				
+                var insertTag = document.getElementById('insertTag');
+                insertTag.style.display = "none";
+
                 wsio.emit('defaultApplications');
                 hideDialog('arrangementDialog');
             }
             else if (element.id === "tilecontent") {
 				var mode = document.getElementById('mode');
 				mode.innerHTML = "Tile Mode";
+                var insertTag = document.getElementById('insertTag');
+                insertTag.style.display = "none";
 				
                 wsio.emit('tileApplications');
                 hideDialog('arrangementDialog');
@@ -1009,6 +1014,8 @@ new gweb.analytics.AutoTrack({
             else if (element.id === "dynamiccontent") {
 				var mode = document.getElementById('mode');
 				mode.innerHTML = "Dynamic Mode";
+                var insertTag = document.getElementById('insertTag');
+                insertTag.style.display = "none";
 				
                 wsio.emit('dynamicApplications');
                 hideDialog('arrangementDialog');
@@ -1016,6 +1023,8 @@ new gweb.analytics.AutoTrack({
             else if (element.id === "googleImageLayout") {
 				var mode = document.getElementById('mode');
 				mode.innerHTML = "Google Image Layout Mode";
+                var insertTag = document.getElementById('insertTag');
+                insertTag.style.display = "none";
 				
                 wsio.emit('googleImageLayoutApplications');
                 hideDialog('arrangementDialog');
@@ -1023,6 +1032,8 @@ new gweb.analytics.AutoTrack({
             else if (element.id === "binPacking") {
 				var mode = document.getElementById('mode');
 				mode.innerHTML = "Bin Packing Mode";
+                var insertTag = document.getElementById('insertTag');
+                insertTag.style.display = "none";
 				
                 wsio.emit('binPackingApplications');
                 hideDialog('arrangementDialog');
@@ -1030,6 +1041,8 @@ new gweb.analytics.AutoTrack({
             else if (element.id === "prioritycontent") {
 				var mode = document.getElementById('mode');
 				mode.innerHTML = "Priority Mode";
+                var insertTag = document.getElementById('insertTag');
+                insertTag.style.display = "none";
 				
                 wsio.emit('priorityApplications');
                 hideDialog('arrangementDialog');
@@ -1037,6 +1050,8 @@ new gweb.analytics.AutoTrack({
 			else if (element.id === "Priority_grid") {
 				var mode = document.getElementById('mode');
 				mode.innerHTML = "Priority_grid Mode";
+                var insertTag = document.getElementById('insertTag');
+                insertTag.style.display = "none";
 				
                 wsio.emit('priorityGridApplications');
                 hideDialog('arrangementDialog');
@@ -1045,6 +1060,8 @@ new gweb.analytics.AutoTrack({
 			else if (element.id === "Priority_thumbnail") {
 				var mode = document.getElementById('mode');
 				mode.innerHTML = "Priority_thumbnail Mode";
+                var insertTag = document.getElementById('insertTag');
+                insertTag.style.display = "none";
 
                 wsio.emit('priorityThumbnailApplications');
                 hideDialog('arrangementDialog');
@@ -1053,6 +1070,8 @@ new gweb.analytics.AutoTrack({
 			else if (element.id === "Priority_static") {
 				var mode = document.getElementById('mode');
 				mode.innerHTML = "Priority_static Mode";
+                var insertTag = document.getElementById('insertTag');
+                insertTag.style.display = "none";
 				
                 wsio.emit('priorityStaticApplications');
                 hideDialog('arrangementDialog');
@@ -1061,13 +1080,17 @@ new gweb.analytics.AutoTrack({
 			else if (element.id === "Priority_ratio") {
 				var mode = document.getElementById('mode');
 				mode.innerHTML = "Priority_ratio Mode";
+                var insertTag = document.getElementById('insertTag');
+                insertTag.style.display = "none";
 				
                 wsio.emit('priorityRatioApplications');
                 hideDialog('arrangementDialog');
 				hideDialog('PriorityDialog');
             }
             else if (element.id === "analysis") {
-			   var mode = document.getElementById('mode');
+			    var mode = document.getElementById('mode');
+                var insertTag = document.getElementById('insertTag');
+                insertTag.style.display = "block";
 				mode.innerHTML = "Analysis Mode";
                 wsio.emit('analysisApplications');
             }
@@ -1486,18 +1509,21 @@ new gweb.analytics.AutoTrack({
 		-->
         <div id="file">
             <form name="localForm">
-                데이터
                 <input type="file" id="filenameForUpload" name='myfile[]' multiple accept="image/*">
                 <input type="button" id="localfileUploadBtn" class="custom-button" value="Upload"/>
             </form>
         </div>
         <!--insertTag -->
-        <div id="insertTag">
-            <form name="tagForm" action="">
+        <div id="insertTag" style="visibility = 'hidden'">
+            <form name="tagForm" action="" id="tag">
                 <input type="text" id="tagForPriority">
                 <input type="button" id="insertTagBtn" class="custom-button" value="Search"/>
+                <input type="button" id="backBtn" class="custom-button" value="◀Back"/>
                 <input type="button" id="resetBtn" class="custom-button" value="Reset"/>
-                <input type="button" id="backBtn" class="custom-button" value="Back"/>
+                <!--Web Speech API-->
+                <div id="speechContainer">
+                    <img id="speech" alt="speech" src="images/ui/[graycircle]-speech2.png" width="10" height="10" />
+                </div>
             </form>
         </div>
 
@@ -1537,11 +1563,7 @@ new gweb.analytics.AutoTrack({
                 <img id="info" alt="info" src="images/ui/[graycircle]-info.svg" width="48" height="48" />
                 <p id="infoLabel">Information</p>
             </div>
-			<!--Web Speech API-->
-			 <div id="speechContainer" class="uiButton">
-                <img id="speech" alt="speech" src="images/ui/[graycircle]-speech.png" width="48" height="48" />
-                <p id="speechLabel">Speech</p>
-            </div>
+
         </div>
     </div>
     <div class="clear"></div>
@@ -1876,8 +1898,9 @@ new gweb.analytics.AutoTrack({
             </select>
         </div>
       </div>
-    </div><script src="/intl/en/chrome/assets/common/js/chrome.min.js">
-</script> <script>
+    </div>
+<script src="/intl/en/chrome/assets/common/js/chrome.min.js"></script> 
+<script>
 var chrmMenuBar = new chrm.ui.MenuBar();
       chrmMenuBar.decorate('nav');
       var chrmLogo = new chrm.ui.Logo('logo');
@@ -2087,6 +2110,8 @@ if (!('webkitSpeechRecognition' in window)) {
 		wsio.emit('priorityStaticApplications');
 	if(document.getElementById('mode').textContent == 'Priority_ratio Mode')
 		wsio.emit('priorityRatioApplications');
+    if(document.getElementById('mode').textContent == 'Analysis Mode')
+        wsio.emit('analysisApplications');
 		
     if (final_transcript || interim_transcript) {
 	  //alert(interim_transcript);
@@ -2185,15 +2210,12 @@ function showButtons(style) {
   copy_info.style.display = 'none';
   email_info.style.display = 'none';
 }
-    </script>
-
-		</div>
-		<div id="speechButtons">
-            <span id="speechCloseBtn" class="button">Close</span>
-        </div>
-	</div>
-        
-		</div>
-	
+</script>
+</div>
+    <div id="speechButtons">
+        <span id="speechCloseBtn" class="button">Close</span>
+    </div>
+</div>
+</div>
 </body>
 </html>

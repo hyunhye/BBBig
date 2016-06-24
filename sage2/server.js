@@ -2400,28 +2400,34 @@ function binPackingApplications() {
 var check = false;
 var insertTagResults = [];
 function analysisApplications(){
-   arrangementMode = 'analysis';
-   console.log(speechResult);
-   if(insertTagResult == "" || insertTagResult == null || insertTagResult == undefined || speechResult == null || speechResult == "" || speechResult == undefined){
-      gridModeForAnalysis();
-   } else {
-      var i;
-      for(i = 0; i < insertTagResults.length ; i++){
-         if(insertTagResults[i] == insertTagResult) break;
-      }
-      if(i == insertTagResults.length) {
-         if(insertTagResult != "" || insertTagResult != null || insertTagResult != undefined)
-            insertTagResults.push(insertTagResult);
-         else if (speechResult != null || speechResult != "" || speechResult != undefined)
-            insertTagResults.push(speechResult.toLowerCase());
-      }
-      priorityModeForAnalysis();
-   }
+    arrangementMode = 'analysis';
+    if((insertTagResult == "" || insertTagResult == null || insertTagResult == undefined) && (speechResult == null || speechResult == "" || speechResult == undefined)){
+      	gridModeForAnalysis();
+    } else {
+        var i;
+        for(i = 0; i < insertTagResults.length ; i++){
+           	if(insertTagResults[i] == insertTagResult || insertTagResults[i] == speechResult) break;
+      	}
+      	if(i == insertTagResults.length) {
+         	if(insertTagResult != "" && insertTagResult != null && insertTagResult != undefined){
+         		console.log("speechResult1: "+speechResult);
+            	insertTagResults.push(insertTagResult);
+            	insertTagResult ="";
+        	}
+         	else if (speechResult != null && speechResult != "" && speechResult != undefined){
+         		console.log("speechResult2: "+speechResult);
+            	insertTagResults.push(speechResult.toLowerCase());
+            	speechResult = "";
+            }
+      	}
+      	priorityModeForAnalysis();
+   	}
+   	for(i = 0; i < insertTagResults.length ; i++){
+      		console.log("insertTagResults:"+insertTagResults[i]);
+    }
 }
 
 function analysisResetApplications(){
-	applications = applications_tmp;
-
 	insertTagResults = [];
 	insertTagResult = "";
 	
@@ -2429,8 +2435,6 @@ function analysisResetApplications(){
 }
 
 function analysisBackApplications(){
-	applications = applications_tmp;
-
 	insertTagResults.splice(insertTagResults.length-1,1);
 
 	insertTagResult = insertTagResults[insertTagResults.length-1];
@@ -2764,8 +2768,6 @@ function dynamicModeForAnalysis(apps, totalHeight, y) {
 	var e = 0;
 	var app;
 	var app_width,app_height;
-	applications_tmp = applications;
-	applications = apps;
 	for(var i = 0 ; i < applications.length ; i++){
 		app = applications[i];
 		var ratio = app.width / app.height;
@@ -2798,7 +2800,6 @@ function dynamicModeForAnalysis(apps, totalHeight, y) {
 		if((i+1) == applications.length) break; 
 		checkSpace(applications[i+1], i+1, totalHeight);
 	}
-	applications = applications_tmp;
 }
 
 
