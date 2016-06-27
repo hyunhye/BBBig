@@ -701,6 +701,8 @@ function setTag(exif){
         // 	exif.Tag.push(f[0][1]);
       	//}
    	}
+   	console.log(" ");
+   	console.log("Tag:  [" + exif.Tag+"]");
 };
 
 appLoader.prototype.manageAndLoadUploadedFile = function(file, callback) {

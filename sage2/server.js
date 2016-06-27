@@ -1403,11 +1403,34 @@ function applicationsNotPriority(){
 
 function defaultApplications() {
     arrangementMode = 'default';
+    for (i = 0; i < applications.length; i++) {
+    	applications[i].is_down_app = false;
+    	applications[i].down.x = 0;
+    	applications[i].down.y = 0;
+    	applications[i].down.width = applications[i].width;
+    	applications[i].down.height = applications[i].height;
+
+    	applications[i].down_app = null;
+		applications[i].down_app_exist = false;
+		applications[i].up_app = null;
+    }
 }
 
 function tileApplications() {
     // seojin
     arrangementMode = 'tile';
+
+    for (i = 0; i < applications.length; i++) {
+    	applications[i].is_down_app = false;
+    	applications[i].down.x = 0;
+    	applications[i].down.y = 0;
+    	applications[i].down.width = applications[i].width;
+    	applications[i].down.height = applications[i].height;
+
+    	applications[i].down_app = null;
+		applications[i].down_app_exist = false;
+		applications[i].up_app = null;
+    }
 
     var app;
     var i, c, r;
@@ -1475,8 +1498,7 @@ function tileApplications() {
         app.top = newdims[1] - titleBar;
         app.width = newdims[2];
         app.height = newdims[3];
-		
-		console.log(app + " " + app.left + " " +  app.top + " " + app.width + " " + app.height);
+
         // build the object to be sent
         var updateItem = {
             elemId: app.id,
@@ -1616,8 +1638,9 @@ function checkSpace(app, index, totalHeight){
 			j = i;
 			app.is_down_app = true;
 			app.up_app = applications[i];
-		}
+		} 
 	}
+
 	if(app.is_down_app){
 		applications[j].down_app = app;
 		applications[j].down_app_exist = true;
@@ -1635,7 +1658,8 @@ function checkSpace(app, index, totalHeight){
 			force: true, date: new Date()
 		};
 		broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');	
-	} else {
+	} 
+	else {
 	    n = 0;
 		for(var i = 0 ; i < (index+1) ; i++){
 			var r = applications[i].width / applications[i].height;
@@ -1671,11 +1695,7 @@ function checkSpace(app, index, totalHeight){
 					force: true, date: new Date()
 				};
 				broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
-			}
-		}
-		for(var i = 0 ; i < (index+1) ; i++){
-			var r = applications[i].width / applications[i].height;
-			if(applications[i].is_down_app){	
+			} else if(applications[i].is_down_app){	
 				var app_width, app_height;
 				applications[i].left = applications[i].up_app.left;
 				applications[i].top = applications[i].up_app.top + applications[i].up_app.height;	
@@ -1700,6 +1720,8 @@ function checkSpace(app, index, totalHeight){
 					force: true, date: new Date()
 				};		
 				broadcast('setItemPositionAndSize', updateItem, 'receivesWindowModification');
+			} else {
+				condole.log("error");
 			}
 		}
 	} 
@@ -1710,10 +1732,16 @@ function priorityApplications() {
 	// speechResult : 음성 인식 결과 없으면
 	// applications (올라가있는 파일들)의 태그를 다 가지고 와서 숫자 큰게 가장 가운데에 가장 크게
 	for (i = 0; i < applications.length; i++) {
-		if(applications[i].tag == speechResult) {
-			console.log("priority tag: "+applications[i].tag);
-		}
-	}
+    	applications[i].is_down_app = false;
+    	applications[i].down.x = 0;
+    	applications[i].down.y = 0;
+    	applications[i].down.width = applications[i].width;
+    	applications[i].down.height = applications[i].height;
+
+    	applications[i].down_app = null;
+		applications[i].down_app_exist = false;
+		applications[i].up_app = null;
+    }
 	 
     arrangementMode = 'priority';
     var app;
@@ -1733,6 +1761,19 @@ function priorityApplications() {
 function priorityGridApplications() {
    
    arrangementMode = 'priority_grid';
+
+   for (i = 0; i < applications.length; i++) {
+    	applications[i].is_down_app = false;
+    	applications[i].down.x = 0;
+    	applications[i].down.y = 0;
+    	applications[i].down.width = applications[i].width;
+    	applications[i].down.height = applications[i].height;
+
+    	applications[i].down_app = null;
+		applications[i].down_app_exist = false;
+		applications[i].up_app = null;
+    }
+
    /** displayTag[tagcount][datacount[]] **/
    /** 태그값을 기반으로 2차원 배열 생성 **/
    var results = applications.slice(0);
@@ -2037,7 +2078,17 @@ function priorityGridApplications() {
 function priorityThumbnailApplications() {
 	
 	arrangementMode = 'priority_thumbnail';
+	for (i = 0; i < applications.length; i++) {
+    	applications[i].is_down_app = false;
+    	applications[i].down.x = 0;
+    	applications[i].down.y = 0;
+    	applications[i].down.width = applications[i].width;
+    	applications[i].down.height = applications[i].height;
 
+    	applications[i].down_app = null;
+		applications[i].down_app_exist = false;
+		applications[i].up_app = null;
+    }
 	// ***** Part0 : Prepare(initialize)
     var app;
     var i, j, c, r;
@@ -2117,7 +2168,17 @@ function priorityThumbnailApplications() {
 function priorityStaticApplications() {
 	
 	arrangementMode = 'priority_static';
-	
+	for (i = 0; i < applications.length; i++) {
+    	applications[i].is_down_app = false;
+    	applications[i].down.x = 0;
+    	applications[i].down.y = 0;
+    	applications[i].down.width = applications[i].width;
+    	applications[i].down.height = applications[i].height;
+
+    	applications[i].down_app = null;
+		applications[i].down_app_exist = false;
+		applications[i].up_app = null;
+    }
     var app;
     var i, j, c, r, n;
     var numCols, numRows;
@@ -2281,7 +2342,17 @@ function setPosition(apps, height){
 
 function googleImageLayoutApplications(){
 	arrangementMode = 'google_image_layout';
-   
+    for (i = 0; i < applications.length; i++) {
+    	applications[i].is_down_app = false;
+    	applications[i].down.x = 0;
+    	applications[i].down.y = 0;
+    	applications[i].down.width = applications[i].width;
+    	applications[i].down.height = applications[i].height;
+
+    	applications[i].down_app = null;
+		applications[i].down_app_exist = false;
+		applications[i].up_app = null;
+    }
     var i;
     var containerWidth = config.totalWidth,
       maxHeight = config.totalHeight;
@@ -2361,7 +2432,17 @@ Packer.prototype.splitNode = function(node, w, h){
 function binPackingApplications() {
 
 	arrangementMode = 'bin_packing';
-	
+	for (i = 0; i < applications.length; i++) {
+    	applications[i].is_down_app = false;
+    	applications[i].down.x = 0;
+    	applications[i].down.y = 0;
+    	applications[i].down.width = applications[i].width;
+    	applications[i].down.height = applications[i].height;
+
+    	applications[i].down_app = null;
+		applications[i].down_app_exist = false;
+		applications[i].up_app = null;
+    }
 	var binWidth   = config.totalWidth;
 	var binHeight  = config.totalHeight;
 
@@ -2401,6 +2482,17 @@ var check = false;
 var insertTagResults = [];
 function analysisApplications(){
     arrangementMode = 'analysis';
+    for (i = 0; i < applications.length; i++) {
+    	applications[i].is_down_app = false;
+    	applications[i].down.x = 0;
+    	applications[i].down.y = 0;
+    	applications[i].down.width = applications[i].width;
+    	applications[i].down.height = applications[i].height;
+
+    	applications[i].down_app = null;
+		applications[i].down_app_exist = false;
+		applications[i].up_app = null;
+    }
     if((insertTagResult == "" || insertTagResult == null || insertTagResult == undefined) && (speechResult == null || speechResult == "" || speechResult == undefined)){
       	gridModeForAnalysis();
     } else {
@@ -2410,21 +2502,16 @@ function analysisApplications(){
       	}
       	if(i == insertTagResults.length) {
          	if(insertTagResult != "" && insertTagResult != null && insertTagResult != undefined){
-         		console.log("speechResult1: "+speechResult);
             	insertTagResults.push(insertTagResult);
             	insertTagResult ="";
         	}
          	else if (speechResult != null && speechResult != "" && speechResult != undefined){
-         		console.log("speechResult2: "+speechResult);
             	insertTagResults.push(speechResult.toLowerCase());
             	speechResult = "";
             }
       	}
       	priorityModeForAnalysis();
    	}
-   	for(i = 0; i < insertTagResults.length ; i++){
-      		console.log("insertTagResults:"+insertTagResults[i]);
-    }
 }
 
 function analysisResetApplications(){
@@ -2619,6 +2706,7 @@ function gridModeForAnalysis(){
         } else {
             var totAr = 0.0;
             for (var j=0; j <displayTag[i].length; j++) {
+            	/**/
                var app2 =  displayTag[i][j];
                totAr += (app2.width / app2.height);
              }
@@ -2675,7 +2763,7 @@ function gridModeForAnalysis(){
         if (displayTag[i].length === 1) padding = 0;
         r2 = numRows2 - 1;
         c2 = 0;
-        for ( var n = 0; n < displayTag[i].length; n++) {
+        for ( var n = 0; n < displayTag[i].length; n++) {/**/
             var app2 =  displayTag[i][n];
             
             var newdims2 = fitWithin(app2,c2 * tileW2 + areaX2,r2 * tileH2 + areaY2, tileW2, tileH2, padding);
